@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:15:31.494645+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781349328771,
+            "stop": 1781349331494
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_file_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349328803,
+                "stop": 1781349328804,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349328805,
+                "stop": 1781349328806,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_global_tempo_in_valid_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349328806,
+                "stop": 1781349328807,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_beat_times_nonempty_and_strictly_increasing",
+                "status": "passed",
+                "duration": 2678,
+                "start": 1781349328807,
+                "stop": 1781349331485,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_global_tempo_within_tolerance_of_ground_truth",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349331485,
+                "stop": 1781349331486,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_median_ibi_matches_global_tempo",
+                "status": "passed",
+                "duration": 8,
+                "start": 1781349331486,
+                "stop": 1781349331494,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

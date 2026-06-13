@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:00:34.439909+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781344834385,
+            "stop": 1781344834439
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_notes_json_exists_and_is_list",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344834421,
+                "stop": 1781344834422,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_note_has_required_keys_and_types",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344834423,
+                "stop": 1781344834424,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_notes_are_strictly_ordered_by_onset",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344834424,
+                "stop": 1781344834425,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_note_has_positive_duration",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781344834425,
+                "stop": 1781344834428,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_offsets_within_audio_duration",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781344834428,
+                "stop": 1781344834430,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_detected_note_count_close_to_ground_truth",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344834431,
+                "stop": 1781344834432,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_pitch_accuracy_against_ground_truth",
+                "status": "passed",
+                "duration": 7,
+                "start": 1781344834432,
+                "stop": 1781344834439,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

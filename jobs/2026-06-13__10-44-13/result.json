@@ -1,0 +1,64 @@
+{
+    "id": "81735b46-9d0c-46cf-87dc-a66a473539e9",
+    "started_at": "2026-06-13T10:44:15.201606",
+    "updated_at": "2026-06-13T10:58:41.922433",
+    "finished_at": "2026-06-13T10:58:41.922433",
+    "n_total_trials": 20,
+    "stats": {
+        "n_completed_trials": 20,
+        "n_errored_trials": 1,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "pochi__glm-5.1__pending-tasks": {
+                "n_trials": 20,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.8
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "pyin-pitch-tracker__pK4Csn9",
+                            "nmf-source-separation__Ywk2ANy",
+                            "dtw-alignment-engine__vNMLobG",
+                            "streaming-stft-processor__mqoNbNX",
+                            "harmonic-cqt-pitchgram__5w6ejBk",
+                            "laplacian-segmentation__CohyKmv",
+                            "spectral-contrast-classifier__Pfy7EiX",
+                            "cqt-cens-aligner__SZNVY5a",
+                            "vocal-separation-pipeline__9yyaGYq",
+                            "griffin-lim-phase-reconstruction__BJVtUUS",
+                            "rms-loudness-normalizer__kqtiboy",
+                            "audio-mosaicing-engine__sFUmAvp",
+                            "chord-recognition-viterbi__3uVaRgB",
+                            "constellation-fingerprinter__jyAYwut",
+                            "plp-tempo-tracker__tyMZinh",
+                            "music-similarity-search__vNsAVsB"
+                        ],
+                        "0.0": [
+                            "impulse-response-convolver__BEkU5gR",
+                            "hpss-multi-stem-mixer__XjgLAKY",
+                            "novelty-segmenter__jJiMvov",
+                            "onset-midi-quantizer__PLN6pfZ"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "hpss-multi-stem-mixer__XjgLAKY"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 363832,
+        "cost_usd": null
+    }
+}

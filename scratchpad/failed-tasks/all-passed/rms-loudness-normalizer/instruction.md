@@ -1,0 +1,32 @@
+# Batch RMS Loudness Normalizer
+
+## Background
+You are building an offline audio post-processing CLI that ingests a directory of WAV files with mixed sample rates, mixed channel counts, and wildly varying loudness, and produces a directory of loudness-normalized WAV files plus a JSON report. The normalizer must use librosa for analysis and must preserve the exact sample rate and channel layout of each input file.
+
+## Requirements
+- Read every WAV file under `/workspace/inputs/`.
+- For every input file, write a normalized WAV file with the exact same filename to `/workspace/outputs/`.
+- Each output WAV must keep the same sample rate and the same channel count as its corresponding input.
+- The default normalization target is a global RMS of `-20 dBFS` (linear amplitude `0.1`), computed across all channels and all samples of the file.
+- If applying the gain that would reach `-20 dBFS` would push the peak absolute sample amplitude above `1.0` (clipping), the normalizer must instead apply the largest gain that keeps the peak `<= 1.0` and report the gain that was actually applied.
+- Write a JSON report to `/workspace/report.json` containing, for every input filename, an object with the keys `orig_rms_db`, `gain_db`, `final_rms_db`, and `peak_after` (all numbers in dB except `peak_after`, which is the linear peak absolute amplitude of the output).
+
+## Implementation Hints
+- librosa exposes audio analysis primitives that can compute RMS energy from a waveform; see https://librosa.org/doc/0.11.0/generated/librosa.feature.rms.html .
+- Preserve the native sample rate by loading with `sr=None`, and preserve the channel layout by loading with `mono=False`.
+- Use `soundfile.write` for output, and remember librosa returns multi-channel audio as channels-first while `soundfile` expects channels-last.
+- All gain math is on linear amplitude; `dB = 20 * log10(amplitude)`.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Command: python3 /workspace/normalize.py
+- Inputs directory: /workspace/inputs/ (contains WAV files prepared at container build time)
+- Outputs directory: /workspace/outputs/ (created by the agent's script)
+- Report file: /workspace/report.json
+- For every WAV file `<name>.wav` in `/workspace/inputs/`, there must be a file `/workspace/outputs/<name>.wav` with identical sample rate and identical channel count to the input.
+- For files whose `-20 dBFS` target does NOT cause clipping, the global RMS of the output WAV file must be within `0.5 dB` of `-20 dBFS`.
+- For files whose `-20 dBFS` target WOULD cause clipping, the output peak absolute amplitude must be within `1%` of `1.0` (i.e. between `0.99` and `1.0001`).
+- `/workspace/report.json` must contain exactly one entry per input filename. Each entry must have all four keys `orig_rms_db`, `gain_db`, `final_rms_db`, `peak_after` and the values must be JSON numbers.
+- For every report entry, `gain_db` must equal `final_rms_db - orig_rms_db` within `0.5 dB`.
+- For every report entry, `peak_after` must be `<= 1.0001`.
+

@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 6 items
+
+tests/test_final_state.py ......                                         [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_all_component_files_exist_and_load
+PASSED tests/test_final_state.py::test_each_component_matches_input_sample_rate
+PASSED tests/test_final_state.py::test_each_component_length_within_tolerance
+PASSED tests/test_final_state.py::test_sum_of_components_is_close_to_input
+PASSED tests/test_final_state.py::test_each_component_has_audible_energy
+PASSED tests/test_final_state.py::test_components_have_distinguishable_spectral_content
+============================== 6 passed in 3.54s ===============================

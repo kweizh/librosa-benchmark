@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 6 items
+
+tests/test_final_state.py ......                                         [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_weighted_rms_matches_global_rms
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_weighted_rms_matches_global_rms
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_weighted_rms_matches_global_rms
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_output_csv_exists
+PASSED tests/test_final_state.py::test_csv_header_and_row_count
+PASSED tests/test_final_state.py::test_block_index_starts_at_zero_and_strictly_increases
+PASSED tests/test_final_state.py::test_time_columns_are_monotonic_and_start_at_zero
+PASSED tests/test_final_state.py::test_weighted_rms_matches_global_rms
+PASSED tests/test_final_state.py::test_last_end_time_close_to_file_duration
+======================== 6 passed, 3 warnings in 3.00s =========================

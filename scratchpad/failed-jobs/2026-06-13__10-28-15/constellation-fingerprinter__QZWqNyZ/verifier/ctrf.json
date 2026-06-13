@@ -1,0 +1,65 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:39:12.612826+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 4,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781347152586,
+            "stop": 1781347152612
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_match_json_has_required_keys",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781347152607,
+                "stop": 1781347152609,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_match_json_start_time_is_float",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347152609,
+                "stop": 1781347152610,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_match_json_confidence_is_float_in_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347152610,
+                "stop": 1781347152611,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_match_json_start_time_close_to_ground_truth",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347152611,
+                "stop": 1781347152612,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

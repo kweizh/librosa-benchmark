@@ -1,0 +1,64 @@
+{
+    "id": "034f42ee-89e3-4d9f-a698-51ca6f793b02",
+    "started_at": "2026-06-13T09:40:50.330379",
+    "updated_at": "2026-06-13T10:11:40.836741",
+    "finished_at": "2026-06-13T10:11:40.836741",
+    "n_total_trials": 20,
+    "stats": {
+        "n_completed_trials": 20,
+        "n_errored_trials": 1,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "pochi__gemini-3.5-flash__pending-tasks": {
+                "n_trials": 20,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.9
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "pyin-pitch-tracker__ZCrgzoo",
+                            "nmf-source-separation__GAJHnGb",
+                            "dtw-alignment-engine__aM4pYgR",
+                            "streaming-stft-processor__8gLJNSr",
+                            "harmonic-cqt-pitchgram__ohWBf6R",
+                            "laplacian-segmentation__J7LnZUR",
+                            "spectral-contrast-classifier__7CfPYZU",
+                            "cqt-cens-aligner__o4XvqS9",
+                            "vocal-separation-pipeline__8kwGhBg",
+                            "novelty-segmenter__K3Zjzjf",
+                            "griffin-lim-phase-reconstruction__LryDAiA",
+                            "rms-loudness-normalizer__qRn3s4k",
+                            "onset-midi-quantizer__GXvoANV",
+                            "audio-mosaicing-engine__zAfGkEx",
+                            "chord-recognition-viterbi__wLCSAYQ",
+                            "constellation-fingerprinter__vZM393b",
+                            "plp-tempo-tracker__SyaZyMx",
+                            "music-similarity-search__2hwDP93"
+                        ],
+                        "0.0": [
+                            "impulse-response-convolver__xAHBJiY",
+                            "hpss-multi-stem-mixer__d4iYvjA"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "hpss-multi-stem-mixer__d4iYvjA"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 656492,
+        "cost_usd": null
+    }
+}

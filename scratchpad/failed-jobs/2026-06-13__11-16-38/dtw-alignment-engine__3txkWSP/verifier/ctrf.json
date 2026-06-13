@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:18:41.635816+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781349521393,
+            "stop": 1781349521635
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_alignment_file_is_valid_json_list",
+                "status": "passed",
+                "duration": 8,
+                "start": 1781349521603,
+                "stop": 1781349521611,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_alignment_has_minimum_points",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349521612,
+                "stop": 1781349521613,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_alignment_entries_have_required_float_keys",
+                "status": "passed",
+                "duration": 12,
+                "start": 1781349521613,
+                "stop": 1781349521625,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_alignment_is_monotonic_non_decreasing",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781349521625,
+                "stop": 1781349521627,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_alignment_starts_near_origin",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781349521628,
+                "stop": 1781349521628,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_alignment_ends_near_durations",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349521629,
+                "stop": 1781349521630,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_alignment_accuracy_against_ground_truth",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781349521631,
+                "stop": 1781349521635,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:48:36.298880+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781347713129,
+            "stop": 1781347716298
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_csv_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347713356,
+                "stop": 1781347713357,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_csv_header_and_row_count",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781347713357,
+                "stop": 1781347713359,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_block_index_starts_at_zero_and_strictly_increases",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347713359,
+                "stop": 1781347713360,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_columns_are_monotonic_and_start_at_zero",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347713360,
+                "stop": 1781347713361,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_weighted_rms_matches_global_rms",
+                "status": "passed",
+                "duration": 2933,
+                "start": 1781347713361,
+                "stop": 1781347716294,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_last_end_time_close_to_file_duration",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781347716296,
+                "stop": 1781347716298,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

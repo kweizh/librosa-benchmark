@@ -1,0 +1,16 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 5 items
+
+tests/test_final_state.py .....                                          [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_mosaic_file_exists_and_is_readable
+PASSED tests/test_final_state.py::test_mosaic_sample_rate_matches_target
+PASSED tests/test_final_state.py::test_mosaic_length_close_to_target
+PASSED tests/test_final_state.py::test_mosaic_peak_amplitude_in_range
+PASSED tests/test_final_state.py::test_mosaic_is_closer_to_target_than_source
+============================== 5 passed in 11.21s ==============================

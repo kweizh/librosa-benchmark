@@ -1,0 +1,38 @@
+- Initializing MCP connections...
+You
+# Monophonic Pitch Tracker with Probabilistic YIN (pYIN) ## Background Librosa ships an implementation of the probabilistic YIN (pYIN) algorithm for fundamental-frequency (F0) tracking of monophonic signals. You will use `librosa.pyin` to build a small offline pitch tracker for a single audio file. ## Requirements * Read the input audio from `/workspace/input.wav` (mono, 22050 Hz, single take). * Estimate the fundamental frequency (in Hz) for every analysis frame using `librosa.pyin`. * Distinguish voiced from unvoiced frames using pYIN's voicing output. * Write the per-frame results to `/workspace/pitch.csv` using the schema below. ## Implementation Hints * Use `librosa.load` to read the WAV file. The recording uses a single channel. * `librosa.pyin` requires `fmin`/`fmax` to be set as keyword arguments. Pick a range that comfortably contains the human-vocal / instrumental sweep frequencies in the input (the input is known to stay between about 100 Hz and 1000 Hz). * Convert the per-frame indices to seconds with the same `sr` and `hop_length` you passed to `librosa.pyin` (e.g. via `librosa.times_like` or `librosa.frames_to_time`). * Unvoiced frames typically come back as `NaN` from `librosa.pyin` (its default `fill_na=np.nan`). Keep that behaviour or write `0` for unvoiced frames; both are acceptable. ## Acceptance Criteria * Project path: /workspace * Ensure the script is executed and the artifact `/workspace/pitch.csv` exists. * Output file: /workspace/pitch.csv * The CSV must include a header row with exactly these three column names (in this order): `time_sec,frequency_hz,voiced`. * One row per analysis frame. The number of data rows (excluding header) must be at least 50. * `time_sec` values must be monotonically non-decreasing and the first row must start at (or extremely close to) `0.0`. * `frequency_hz` must be a finite numeric value for voiced frames and may be either `NaN`/empty or `0` for unvoiced frames. * `voiced` must be one of the boolean encodings `true`/`false`, `True`/`False`, or `1`/`0` (any one of these encodings is acceptable, but it must be used consistently for the whole file).   
+
+Pochi
+💭 Thinking for 144 characters   
+📂 Listing files in /workspace ✔ 
+✏️  Writing /workspace/pitch_tracker.py ✔ 
+💫 Executing cd /workspace && python pitch_tracker.py ✔ 
+💫 Executing head -5 /workspace/pitch.csv && echo "---" && wc -l /workspace/pitch.csv ✔ 
+🎉 Task Completed
+The pitch tracker is implemented and `/workspace/pitch.csv` has been generated successfully.
+
+**Script:** `/workspace/pitch_tracker.py`  
+**Output:** `/workspace/pitch.csv`
+
+### What the script does
+
+1. **Loads** `/workspace/input.wav` with `librosa.load` (preserving native 22 050 Hz sample rate, forced mono).
+2. **Runs `librosa.pyin`** with:
+   - `fmin=80 Hz`, `fmax=1100 Hz` — covers the known 100–1000 Hz sweep with comfortable headroom
+   - `hop_length=512` samples (~23 ms per frame)
+   - `fill_na=np.nan` — unvoiced frames get `NaN` (written as an empty cell in CSV)
+3. **Builds the time axis** via `librosa.times_like` using the same `sr` and `hop_length`.
+4. **Writes the CSV** with the required header `time_sec,frequency_hz,voiced`.
+
+### Results
+
+| Property | Value |
+|---|---|
+| Total data rows | **216** (≥ 50 ✓) |
+| First `time_sec` | **0.000000** (≈ 0 ✓) |
+| Last `time_sec` | **4.992290** |
+| Time axis | monotonically non-decreasing ✓ |
+| `voiced` encoding | `True`/`False` (consistent throughout ✓) |
+| Voiced frames | 216 / 216 (the input is fully voiced) |
+| F0 range observed | ~204 Hz → ~797 Hz |   
+  

@@ -1,0 +1,37 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 26 items
+
+tests/test_final_state.py ..........................                     [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_outputs_dir_exists
+PASSED tests/test_final_state.py::test_output_file_exists_with_matching_layout[quiet_mono_16k.wav]
+PASSED tests/test_final_state.py::test_output_file_exists_with_matching_layout[loud_mono_44100.wav]
+PASSED tests/test_final_state.py::test_output_file_exists_with_matching_layout[pink_stereo_48k.wav]
+PASSED tests/test_final_state.py::test_output_file_exists_with_matching_layout[tone_mono_22050.wav]
+PASSED tests/test_final_state.py::test_non_clipping_outputs_hit_target_rms[quiet_mono_16k.wav]
+PASSED tests/test_final_state.py::test_non_clipping_outputs_hit_target_rms[pink_stereo_48k.wav]
+PASSED tests/test_final_state.py::test_non_clipping_outputs_hit_target_rms[tone_mono_22050.wav]
+PASSED tests/test_final_state.py::test_clipping_case_uses_maximum_headroom
+PASSED tests/test_final_state.py::test_report_has_entry_for_each_input
+PASSED tests/test_final_state.py::test_report_entry_schema[quiet_mono_16k.wav]
+PASSED tests/test_final_state.py::test_report_entry_schema[loud_mono_44100.wav]
+PASSED tests/test_final_state.py::test_report_entry_schema[pink_stereo_48k.wav]
+PASSED tests/test_final_state.py::test_report_entry_schema[tone_mono_22050.wav]
+PASSED tests/test_final_state.py::test_report_gain_db_matches_rms_delta[quiet_mono_16k.wav]
+PASSED tests/test_final_state.py::test_report_gain_db_matches_rms_delta[loud_mono_44100.wav]
+PASSED tests/test_final_state.py::test_report_gain_db_matches_rms_delta[pink_stereo_48k.wav]
+PASSED tests/test_final_state.py::test_report_gain_db_matches_rms_delta[tone_mono_22050.wav]
+PASSED tests/test_final_state.py::test_report_peak_after_not_clipped[quiet_mono_16k.wav]
+PASSED tests/test_final_state.py::test_report_peak_after_not_clipped[loud_mono_44100.wav]
+PASSED tests/test_final_state.py::test_report_peak_after_not_clipped[pink_stereo_48k.wav]
+PASSED tests/test_final_state.py::test_report_peak_after_not_clipped[tone_mono_22050.wav]
+PASSED tests/test_final_state.py::test_actual_output_peak_not_clipped[quiet_mono_16k.wav]
+PASSED tests/test_final_state.py::test_actual_output_peak_not_clipped[loud_mono_44100.wav]
+PASSED tests/test_final_state.py::test_actual_output_peak_not_clipped[pink_stereo_48k.wav]
+PASSED tests/test_final_state.py::test_actual_output_peak_not_clipped[tone_mono_22050.wav]
+============================== 26 passed in 0.31s ==============================

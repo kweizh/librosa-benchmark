@@ -1,0 +1,62 @@
+- Initializing MCP connections...
+You
+# Vocal / Accompaniment Separation Pipeline ## Background The file `/workspace/input.wav` is a short music recording that contains a singer plus instrumental accompaniment. Your job is to split it into two waveforms: the foreground (the vocals) and the background (the instrumental music). ## Requirements * Read `/workspace/input.wav`. * Implement a mask-based separation pipeline that uses `librosa.decompose.nn_filter` (the REPET-SIM style nearest-neighbor filter on the magnitude spectrogram) together with a soft spectral mask, applied to the original complex STFT. * Write the two reconstructed waveforms back to disk: * `/workspace/foreground.wav` — the vocals. * `/workspace/background.wav` — the instrumental accompaniment. * Each output file must have the same sample rate and channel count as the input, and (approximately) the same length. When summed sample-by-sample, `foreground + background` should reconstruct the input mixture. ## Acceptance Criteria * Project path: /workspace * Input file (already present): /workspace/input.wav * Output files (must be created by you): /workspace/foreground.wav and /workspace/background.wav * Both outputs must be readable WAV files (via `soundfile`), with the same sample rate and channel count as the input. * Each output length must be within 1024 samples of the input length. * The sample-wise sum `foreground + background` must reconstruct the input closely: cosine similarity with the input >= 0.85 and normalized mean absolute error < 0.05. * The foreground and background must be distinct (cosine similarity between them < 0.95). * Neither output may be silent (RMS > 1e-4).   
+
+Pochi
+I'll start by examining the input file and understanding its properties, then implement the separation pipeline.   
+📋 Updating todo list (4 items) ✔ 
+💫 Executing python3 -c "
+import soundfile as sf
+import numpy as np
+
+info = sf.info('/workspace/input.wav')
+print(f'Sample rate: {info.samplerate}')
+print(f'Channels: {info.channels}')
+print(f'Frames: {info.frames}')
+print(f'Duration: {info.duration:.3f}s')
+print(f'Format: {info.format}')
+print(f'Subtype: {info.subtype}')
+
+y, sr = sf.read('/workspace/input.wav')
+print(f'Data shape: {y.shape}')
+print(f'Data dtype: {y.dtype}')
+print(f'Min: {y.min():.6f}, Max: {y.max():.6f}')
+print(f'RMS: {np.sqrt(np.mean(y**2)):.6f}')
+"
+ ✔ 
+Good — mono, 22050 Hz, 30 seconds. Now let me implement the full separation pipeline.   
+📋 Updating todo list (4 items) ✔ 
+✏️  Writing /workspace/separate.py ✔ 
+💫 Executing cd /workspace && python3 separate.py ✔ 
+All acceptance criteria pass with excellent metrics. Let me verify the output files are valid WAVs with correct properties:   
+💫 Executing python3 -c "
+import soundfile as sf
+
+for path in ['/workspace/foreground.wav', '/workspace/background.wav']:
+    info = sf.info(path)
+    print(f'{path}: sr={info.samplerate}, channels={info.channels}, frames={info.frames}, duration={info.duration:.3f}s')
+"
+ ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+The vocal/accompaniment separation pipeline is complete. Here's a summary:
+
+**Pipeline**: REPET-SIM style mask-based separation using `librosa.decompose.nn_filter` on the magnitude spectrogram with a soft spectral mask applied to the complex STFT.
+
+**Output files**:
+- `/workspace/foreground.wav` — vocals (661,500 samples, 22,050 Hz, mono)
+- `/workspace/background.wav` — instrumental accompaniment (661,500 samples, 22,050 Hz, mono)
+
+**Validation results** (all criteria met):
+
+| Criterion | Value | Threshold | Status |
+|---|---|---|---|
+| Length match | 0 sample diff | ≤ 1024 | ✓ |
+| Foreground RMS | 0.0785 | > 1e-4 | ✓ |
+| Background RMS | 0.0613 | > 1e-4 | ✓ |
+| Reconstruction cosine similarity | 1.000 | ≥ 0.85 | ✓ |
+| Normalized MAE | 0.000 | < 0.05 | ✓ |
+| FG/BG distinctness (cosine sim) | 0.897 | < 0.95 | ✓ |
+
+The soft mask is computed as `mask_bg = S_bg^p / (S_bg^p + (m * S)^p)` where `S_bg` is the nn_filter output and `S` is the original magnitude spectrogram. The foreground mask is the complement. Both masks are applied to the complex STFT before inverse transform, ensuring perfect reconstruction when summed.   
+  

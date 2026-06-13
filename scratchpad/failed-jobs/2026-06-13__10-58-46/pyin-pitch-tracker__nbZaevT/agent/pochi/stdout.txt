@@ -1,0 +1,80 @@
+- Initializing MCP connections...
+You
+# Monophonic Pitch Tracker with Probabilistic YIN (pYIN) ## Background Librosa ships an implementation of the probabilistic YIN (pYIN) algorithm for fundamental-frequency (F0) tracking of monophonic signals. You will use `librosa.pyin` to build a small offline pitch tracker for a single audio file. ## Requirements * Read the input audio from `/workspace/input.wav` (mono, 22050 Hz, single take). * Estimate the fundamental frequency (in Hz) for every analysis frame using `librosa.pyin`. * Distinguish voiced from unvoiced frames using pYIN's voicing output. * Write the per-frame results to `/workspace/pitch.csv` using the schema below. ## Implementation Hints * Use `librosa.load` to read the WAV file. The recording uses a single channel. * `librosa.pyin` requires `fmin`/`fmax` to be set as keyword arguments. Pick a range that comfortably contains the human-vocal / instrumental sweep frequencies in the input (the input is known to stay between about 100 Hz and 1000 Hz). * Convert the per-frame indices to seconds with the same `sr` and `hop_length` you passed to `librosa.pyin` (e.g. via `librosa.times_like` or `librosa.frames_to_time`). * Unvoiced frames typically come back as `NaN` from `librosa.pyin` (its default `fill_na=np.nan`). Keep that behaviour or write `0` for unvoiced frames; both are acceptable. ## Acceptance Criteria * Project path: /workspace * Ensure the script is executed and the artifact `/workspace/pitch.csv` exists. * Output file: /workspace/pitch.csv * The CSV must include a header row with exactly these three column names (in this order): `time_sec,frequency_hz,voiced`. * One row per analysis frame. The number of data rows (excluding header) must be at least 50. * `time_sec` values must be monotonically non-decreasing and the first row must start at (or extremely close to) `0.0`. * `frequency_hz` must be a finite numeric value for voiced frames and may be either `NaN`/empty or `0` for unvoiced frames. * `voiced` must be one of the boolean encodings `true`/`false`, `True`/`False`, or `1`/`0` (any one of these encodings is acceptable, but it must be used consistently for the whole file).   
+
+Pochi
+I'll start by exploring the workspace and understanding the input file, then build the pitch tracker script.   
+📋 Updating todo list (3 items) ✔ 
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print('librosa version:', librosa.__version__)" ✔ 
+💫 Executing python3 -c "
+import soundfile as sf
+info = sf.info('/workspace/input.wav')
+print(f'samplerate: {info.samplerate}')
+print(f'channels: {info.channels}')
+print(f'duration: {info.duration}s')
+print(f'frames: {info.frames}')
+" ✔ 
+Input confirmed: mono, 22050 Hz, 5 seconds. Now I'll write the script.   
+📋 Updating todo list (3 items) ✔ 
+✏️  Writing /workspace/pitch_tracker.py ✔ 
+📋 Updating todo list (3 items) ✔ 
+💫 Executing cd /workspace && python3 pitch_tracker.py ✔ 
+431 frames, well over the 50 minimum. Let me verify the output more thoroughly.   
+💫 Executing python3 -c "
+import csv
+
+with open('/workspace/pitch.csv', 'r') as f:
+    reader = csv.reader(f)
+    header = next(reader)
+    print('Header:', header)
+    assert header == ['time_sec', 'frequency_hz', 'voiced'], 'Header mismatch'
+
+    rows = list(reader)
+    print(f'Total data rows: {len(rows)}')
+    assert len(rows) >= 50, f'Too few rows: {len(rows)}'
+
+    # Check time monotonic and starts near 0
+    times = [float(r[0]) for r in rows]
+    assert abs(times[0]) < 1e-6, f'First time not near 0: {times[0]}'
+    assert all(times[i] <= times[i+1] for i in range(len(times)-1)), 'Times not monotonic'
+
+    # Check voiced column is consistently True/False
+    voiced_vals = set(r[2] for r in rows)
+    print(f'Voiced values found: {voiced_vals}')
+    assert voiced_vals.issubset({'True', 'False'}), f'Unexpected voiced values: {voiced_vals}'
+
+    # Count voiced vs unvoiced
+    voiced_count = sum(1 for r in rows if r[2] == 'True')
+    unvoiced_count = sum(1 for r in rows if r[2] == 'False')
+    print(f'Voiced frames: {voiced_count}, Unvoiced frames: {unvoiced_count}')
+
+    # Check frequency_hz: finite for voiced, empty/NaN for unvoiced
+    for r in rows:
+        freq_str = r[1]
+        voiced_str = r[2]
+        if voiced_str == 'True':
+            assert freq_str != '' and freq_str != 'nan' and freq_str != 'NaN', f'Voiced frame has non-finite freq: {r}'
+        # unvoiced: empty string is acceptable
+
+    print('All checks passed.')
+"
+ ✔ 
+All frames are voiced in this particular audio (a continuous sweep staying within the F0 range), which is fine — all frequency values are finite and the `voiced` column is consistently `True`.   
+📋 Updating todo list (3 items) ✔ 
+🎉 Task Completed
+The monophonic pitch tracker has been built and executed successfully.
+
+**Script**: `/workspace/pitch_tracker.py`
+**Output**: `/workspace/pitch.csv`
+
+**Verification results:**
+- 431 analysis frames (well above the 50 minimum)
+- Header: `time_sec,frequency_hz,voiced` — correct schema
+- `time_sec` starts at `0.0` and is monotonically non-decreasing
+- `frequency_hz` contains finite numeric values for all voiced frames
+- `voiced` column uses consistent `True`/`False` encoding
+- pYIN parameters: `fmin=80 Hz`, `fmax=1100 Hz`, `hop_length=256` at 22050 Hz sample rate
+
+The input audio is a continuous 5-second sweep that stays entirely within the voiced F0 range, so all 431 frames are voiced with valid frequency estimates ranging from ~204 Hz to ~1000 Hz.   
+  

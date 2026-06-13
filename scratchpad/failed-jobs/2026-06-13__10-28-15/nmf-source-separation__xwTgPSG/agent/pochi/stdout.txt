@@ -1,0 +1,233 @@
+- Initializing MCP connections...
+You
+# NMF-based Audio Source Separation ## Background You have a librosa-based Python environment available. Your job is to build a small audio analysis utility that performs unsupervised source separation on a real audio recording by factoring its magnitude spectrogram with Non-negative Matrix Factorization (NMF), and then synthesizes a separate time-domain waveform for each learned component. ## Requirements * Read the input audio file `/workspace/input.wav` (mono, native sample rate). * Decompose the audio into exactly **4** NMF components using `librosa.decompose.decompose` together with `sklearn.decomposition.NMF`. * For each of the 4 components, reconstruct a time-domain audio signal that represents that component's contribution to the original mixture. * Write the 4 resulting audio waveforms to `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, and `/workspace/component_3.wav`. ## Implementation Hints * `librosa.decompose.decompose` operates on a non-negative feature matrix such as a magnitude spectrogram. Compute a complex STFT first so that you can later use its phase for reconstruction. * The factorization yields `components` (spectral basis vectors) and `activations` (time-varying gains). The contribution of a single component to the mixture spectrogram is the outer product of its basis with its activation row. * To turn a component back into a waveform that sounds like part of the original recording, recombine its magnitude with the original STFT phase before running an inverse STFT. * Make sure each output WAV preserves the input sample rate and is close in length to the original input. ## Acceptance Criteria * Project path: /home/user/myproject * Input audio file: /workspace/input.wav * Output audio files: /workspace/component\_0.wav, /workspace/component\_1.wav, /workspace/component\_2.wav, /workspace/component\_3.wav * Ensure the solver script is executed end-to-end and the four output WAV files exist. * Each output file must be a valid WAV file that loads with `soundfile.read`. * Each output file must have the same sample rate as the input audio. * Each output file's length (in samples) must be within 2048 samples of the input length. * The sample-wise sum of the 4 component waveforms must have a cosine similarity of at least 0.95 to the input waveform (NMF approximately reconstructs the original mixture). * Each component waveform must be non-trivial, with RMS amplitude strictly greater than 1e-5. * The 4 components must capture different spectral content: at least two of the four component waveforms must have spectral centroids that differ from each other by more than 50 Hz.   
+
+Pochi
+💭 Thinking for 157 characters   
+📂 Listing files in /workspace ✔ 
+📂 Listing files in /home/user/myproject ✔ 
+✏️  Writing /home/user/myproject/separate.py ✔ 
+💫 Executing cd /home/user/myproject && python separate.py ✔ 
+All four components generated successfully. Let me run a quick validation to confirm all acceptance criteria are met:   
+💫 Executing python3 - <<'EOF'
+import numpy as np
+import soundfile as sf
+import librosa
+
+INPUT  = "/workspace/input.wav"
+PATHS  = [f"/workspace/component_{i}.wav" for i in range(4)]
+
+y_in, sr_in = sf.read(INPUT)
+print(f"Input  : sr={sr_in}  len={len(y_in)}")
+
+components = []
+for p in PATHS:
+    y, sr = sf.read(p)
+    rms   = np.sqrt(np.mean(y**2))
+    centroid = librosa.feature.spectral_centroid(y=y.astype(float), sr=sr).mean()
+    print(f"  {p}  sr={sr}  len={len(y)}  Δlen={abs(len(y)-len(y_in))}  RMS={rms:.5f}  centroid={centroid:.1f} Hz")
+    assert sr == sr_in,               "sample-rate mismatch"
+    assert abs(len(y)-len(y_in)) <= 2048, "length too different"
+    assert rms > 1e-5,                "component is trivial (RMS too low)"
+    components.append(y.astype(float))
+
+# Cosine similarity of sum vs original
+mixture = np.sum(components, axis=0)
+cos_sim = np.dot(mixture, y_in) / (np.linalg.norm(mixture) * np.linalg.norm(y_in))
+print(f"\nCosine similarity (sum vs input) : {cos_sim:.4f}")
+assert cos_sim >= 0.95, f"cosine similarity {cos_sim:.4f} < 0.95"
+
+# Spectral centroid spread
+centroids = [librosa.feature.spectral_centroid(y=c, sr=sr_in).mean() for c in components]
+print(f"Spectral centroids               : {[f'{c:.1f}' for c in centroids]}")
+pairs = [(abs(centroids[i]-centroids[j]), i, j)
+         for i in range(4) for j in range(i+1,4)]
+max_diff, ai, bi = max(pairs)
+print(f"Max centroid diff                : {max_diff:.1f} Hz  (components {ai} and {bi})")
+assert max_diff > 50, f"centroid spread {max_diff:.1f} Hz ≤ 50 Hz"
+
+print("\n✅  All acceptance criteria passed.")
+EOF
+ ✖ "Command exited with code 1"
+The cosine similarity is below 0.95 because individual component normalisation broke the additive property. I need to reconstruct without independent peak-normalisation — instead apply a single global scale or no normalisation at all.   
+🔧 Applying diff to /home/user/myproject/separate.py ✔ 
+💫 Executing cd /home/user/myproject && python separate.py ✔ 
+💫 Executing python3 - <<'EOF'
+import numpy as np
+import soundfile as sf
+import librosa
+
+INPUT  = "/workspace/input.wav"
+PATHS  = [f"/workspace/component_{i}.wav" for i in range(4)]
+
+y_in, sr_in = sf.read(INPUT)
+print(f"Input  : sr={sr_in}  len={len(y_in)}")
+
+components = []
+for p in PATHS:
+    y, sr = sf.read(p)
+    rms   = np.sqrt(np.mean(y**2))
+    centroid = librosa.feature.spectral_centroid(y=y.astype(float), sr=sr).mean()
+    print(f"  {p}  sr={sr}  len={len(y)}  Δlen={abs(len(y)-len(y_in))}  RMS={rms:.5f}  centroid={centroid:.1f} Hz")
+    assert sr == sr_in,               "sample-rate mismatch"
+    assert abs(len(y)-len(y_in)) <= 2048, "length too different"
+    assert rms > 1e-5,                "component is trivial (RMS too low)"
+    components.append(y.astype(float))
+
+# Cosine similarity of sum vs original
+mixture = np.sum(components, axis=0)
+cos_sim = np.dot(mixture, y_in) / (np.linalg.norm(mixture) * np.linalg.norm(y_in))
+print(f"\nCosine similarity (sum vs input) : {cos_sim:.4f}")
+assert cos_sim >= 0.95, f"cosine similarity {cos_sim:.4f} < 0.95"
+
+# Spectral centroid spread
+centroids = [librosa.feature.spectral_centroid(y=c, sr=sr_in).mean() for c in components]
+print(f"Spectral centroids               : {[f'{c:.1f}' for c in centroids]}")
+pairs = [(abs(centroids[i]-centroids[j]), i, j)
+         for i in range(4) for j in range(i+1,4)]
+max_diff, ai, bi = max(pairs)
+print(f"Max centroid diff                : {max_diff:.1f} Hz  (components {ai} and {bi})")
+assert max_diff > 50, f"centroid spread {max_diff:.1f} Hz ≤ 50 Hz"
+
+print("\n✅  All acceptance criteria passed.")
+EOF
+ ✖ "Command exited with code 1"
+The cosine similarity is still below 0.95. The issue is that using only the original phase for each component doesn't accurately reconstruct the mixture. I need a better reconstruction approach — use Griffin-Lim or use a weighted phase approach where each component's phase is the original phase but the reconstruction sums properly. Let me think about this differently: the sum of components should equal the NMF reconstruction `W @ H`, not the original signal. I need to ensure that when using the original phase, the reconstruction is faithful. The key insight is that `sum(S_k * exp(i*phase)) = (W@H) * exp(i*phase)`, and the cosine similarity between `istft((W@H)*exp(i*phase))` and `y` needs to be ≥ 0.95. This means I need NMF to fit well (high reconstruction quality).   
+💫 Executing python3 - <<'EOF'
+import numpy as np
+import librosa
+from sklearn.decomposition import NMF
+
+y, sr = librosa.load("/workspace/input.wav", sr=None, mono=True)
+D = librosa.stft(y, n_fft=2048, hop_length=512)
+S = np.abs(D)
+
+# Check reconstruction quality at various n_components and max_iter
+for n in [4, 8]:
+    for mi in [200, 500, 1000]:
+        nmf = NMF(n_components=n, init="nndsvda", max_iter=mi, random_state=42)
+        W = nmf.fit_transform(S)
+        H = nmf.components_
+        S_recon = W @ H
+        # cosine sim of ISTFT of recon vs original
+        D_recon = S_recon * np.exp(1j * np.angle(D))
+        y_recon = librosa.istft(D_recon, hop_length=512, length=len(y))
+        cos = np.dot(y_recon, y) / (np.linalg.norm(y_recon)*np.linalg.norm(y))
+        print(f"  n={n} max_iter={mi} reconstruction_err={nmf.reconstruction_err_:.4f} cosine={cos:.4f}")
+EOF
+ ✔ 
+The fundamental limitation is that NMF with 4 components on this audio doesn't achieve 0.95 cosine similarity when using original phase. With 8 components it works (0.97), but the task requires exactly 4. Let me try a different approach: use a mel spectrogram for NMF (better factorization), or use `librosa.decompose.decompose` with a different transformer, or use Wiener-filter style reconstruction which should improve the similarity significantly.   
+💫 Executing python3 - <<'EOF'
+import numpy as np
+import librosa
+from sklearn.decomposition import NMF
+
+y, sr = librosa.load("/workspace/input.wav", sr=None, mono=True)
+D = librosa.stft(y, n_fft=2048, hop_length=512)
+S = np.abs(D)
+
+# Try Wiener masking approach:
+# mask_k = S_k / (sum of all S_k + eps)  -- soft Wiener mask applied to original D
+nmf = NMF(n_components=4, init="nndsvda", max_iter=500, random_state=42)
+W = nmf.fit_transform(S)
+H = nmf.components_
+S_recon = W @ H
+
+# Wiener masks
+eps = 1e-8
+masks = []
+for k in range(4):
+    S_k = np.outer(W[:, k], H[k, :])
+    mask = S_k / (S_recon + eps)
+    masks.append(mask)
+
+# Each component = mask * D (complex)
+components = []
+for k in range(4):
+    y_k = librosa.istft(masks[k] * D, hop_length=512, length=len(y))
+    components.append(y_k)
+
+mixture = np.sum(components, axis=0)
+cos = np.dot(mixture, y) / (np.linalg.norm(mixture)*np.linalg.norm(y))
+print(f"Wiener mask cosine similarity: {cos:.4f}")
+
+# Check individual RMS
+for k, c in enumerate(components):
+    rms = np.sqrt(np.mean(c**2))
+    centroid = librosa.feature.spectral_centroid(y=c, sr=sr).mean()
+    print(f"  component_{k}  RMS={rms:.5f}  centroid={centroid:.1f} Hz")
+EOF
+ ✔ 
+Wiener masking gives a cosine similarity of 0.9999. Now let me update the script to use this approach:   
+✏️  Writing /home/user/myproject/separate.py ✔ 
+💫 Executing cd /home/user/myproject && python separate.py ✔ 
+💫 Executing python3 - <<'EOF'
+import numpy as np
+import soundfile as sf
+import librosa
+
+INPUT  = "/workspace/input.wav"
+PATHS  = [f"/workspace/component_{i}.wav" for i in range(4)]
+
+y_in, sr_in = sf.read(INPUT)
+print(f"Input  : sr={sr_in}  len={len(y_in)}")
+
+components = []
+for p in PATHS:
+    y, sr = sf.read(p)
+    rms      = np.sqrt(np.mean(y**2))
+    centroid = librosa.feature.spectral_centroid(y=y.astype(float), sr=sr).mean()
+    print(f"  {p}  sr={sr}  len={len(y)}  Δlen={abs(len(y)-len(y_in))}  RMS={rms:.5f}  centroid={centroid:.1f} Hz")
+    assert sr == sr_in,                   "sample-rate mismatch"
+    assert abs(len(y)-len(y_in)) <= 2048, "length too different"
+    assert rms > 1e-5,                    "component is trivial (RMS too low)"
+    components.append(y.astype(float))
+
+# Cosine similarity of sum vs original
+mixture = np.sum(components, axis=0)
+cos_sim = np.dot(mixture, y_in) / (np.linalg.norm(mixture) * np.linalg.norm(y_in))
+print(f"\nCosine similarity (sum vs input) : {cos_sim:.4f}  (need ≥ 0.95)")
+assert cos_sim >= 0.95, f"cosine similarity {cos_sim:.4f} < 0.95"
+
+# Spectral centroid spread
+centroids = [librosa.feature.spectral_centroid(y=c, sr=sr_in).mean() for c in components]
+print(f"Spectral centroids               : {[f'{c:.1f}' for c in centroids]}")
+pairs     = [(abs(centroids[i]-centroids[j]), i, j)
+             for i in range(4) for j in range(i+1,4)]
+max_diff, ai, bi = max(pairs)
+print(f"Max centroid diff                : {max_diff:.1f} Hz  (components {ai} and {bi}, need > 50 Hz)")
+assert max_diff > 50, f"centroid spread {max_diff:.1f} Hz ≤ 50 Hz"
+
+print("\n✅  All acceptance criteria passed.")
+EOF
+ ✔ 
+All acceptance criteria pass with comfortable margins. Here's a summary of what was built: --- **`/home/user/myproject/separate.py`** — the complete pipeline: | Step | Details | |---|---| | **Load** | `librosa.load` at native 22 050 Hz, mono | | **STFT** | `n_fft=2048`, `hop_length=512` → complex spectrogram `D`, magnitude `S` | | **NMF** | `librosa.decompose.decompose` wrapping `sklearn NMF` (`init=nndsvda`, `max_iter=500`) → basis `W` (1025 × 4) and activations `H` (4 × 230) | | **Reconstruction** | **Wiener soft-masking**: `mask_k = S_k / (W@H + ε)`, applied to the complex STFT → `istft(mask_k * D)` | | **Output** | 4 × PCM-32 WAV files at `/workspace/component_{0-3}.wav` | **Validation results:** | Check | Result | |---|---| | Sample rate (all 4) | 22 050 Hz ✅ | | Length delta (all 4) | 0 samples ✅ | | RMS > 1e-5 (all 4) | min 0.027 ✅ | | Cosine similarity (sum vs input) | **0.9999** ✅ | | Max spectral centroid difference | **986.5 Hz** (components 0 & 3) ✅ |   
+💭 Thinking for 191 characters   
+🎉 Task Completed
+The NMF-based audio source separation pipeline is complete and all acceptance criteria pass.
+
+**Script:** `/home/user/myproject/separate.py`
+
+**Output files produced:**
+- `/workspace/component_0.wav`
+- `/workspace/component_1.wav`
+- `/workspace/component_2.wav`
+- `/workspace/component_3.wav`
+
+**Validation results:**
+
+| Criterion | Result |
+|---|---|
+| Valid WAV, loads with `soundfile.read` | ✅ all 4 |
+| Sample rate matches input (22 050 Hz) | ✅ all 4 |
+| Length within 2048 samples of input | ✅ Δ = 0 samples |
+| RMS > 1e-5 per component | ✅ min RMS = 0.027 |
+| Cosine similarity of sum vs input ≥ 0.95 | ✅ **0.9999** |
+| Max spectral centroid spread > 50 Hz | ✅ **986.5 Hz** (components 0 & 3) |
+
+**Key design decisions:**
+
+1. **STFT** with `n_fft=2048 / hop_length=512` captures sufficient time-frequency resolution.
+2. **NMF** via `librosa.decompose.decompose` wrapping `sklearn.decomposition.NMF` (`init=nndsvda`, `max_iter=500`) factorises the magnitude spectrogram into 4 basis/activation pairs.
+3. **Wiener soft-masking** for reconstruction — each component's mask is `S_k / (W@H + ε)` applied to the *complex* STFT before `istft`. This ensures the 4 waveforms sum to virtually the original signal (cosine sim ≈ 1.0), unlike the naïve phase-copying approach which only reached ~0.88.   
+  

@@ -1,0 +1,89 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:02:33.413706+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781344948324,
+            "stop": 1781344953413
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_file_exists_and_has_expected_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781344948367,
+                "stop": 1781344948369,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_boundaries_are_floats_and_strictly_increasing",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781344948370,
+                "stop": 1781344948372,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_boundaries_lie_inside_audio_duration",
+                "status": "passed",
+                "duration": 5034,
+                "start": 1781344948372,
+                "stop": 1781344953406,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_two_boundaries_detected",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781344953406,
+                "stop": 1781344953409,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_ground_truth_change_point_is_covered",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344953410,
+                "stop": 1781344953411,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::ground_truth_sec::[5.0, 10.0]"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_each_ground_truth_change_point_is_covered",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344953412,
+                "stop": 1781344953413,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::ground_truth_sec::[5.0, 10.0]"
+                ]
+            }
+        ]
+    }
+}

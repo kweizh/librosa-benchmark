@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:09:55.452673+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781348992137,
+            "stop": 1781348995452
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_reconstructed_file_exists",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781348992338,
+                "stop": 1781348992340,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstructed_file_is_readable_and_mono_22050",
+                "status": "passed",
+                "duration": 12,
+                "start": 1781348992340,
+                "stop": 1781348992352,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstructed_length_matches_reference",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781348992353,
+                "stop": 1781348992358,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstructed_peak_amplitude_in_audible_range",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781348992358,
+                "stop": 1781348992362,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstructed_magnitude_matches_input",
+                "status": "passed",
+                "duration": 3090,
+                "start": 1781348992362,
+                "stop": 1781348995452,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,276 @@
+- Initializing MCP connections...
+You
+# NMF-based Audio Source Separation ## Background You have a librosa-based Python environment available. Your job is to build a small audio analysis utility that performs unsupervised source separation on a real audio recording by factoring its magnitude spectrogram with Non-negative Matrix Factorization (NMF), and then synthesizes a separate time-domain waveform for each learned component. ## Requirements * Read the input audio file `/workspace/input.wav` (mono, native sample rate). * Decompose the audio into exactly **4** NMF components using `librosa.decompose.decompose` together with `sklearn.decomposition.NMF`. * For each of the 4 components, reconstruct a time-domain audio signal that represents that component's contribution to the original mixture. * Write the 4 resulting audio waveforms to `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, and `/workspace/component_3.wav`. ## Implementation Hints * `librosa.decompose.decompose` operates on a non-negative feature matrix such as a magnitude spectrogram. Compute a complex STFT first so that you can later use its phase for reconstruction. * The factorization yields `components` (spectral basis vectors) and `activations` (time-varying gains). The contribution of a single component to the mixture spectrogram is the outer product of its basis with its activation row. * To turn a component back into a waveform that sounds like part of the original recording, recombine its magnitude with the original STFT phase before running an inverse STFT. * Make sure each output WAV preserves the input sample rate and is close in length to the original input. ## Acceptance Criteria * Project path: /home/user/myproject * Input audio file: /workspace/input.wav * Output audio files: /workspace/component\_0.wav, /workspace/component\_1.wav, /workspace/component\_2.wav, /workspace/component\_3.wav * Ensure the solver script is executed end-to-end and the four output WAV files exist. * Each output file must be a valid WAV file that loads with `soundfile.read`. * Each output file must have the same sample rate as the input audio. * Each output file's length (in samples) must be within 2048 samples of the input length. * The sample-wise sum of the 4 component waveforms must have a cosine similarity of at least 0.95 to the input waveform (NMF approximately reconstructs the original mixture). * Each component waveform must be non-trivial, with RMS amplitude strictly greater than 1e-5. * The 4 components must capture different spectral content: at least two of the four component waveforms must have spectral centroids that differ from each other by more than 50 Hz.   
+
+Pochi
+💭 Thinking for 944 characters   
+💫 Executing ls -la /workspace/input.wav ✔ 
+💭 Thinking for 767 characters   
+✏️  Writing /workspace/nmf_separation.py ✔ 
+💭 Thinking for 164 characters   
+💫 Executing python3 /workspace/nmf_separation.py ✔ 
+💭 Thinking for 194 characters   
+💫 Executing ls -la /workspace/component_*.wav ✔ 
+💭 Thinking for 252 characters   
+💫 Executing mkdir -p /home/user/myproject && mv /workspace/nmf_separation.py /home/user/myproject/ ✔ 
+💭 Thinking for 259 characters   
+✏️  Writing /workspace/test.py ✔ 
+💭 Thinking for 226 characters   
+💫 Executing python3 /workspace/test.py ✔ 
+💭 Thinking for 1348 characters   
+✏️  Writing /home/user/myproject/nmf_separation.py ✖ "File has not been read yet. Please read the file before writing it."
+💫 Executing cat << 'EOF' > /home/user/myproject/nmf_separation.py
+import librosa
+import numpy as np
+import soundfile as sf
+import sklearn.decomposition
+
+def main():
+    input_file = '/workspace/input.wav'
+    y, sr = librosa.load(input_file, sr=None)
+    
+    # Compute complex STFT
+    S = librosa.stft(y)
+    
+    # Magnitude and phase
+    S_mag = np.abs(S)
+    S_phase = np.angle(S)
+    
+    # Decompose
+    n_components = 4
+    components, activations = librosa.decompose.decompose(S_mag, n_components=n_components, sort=True)
+    
+    # Calculate sum of component magnitudes to create soft masks
+    comp_mags = []
+    for i in range(n_components):
+        comp_mags.append(np.outer(components[:, i], activations[i, :]))
+    
+    comp_mags = np.array(comp_mags)
+    sum_mags = np.sum(comp_mags, axis=0) + 1e-10
+    
+    for i in range(n_components):
+        # Soft mask
+        mask = comp_mags[i] / sum_mags
+        comp_mag = mask * S_mag
+        
+        # Combine with original phase
+        comp_S = comp_mag * np.exp(1j * S_phase)
+        
+        # Inverse STFT
+        comp_y = librosa.istft(comp_S, length=len(y))
+        
+        # Save to file
+        output_file = f'/workspace/component_{i}.wav'
+        sf.write(output_file, comp_y, sr)
+
+if __name__ == '__main__':
+    main()
+EOF
+python3 /home/user/myproject/nmf_separation.py
+python3 /workspace/test.py ✔ 
+💭 Thinking for 1163 characters   
+💫 Executing cat << 'EOF' > /home/user/myproject/nmf_separation.py
+import librosa
+import numpy as np
+import soundfile as sf
+import sklearn.decomposition
+
+def main():
+    input_file = '/workspace/input.wav'
+    y, sr = librosa.load(input_file, sr=None)
+    
+    # Compute complex STFT
+    S = librosa.stft(y)
+    
+    # Magnitude and phase
+    S_mag = np.abs(S)
+    S_phase = np.angle(S)
+    
+    # Decompose
+    n_components = 4
+    components, activations = librosa.decompose.decompose(S_mag, n_components=n_components, sort=True)
+    
+    for i in range(n_components):
+        comp_mag = np.outer(components[:, i], activations[i, :])
+        
+        # Combine with original phase
+        comp_S = comp_mag * np.exp(1j * S_phase)
+        
+        # Inverse STFT
+        comp_y = librosa.istft(comp_S, length=len(y))
+        
+        # Save to file
+        output_file = f'/workspace/component_{i}.wav'
+        sf.write(output_file, comp_y, sr)
+
+if __name__ == '__main__':
+    main()
+EOF
+python3 /home/user/myproject/nmf_separation.py
+python3 /workspace/test.py ✔ 
+💭 Thinking for 1103 characters   
+💫 Executing cat << 'EOF' > /home/user/myproject/nmf_separation.py
+import librosa
+import numpy as np
+import soundfile as sf
+from sklearn.decomposition import NMF
+
+def main():
+    input_file = '/workspace/input.wav'
+    y, sr = librosa.load(input_file, sr=None)
+    
+    S = librosa.stft(y)
+    S_mag = np.abs(S)
+    S_phase = np.angle(S)
+    
+    n_components = 4
+    # Using KL divergence
+    nmf = NMF(n_components=n_components, solver='mu', beta_loss='kullback-leibler', init='nndsvda', random_state=0, max_iter=1000)
+    activations = nmf.fit_transform(S_mag.T).T
+    components = nmf.components_.T
+    
+    for i in range(n_components):
+        comp_mag = np.outer(components[:, i], activations[i, :])
+        comp_S = comp_mag * np.exp(1j * S_phase)
+        comp_y = librosa.istft(comp_S, length=len(y))
+        output_file = f'/workspace/component_{i}.wav'
+        sf.write(output_file, comp_y, sr)
+
+if __name__ == '__main__':
+    main()
+EOF
+python3 /home/user/myproject/nmf_separation.py
+python3 /workspace/test.py ✔ 
+💭 Thinking for 749 characters   
+💫 Executing cat << 'EOF' > /workspace/test_nmf.py
+import librosa
+import numpy as np
+import soundfile as sf
+import sklearn.decomposition
+
+y, sr = sf.read('/workspace/input.wav')
+S = librosa.stft(y)
+S_mag = np.abs(S)
+S_phase = np.angle(S)
+
+components, activations = librosa.decompose.decompose(S_mag, n_components=4, sort=True)
+S_mag_approx = components @ activations
+
+print("S_mag approx cosine sim:", np.sum(S_mag * S_mag_approx) / (np.linalg.norm(S_mag) * np.linalg.norm(S_mag_approx)))
+EOF
+python3 /workspace/test_nmf.py ✔ 
+💭 Thinking for 783 characters   
+💫 Executing cat << 'EOF' > /home/user/myproject/nmf_separation.py
+import librosa
+import numpy as np
+import soundfile as sf
+import sklearn.decomposition
+
+def main():
+    input_file = '/workspace/input.wav'
+    y, sr = librosa.load(input_file, sr=None)
+    
+    # Compute complex STFT
+    S = librosa.stft(y)
+    
+    # Magnitude and phase
+    S_mag = np.abs(S)
+    S_phase = np.angle(S)
+    
+    # Decompose
+    n_components = 4
+    components, activations = librosa.decompose.decompose(S_mag, n_components=n_components, sort=True)
+    
+    # Calculate sum of component magnitudes to create soft masks
+    comp_mags = []
+    for i in range(n_components):
+        comp_mags.append(np.outer(components[:, i], activations[i, :]))
+    
+    comp_mags = np.array(comp_mags)
+    sum_mags = np.sum(comp_mags, axis=0) + 1e-10
+    
+    for i in range(n_components):
+        # Soft mask
+        mask = comp_mags[i] / sum_mags
+        comp_mag_masked = mask * S_mag
+        
+        # Combine with original phase
+        comp_S = comp_mag_masked * np.exp(1j * S_phase)
+        
+        # Inverse STFT
+        comp_y = librosa.istft(comp_S, length=len(y))
+        
+        # Save to file
+        output_file = f'/workspace/component_{i}.wav'
+        sf.write(output_file, comp_y, sr)
+
+if __name__ == '__main__':
+    main()
+EOF
+python3 /home/user/myproject/nmf_separation.py
+python3 /workspace/test.py ✔ 
+💭 Thinking for 1028 characters   
+💫 Executing cat << 'EOF' > /home/user/myproject/nmf_separation.py
+import librosa
+import numpy as np
+import soundfile as sf
+import sklearn.decomposition
+
+def main():
+    input_file = '/workspace/input.wav'
+    y, sr = librosa.load(input_file, sr=None)
+    
+    # Compute complex STFT
+    S = librosa.stft(y)
+    
+    # Magnitude and phase
+    S_mag = np.abs(S)
+    S_phase = np.angle(S)
+    
+    # Decompose
+    n_components = 4
+    transformer = sklearn.decomposition.NMF(n_components=n_components, random_state=42)
+    components, activations = librosa.decompose.decompose(S_mag, transformer=transformer, sort=True)
+    
+    # Calculate sum of component magnitudes to create soft masks
+    comp_mags = []
+    for i in range(n_components):
+        comp_mags.append(np.outer(components[:, i], activations[i, :]))
+    
+    comp_mags = np.array(comp_mags)
+    sum_mags = np.sum(comp_mags, axis=0) + 1e-10
+    
+    for i in range(n_components):
+        # Soft mask
+        mask = comp_mags[i] / sum_mags
+        comp_mag_masked = mask * S_mag
+        
+        # Combine with original phase
+        comp_S = comp_mag_masked * np.exp(1j * S_phase)
+        
+        # Inverse STFT
+        comp_y = librosa.istft(comp_S, length=len(y))
+        
+        # Save to file
+        output_file = f'/workspace/component_{i}.wav'
+        sf.write(output_file, comp_y, sr)
+
+if __name__ == '__main__':
+    main()
+EOF
+python3 /home/user/myproject/nmf_separation.py
+python3 /workspace/test.py ✔ 
+💭 Thinking for 124 characters   
+🎉 Task Completed
+I have implemented the NMF-based source separation utility. The script handles reading the audio, decomposing the magnitude spectrogram into 4 components using `librosa.decompose.decompose` with `sklearn.decomposition.NMF`, and then applies soft-masking to precisely reconstruct the individual time-domain signals using the original phase. 
+
+The python script is saved at `/home/user/myproject/nmf_separation.py` and has been executed end-to-end.
+
+The 4 resulting waveforms:
+* `/workspace/component_0.wav`
+* `/workspace/component_1.wav`
+* `/workspace/component_2.wav`
+* `/workspace/component_3.wav`
+
+All files have been generated with the correct sample rate, lengths within 2048 samples of the input, and their sum has a cosine similarity of >0.99 to the original input mixture. Each component is non-trivial and captures distinct spectral content.   
+  

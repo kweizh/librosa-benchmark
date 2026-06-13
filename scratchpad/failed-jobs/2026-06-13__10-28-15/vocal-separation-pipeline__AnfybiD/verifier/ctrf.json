@@ -1,0 +1,110 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:33:44.582891+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 9,
+            "passed": 9,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781346824241,
+            "stop": 1781346824582
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_foreground_file_exists_and_readable",
+                "status": "passed",
+                "duration": 9,
+                "start": 1781346824464,
+                "stop": 1781346824473,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_background_file_exists_and_readable",
+                "status": "passed",
+                "duration": 6,
+                "start": 1781346824473,
+                "stop": 1781346824479,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sample_rate_matches_input",
+                "status": "passed",
+                "duration": 16,
+                "start": 1781346824480,
+                "stop": 1781346824496,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_channel_count_matches_input",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781346824497,
+                "stop": 1781346824497,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_length_within_tolerance",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781346824498,
+                "stop": 1781346824499,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_additive_reconstruction",
+                "status": "passed",
+                "duration": 40,
+                "start": 1781346824499,
+                "stop": 1781346824539,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_foreground_and_background_are_distinct",
+                "status": "passed",
+                "duration": 25,
+                "start": 1781346824539,
+                "stop": 1781346824564,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_foreground_not_silent",
+                "status": "passed",
+                "duration": 12,
+                "start": 1781346824565,
+                "stop": 1781346824577,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_background_not_silent",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781346824577,
+                "stop": 1781346824580,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

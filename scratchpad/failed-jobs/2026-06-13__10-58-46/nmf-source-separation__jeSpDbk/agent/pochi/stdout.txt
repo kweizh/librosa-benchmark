@@ -1,0 +1,123 @@
+- Initializing MCP connections...
+You
+# NMF-based Audio Source Separation ## Background You have a librosa-based Python environment available. Your job is to build a small audio analysis utility that performs unsupervised source separation on a real audio recording by factoring its magnitude spectrogram with Non-negative Matrix Factorization (NMF), and then synthesizes a separate time-domain waveform for each learned component. ## Requirements * Read the input audio file `/workspace/input.wav` (mono, native sample rate). * Decompose the audio into exactly **4** NMF components using `librosa.decompose.decompose` together with `sklearn.decomposition.NMF`. * For each of the 4 components, reconstruct a time-domain audio signal that represents that component's contribution to the original mixture. * Write the 4 resulting audio waveforms to `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, and `/workspace/component_3.wav`. ## Implementation Hints * `librosa.decompose.decompose` operates on a non-negative feature matrix such as a magnitude spectrogram. Compute a complex STFT first so that you can later use its phase for reconstruction. * The factorization yields `components` (spectral basis vectors) and `activations` (time-varying gains). The contribution of a single component to the mixture spectrogram is the outer product of its basis with its activation row. * To turn a component back into a waveform that sounds like part of the original recording, recombine its magnitude with the original STFT phase before running an inverse STFT. * Make sure each output WAV preserves the input sample rate and is close in length to the original input. ## Acceptance Criteria * Project path: /home/user/myproject * Input audio file: /workspace/input.wav * Output audio files: /workspace/component\_0.wav, /workspace/component\_1.wav, /workspace/component\_2.wav, /workspace/component\_3.wav * Ensure the solver script is executed end-to-end and the four output WAV files exist. * Each output file must be a valid WAV file that loads with `soundfile.read`. * Each output file must have the same sample rate as the input audio. * Each output file's length (in samples) must be within 2048 samples of the input length. * The sample-wise sum of the 4 component waveforms must have a cosine similarity of at least 0.95 to the input waveform (NMF approximately reconstructs the original mixture). * Each component waveform must be non-trivial, with RMS amplitude strictly greater than 1e-5. * The 4 components must capture different spectral content: at least two of the four component waveforms must have spectral centroids that differ from each other by more than 50 Hz.   
+
+Pochi
+I'll build this NMF-based audio source separation utility step by step.   
+📋 Updating todo list (4 items) ✔ 
+💫 Executing mkdir -p /home/user/myproject ✔ 
+💫 Executing ls -la /workspace/input.wav 2>/dev/null && file /workspace/input.wav ✖ "Command exited with code 127"
+💫 Executing python3 -c "
+import soundfile as sf
+import librosa
+y, sr = sf.read('/workspace/input.wav')
+print(f'Sample rate: {sr}')
+print(f'Shape: {y.shape}')
+print(f'Duration: {len(y)/sr:.2f}s')
+print(f'Dtype: {y.dtype}')
+print(f'RMS: {((y**2).mean())**0.5:.6f}')
+print(f'Min: {y.min():.4f}, Max: {y.max():.4f}')
+" ✔ 
+📋 Updating todo list (4 items) ✔ 
+Good — mono, 22050 Hz, 117601 samples. Now I'll write the separation script.   
+✏️  Writing /home/user/myproject/separate.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /home/user/myproject && python3 separate.py ✖ "Command exited with code 1"
+The issue is that `components[k]` is a scalar (not a vector) because `librosa.decompose.decompose` returns components with shape `(n_components, n_features)` but each `components[k]` needs to be a 1D array. Let me check the shapes:   
+💫 Executing python3 -c "
+import numpy as np
+import librosa
+import soundfile as sf
+from sklearn.decomposition import NMF
+
+y, sr = sf.read('/workspace/input.wav')
+D = librosa.stft(y, n_fft=2048, hop_length=512)
+S = np.abs(D)
+print('S shape:', S.shape)
+
+components, activations = librosa.decompose.decompose(
+    S, n_components=4, sort=True,
+    transformer=NMF(n_components=4, init='nndsvda', max_iter=500, random_state=42),
+)
+print('components shape:', components.shape)
+print('activations shape:', activations.shape)
+print('components[0] shape:', components[0].shape)
+print('components[1] shape:', components[1].shape)
+" ✔ 
+`components` is `(n_freq, n_components)` — the components are along axis 1, not axis 0. So `components[:, k]` gives the k-th basis vector. Let me fix the script:   
+🔧 Applying diff to /home/user/myproject/separate.py ✔ 
+💫 Executing cd /home/user/myproject && python3 separate.py ✔ 
+The cosine similarity is 0.885, which is below the 0.95 threshold. This is because the NMF reconstruction with only 4 components loses some fidelity. I need to improve the reconstruction quality. Let me try increasing NMF iterations and using a better initialization, or use a larger FFT window for more frequency resolution:   
+🔧 Applying diff to /home/user/myproject/separate.py ✔ 
+💫 Executing cd /home/user/myproject && python3 separate.py ✔ 
+The similarity hasn't changed much. The issue is that the NMF residual (the error between the NMF-approximated magnitude and the original magnitude) is inherent to the 4-component decomposition. The cosine similarity of 0.885 is actually quite good for 4-component NMF, but we need 0.95. Let me think about this differently. The cosine similarity problem arises because we're using the original phase with the NMF-approximated magnitude. The NMF approximation error in magnitude gets compounded. Let me try using a Wiener-like soft mask approach instead — using the ratio of each component's magnitude to the sum of all components as a mask applied to the original STFT. This should give perfect reconstruction when summed:   
+✏️  Writing /home/user/myproject/separate.py ✔ 
+💫 Executing cd /home/user/myproject && python3 separate.py ✔ 
+Cosine similarity is now 0.999944 — well above 0.95. All RMS values are well above 1e-5. Max centroid difference is 858.8 Hz (well above 50 Hz). Now let me run the full validation:   
+📋 Updating todo list (4 items) ✔ 
+💫 Executing python3 -c "
+import soundfile as sf
+import numpy as np
+import librosa
+
+# Load input
+y_in, sr_in = sf.read('/workspace/input.wav')
+print(f'Input: sr={sr_in}, samples={len(y_in)}')
+
+# Check each output file
+components = []
+for k in range(4):
+    path = f'/workspace/component_{k}.wav'
+    y, sr = sf.read(path)
+    components.append(y)
+    rms = np.sqrt(np.mean(y**2))
+    cent = librosa.feature.spectral_centroid(y=y, sr=sr).mean()
+    length_diff = abs(len(y) - len(y_in))
+    print(f'component_{k}: sr={sr}, samples={len(y)}, length_diff={length_diff}, rms={rms:.6f}, centroid={cent:.1f}Hz')
+    assert sr == sr_in, f'FAIL: sample rate mismatch'
+    assert length_diff <= 2048, f'FAIL: length diff {length_diff} > 2048'
+    assert rms > 1e-5, f'FAIL: RMS too low'
+
+# Cosine similarity
+y_sum = sum(components)
+cos_sim = np.dot(y_in, y_sum) / (np.linalg.norm(y_in) * np.linalg.norm(y_sum))
+print(f'Cosine similarity: {cos_sim:.6f}')
+assert cos_sim >= 0.95, f'FAIL: cos sim {cos_sim} < 0.95'
+
+# Spectral centroid check
+cents = [librosa.feature.spectral_centroid(y=c, sr=sr_in).mean() for c in components]
+max_diff = max(abs(cents[i] - cents[j]) for i in range(4) for j in range(i+1, 4))
+print(f'Max centroid diff: {max_diff:.1f} Hz')
+assert max_diff > 50, f'FAIL: max centroid diff {max_diff} <= 50'
+
+print()
+print('ALL CHECKS PASSED')
+" ✔ 
+All checks pass. Let me also verify the files exist:   
+💫 Executing ls -la /workspace/component_*.wav ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+## NMF Audio Source Separation — Complete
+
+The project is at `/home/user/myproject/separate.py`. All four output WAV files have been generated at `/workspace/component_0.wav` through `/workspace/component_3.wav`.
+
+### Approach
+
+1. **STFT**: Computed complex STFT (2048-point FFT, 512 hop) to get magnitude and phase.
+2. **NMF Decomposition**: Used `librosa.decompose.decompose` with `sklearn.decomposition.NMF` (nndsvda init, 2000 iterations) to factor the magnitude spectrogram into 4 spectral basis vectors and their time-varying activations.
+3. **Soft Masking (Wiener-like)**: Instead of using the NMF-approximated magnitude directly (which loses fidelity), each component's magnitude proportion relative to the total NMF reconstruction is used as a soft mask applied to the **original** complex STFT. This ensures the sum of all component STFTs exactly equals the original STFT.
+4. **ISTFT**: Each masked complex STFT is inverted back to a time-domain waveform.
+
+### Validation Results
+
+| Criterion | Result |
+|---|---|
+| All 4 WAV files exist | ✅ |
+| Loadable with `soundfile.read` | ✅ |
+| Same sample rate (22050 Hz) | ✅ |
+| Length within 2048 samples of input | ✅ (exact match: 117601 samples) |
+| Cosine similarity ≥ 0.95 | ✅ **0.999944** |
+| Each RMS > 1e-5 | ✅ (0.0277–0.0446) |
+| ≥2 components differ by >50 Hz centroid | ✅ max diff: **858.8 Hz** |
+   
+  

@@ -1,0 +1,140 @@
+- Initializing MCP connections...
+You
+# Batch RMS Loudness Normalizer ## Background You are building an offline audio post-processing CLI that ingests a directory of WAV files with mixed sample rates, mixed channel counts, and wildly varying loudness, and produces a directory of loudness-normalized WAV files plus a JSON report. The normalizer must use librosa for analysis and must preserve the exact sample rate and channel layout of each input file. ## Requirements * Read every WAV file under `/workspace/inputs/`. * For every input file, write a normalized WAV file with the exact same filename to `/workspace/outputs/`. * Each output WAV must keep the same sample rate and the same channel count as its corresponding input. * The default normalization target is a global RMS of `-20 dBFS` (linear amplitude `0.1`), computed across all channels and all samples of the file. * If applying the gain that would reach `-20 dBFS` would push the peak absolute sample amplitude above `1.0` (clipping), the normalizer must instead apply the largest gain that keeps the peak `<= 1.0` and report the gain that was actually applied. * Write a JSON report to `/workspace/report.json` containing, for every input filename, an object with the keys `orig_rms_db`, `gain_db`, `final_rms_db`, and `peak_after` (all numbers in dB except `peak_after`, which is the linear peak absolute amplitude of the output). ## Implementation Hints * librosa exposes audio analysis primitives that can compute RMS energy from a waveform; see https://librosa.org/doc/0.11.0/generated/librosa.feature.rms.html . * Preserve the native sample rate by loading with `sr=None`, and preserve the channel layout by loading with `mono=False`. * Use `soundfile.write` for output, and remember librosa returns multi-channel audio as channels-first while `soundfile` expects channels-last. * All gain math is on linear amplitude; `dB = 20 * log10(amplitude)`. ## Acceptance Criteria * Project path: /workspace * Command: python3 /workspace/normalize.py * Inputs directory: /workspace/inputs/ (contains WAV files prepared at container build time) * Outputs directory: /workspace/outputs/ (created by the agent's script) * Report file: /workspace/report.json * For every WAV file `.wav` in `/workspace/inputs/`, there must be a file `/workspace/outputs/<name>.wav` with identical sample rate and identical channel count to the input. * For files whose `-20 dBFS` target does NOT cause clipping, the global RMS of the output WAV file must be within `0.5 dB` of `-20 dBFS`. * For files whose `-20 dBFS` target WOULD cause clipping, the output peak absolute amplitude must be within `1%` of `1.0` (i.e. between `0.99` and `1.0001`). * `/workspace/report.json` must contain exactly one entry per input filename. Each entry must have all four keys `orig_rms_db`, `gain_db`, `final_rms_db`, `peak_after` and the values must be JSON numbers. * For every report entry, `gain_db` must equal `final_rms_db - orig_rms_db` within `0.5 dB`. * For every report entry, `peak_after` must be `<= 1.0001`.   
+
+Pochi
+I'll start by exploring the workspace structure and understanding the inputs, then build the normalizer script.   
+📋 Updating todo list (4 items) ✔ 
+📂 Listing files in /workspace recursively ✔ 
+💫 Executing ls -la /workspace/inputs/ 2>/dev/null || echo "No inputs directory" ✔ 
+💫 Executing python3 -c "import librosa; import soundfile; print('librosa:', librosa.__version__); print('soundfile:', soundfile.__version__)" ✔ 
+Good — 4 input WAV files with mixed sample rates and channels. Let me inspect their properties:   
+💫 Executing python3 -c "
+import soundfile as sf
+import numpy as np
+import os
+
+inputs_dir = '/workspace/inputs'
+for f in sorted(os.listdir(inputs_dir)):
+    if f.endswith('.wav'):
+        path = os.path.join(inputs_dir, f)
+        info = sf.info(path)
+        data, sr = sf.read(path)
+        rms = np.sqrt(np.mean(data**2))
+        rms_db = 20 * np.log10(rms) if rms > 0 else -float('inf')
+        peak = np.max(np.abs(data))
+        peak_db = 20 * np.log10(peak) if peak > 0 else -float('inf')
+        print(f'{f}: sr={info.samplerate}, ch={info.channels}, frames={info.frames}, dtype={info.subtype}')
+        print(f'  RMS={rms:.6f} ({rms_db:.2f} dBFS), peak={peak:.6f} ({peak_db:.2f} dBFS)')
+        target_gain = 0.1 / rms if rms > 0 else 1.0
+        new_peak = peak * target_gain
+        print(f'  Target gain for -20dBFS: {target_gain:.4f} -> peak would be {new_peak:.4f} (clipping: {new_peak > 1.0})')
+        print()
+"
+ ✔ 
+📋 Updating todo list (4 items) ✔ 
+Now I have a clear picture. `loud_mono_44100.wav` will clip at -20 dBFS target, so it needs peak-limiting. The others won't clip. Let me write the script:   
+✏️  Writing /workspace/normalize.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 /workspace/normalize.py ✔ 
+Script ran successfully. Now let me validate all the acceptance criteria:   
+💫 Executing python3 -c "
+import json, os, math, soundfile as sf, numpy as np
+
+# --- Check 1: Every input has a matching output ---
+inputs = sorted(f for f in os.listdir('/workspace/inputs') if f.endswith('.wav'))
+outputs = sorted(f for f in os.listdir('/workspace/outputs') if f.endswith('.wav'))
+print('=== File presence ===')
+print(f'Input files: {inputs}')
+print(f'Output files: {outputs}')
+assert inputs == outputs, 'MISMATCH: input and output file lists differ!'
+print('OK: every input has a matching output')
+
+# --- Check 2: Same sample rate and channel count ---
+print()
+print('=== Sample rate & channels ===')
+for f in inputs:
+    in_info = sf.info(os.path.join('/workspace/inputs', f))
+    out_info = sf.info(os.path.join('/workspace/outputs', f))
+    assert in_info.samplerate == out_info.samplerate, f'{f}: SR mismatch {in_info.samplerate} vs {out_info.samplerate}'
+    assert in_info.channels == out_info.channels, f'{f}: ch mismatch {in_info.channels} vs {out_info.channels}'
+    print(f'{f}: sr={out_info.samplerate}, ch={out_info.channels} OK')
+
+# --- Check 3: RMS tolerance for non-clipping files, peak tolerance for clipping ---
+print()
+print('=== Loudness / peak validation ===')
+for f in inputs:
+    data, sr = sf.read(os.path.join('/workspace/outputs', f))
+    rms = float(np.sqrt(np.mean(data**2)))
+    rms_db = 20 * math.log10(rms) if rms > 0 else -float('inf')
+    peak = float(np.max(np.abs(data)))
+
+    # Determine if this file was clipping-limited by checking if peak is near 1.0
+    if peak > 0.99:
+        # Clipping case: peak must be within 1% of 1.0
+        assert 0.99 <= peak <= 1.0001, f'{f}: peak {peak} not in [0.99, 1.0001]'
+        print(f'{f}: CLIPPING-LIMITED, peak={peak:.6f} (within [0.99, 1.0001]) OK')
+    else:
+        # Non-clipping case: RMS must be within 0.5 dB of -20 dBFS
+        assert abs(rms_db - (-20.0)) < 0.5, f'{f}: RMS {rms_db:.2f} not within 0.5 dB of -20'
+        print(f'{f}: RMS={rms_db:.2f} dBFS (within 0.5 dB of -20) OK')
+
+# --- Check 4: Report validation ---
+print()
+print('=== Report validation ===')
+with open('/workspace/report.json') as fp:
+    report = json.load(fp)
+
+report_files = sorted(report.keys())
+assert report_files == inputs, f'Report keys {report_files} != inputs {inputs}'
+print('OK: report has exactly one entry per input file')
+
+for f in inputs:
+    entry = report[f]
+    for key in ('orig_rms_db', 'gain_db', 'final_rms_db', 'peak_after'):
+        assert key in entry, f'{f}: missing key {key}'
+        assert isinstance(entry[key], (int, float)), f'{f}: {key} is not a number'
+
+    # gain_db must equal final_rms_db - orig_rms_db within 0.5 dB
+    expected_gain = entry['final_rms_db'] - entry['orig_rms_db']
+    assert abs(entry['gain_db'] - expected_gain) < 0.5, \
+        f'{f}: gain_db {entry[\"gain_db\"]} != final_rms_db - orig_rms_db = {expected_gain}'
+    
+    # peak_after must be <= 1.0001
+    assert entry['peak_after'] <= 1.0001, f'{f}: peak_after {entry[\"peak_after\"]} > 1.0001'
+    
+    print(f'{f}: all keys present, gain_db consistent, peak_after={entry[\"peak_after\"]} OK')
+
+print()
+print('=== ALL CHECKS PASSED ===')
+"
+ ✔ 
+Let me also verify the report.json contents directly:   
+📖 Reading /workspace/report.json ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+The batch RMS loudness normalizer is implemented and fully validated.
+
+**Script**: `/workspace/normalize.py`
+
+**What it does**:
+1. Reads every `.wav` file from `/workspace/inputs/` using `librosa.load(sr=None, mono=False)` to preserve native sample rate and channel layout.
+2. Computes per-file global RMS and applies the gain needed to hit -20 dBFS (linear 0.1).
+3. If that gain would cause peak > 1.0, it caps the gain so peak = 1.0 instead.
+4. Writes normalized output to `/workspace/outputs/<same-filename>` using `soundfile.write` (transposing channels-first → channels-last as needed).
+5. Writes `/workspace/report.json` with `orig_rms_db`, `gain_db`, `final_rms_db`, and `peak_after` for every file.
+
+**Validation results — all acceptance criteria pass**:
+
+| Criterion | Status |
+|---|---|
+| Every input has a matching output file | ✅ 4/4 |
+| Same sample rate & channel count preserved | ✅ 4/4 |
+| Non-clipping files: RMS within 0.5 dB of -20 dBFS | ✅ 3/3 (pink_stereo, quiet_mono, tone_mono) |
+| Clipping file: peak within [0.99, 1.0001] | ✅ loud_mono (peak=0.999969) |
+| Report has exactly one entry per file, all 4 keys present | ✅ |
+| `gain_db ≈ final_rms_db - orig_rms_db` within 0.5 dB | ✅ |
+| All `peak_after ≤ 1.0001` | ✅ |
+
+The `loud_mono_44100.wav` file was the only one where the -20 dBFS target would have caused clipping (its original peak is 0.957 at -30.49 dBFS RMS), so it was peak-limited instead.   
+  

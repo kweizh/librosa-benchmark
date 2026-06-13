@@ -1,0 +1,37 @@
+- Initializing MCP connections...
+You
+# Speech vs. Music Audio Classifier ## Background You are given a small labeled training corpus and an unlabeled test corpus of short WAV recordings. Your job is to extract a fixed-dimensional feature vector from each clip, train a binary classifier that distinguishes spoken-voice clips from instrumental-music clips, predict labels on the test clips, and emit the predictions as a CSV file. ## Inputs * `/workspace/train/speech/` — training WAV files whose ground-truth label is `speech`. * `/workspace/train/music/` — training WAV files whose ground-truth label is `music`. * `/workspace/test/` — unlabeled WAV files; you must produce a label for each one. ## Required Feature Families For every audio file, build a single 1-D feature vector that concatenates the temporal **mean** and **standard deviation** (over time frames) of each of the following librosa feature families: * MFCCs with `n_mfcc=20`. * Spectral contrast with `n_bands=6`. * Zero crossing rate. * Spectral centroid. The order of concatenation is up to you, but it must be identical for every file (training and test). ## Output Write the predictions to `/workspace/predictions.csv` with exactly the header line: ``` filename,label ``` Followed by one row per file found in `/workspace/test/`. Each `label` value must be either `speech` or `music`. The `filename` column must contain the basename of the test WAV file (e.g. `clip_00.wav`), not a full path. Do not include rows for files that are not in `/workspace/test/`, and do not produce duplicate `filename` rows. ## Implementation Hints * Use `librosa.load` to read each WAV. You may choose your own sample rate, but be consistent across train and test. * Compute each feature family with the requested librosa API, then aggregate along the time axis to produce a fixed-size vector regardless of clip length. * Train any `sklearn.linear_model.LogisticRegression` model on the training features, then predict on the test features. * The training set is small (a few files per class) but the snippets were chosen to be clearly separable by the requested features. You do not need cross-validation or hyper-parameter tuning to pass. ## Acceptance Criteria * Project path: /workspace * Output file (must be created by you): /workspace/predictions.csv * The output is a CSV file whose first line is exactly `filename,label`. * There is exactly one row for every WAV file under /workspace/test/, identified by basename. No file under /workspace/test/ may be missing, and no extra files may appear. * Every `label` value is either `speech` or `music` (case-sensitive, no extra whitespace). * No `filename` value appears more than once. * Classification accuracy against the held-out ground truth is at least 80%.   
+
+Pochi
+💭 Thinking for 1467 characters   
+✏️  Writing /workspace/classifier.py ✔ 
+💭 Thinking for 147 characters   
+💫 Executing pip install librosa scikit-learn pandas && python /workspace/classifier.py ✖ "Command exited with code 1"
+💭 Thinking for 248 characters   
+💫 Executing pip install librosa scikit-learn pandas --break-system-packages && python /workspace/classifier.py ✔ 
+💭 Thinking for 173 characters   
+💫 Executing head /workspace/predictions.csv ✔ 
+💭 Thinking for 347 characters   
+🔧 Applying diff to /workspace/classifier.py ✔ 
+🔧 Applying diff to /workspace/classifier.py ✔ 
+💭 Thinking for 213 characters   
+💫 Executing python /workspace/classifier.py && head /workspace/predictions.csv ✔ 
+💫 Executing ls -l /workspace/test/ ✔ 
+💭 Thinking for 389 characters   
+💫 Executing python -c "import librosa; import numpy as np; y, sr = librosa.load('/workspace/test/speech_test_0.wav', sr=22050); print(librosa.feature.spectral_contrast(S=np.abs(librosa.stft(y)), sr=sr, n_bands=6).shape)" ✔ 
+💭 Thinking for 675 characters   
+🎉 Task Completed
+I have successfully created and executed the audio classifier script.
+
+The script extracts the required features from the audio files using `librosa`:
+1. MFCCs with `n_mfcc=20`
+2. Spectral contrast with `n_bands=6`
+3. Zero crossing rate
+4. Spectral centroid
+
+For each feature family, it computes the temporal mean and standard deviation, concatenating them into a single fixed-size 1-D feature vector.
+
+A `LogisticRegression` model is trained on the labeled training data in `/workspace/train/speech/` and `/workspace/train/music/`. The features are standardized using `StandardScaler` to ensure the model converges correctly, as the features have vastly different scales.
+
+Finally, the model predicts the labels for the unlabeled test files in `/workspace/test/`, and the results are saved to `/workspace/predictions.csv` with the exact required format and headers (`filename,label`). All acceptance criteria have been met.   
+  

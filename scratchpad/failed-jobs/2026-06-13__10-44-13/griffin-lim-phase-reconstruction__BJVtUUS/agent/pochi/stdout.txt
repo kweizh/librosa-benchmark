@@ -1,0 +1,96 @@
+- Initializing MCP connections...
+You
+# Griffin-Lim Phase Reconstruction ## Background You are given only the magnitude of a Short-Time Fourier Transform (STFT) of a real-valued audio signal. The original phase information has been discarded. Your task is to recover an audio waveform whose magnitude STFT closely matches the provided magnitude, using librosa's Griffin-Lim algorithm. ## Requirements * Read the magnitude spectrogram from `/workspace/magnitude.npy`. It is a 2D `float32` NumPy array of shape `(1 + n_fft // 2, n_frames)` produced by `librosa.stft` from a real-valued mono signal. * Reconstruct a real-valued time-domain waveform using `librosa.griffinlim`. * Write the reconstructed waveform to `/workspace/reconstructed.wav` as a mono WAV file at a sample rate of **22050 Hz**. ## Implementation Hints * Infer the STFT frame size from the first dimension of the input array: if the input has `n_bins` frequency rows, then `n_fft = 2 * (n_bins - 1)`. * Pick a hop length that is consistent with the STFT used to produce the magnitude (a power-of-two fraction of `n_fft` is conventional for `librosa.stft`). * Run Griffin-Lim with enough iterations for the phase estimates to converge to a good approximation. * Use `soundfile` (or another correct WAV writer) to save the result as a standard PCM/float WAV at 22050 Hz. ## Acceptance Criteria * Project path: /workspace * Output file: `/workspace/reconstructed.wav` must exist, be readable, contain a single audio channel, and have a sample rate of exactly 22050 Hz. * The reconstructed waveform's magnitude STFT (computed with the same STFT parameters used to produce the input) must closely match the input magnitude spectrogram. * The reconstructed waveform's length must be approximately equal to the original reference signal length (within a few hop lengths). * The reconstructed waveform's peak absolute amplitude must lie in the audible, non-clipping range \[0.01, 1.0].   
+
+Pochi
+💭 Thinking for 307 characters   
+📋 Updating todo list (3 items) ✔ 
+💭 Thinking for 73 characters   
+💫 Executing cd /workspace && python3 -c "
+import numpy as np
+mag = np.load('magnitude.npy')
+print('Shape:', mag.shape)
+print('Dtype:', mag.dtype)
+print('Min:', mag.min(), 'Max:', mag.max())
+n_bins = mag.shape[0]
+print('n_bins:', n_bins)
+n_fft = 2 * (n_bins - 1)
+print('Inferred n_fft:', n_fft)
+" ✔ 
+💭 Thinking for 304 characters   
+📋 Updating todo list (3 items) ✔ 
+💫 Executing cd /workspace && python3 -c "
+import numpy as np
+import librosa
+import soundfile as sf
+
+# Load magnitude spectrogram
+mag = np.load('magnitude.npy')
+print('Input shape:', mag.shape)
+
+# Infer STFT parameters
+n_bins = mag.shape[0]
+n_fft = 2 * (n_bins - 1)  # 1024
+hop_length = n_fft // 4    # 256 (librosa default)
+sr = 22050
+
+print(f'n_fft={n_fft}, hop_length={hop_length}, sr={sr}')
+
+# Reconstruct using Griffin-Lim with enough iterations
+waveform = librosa.griffinlim(mag, n_iter=100, hop_length=hop_length, n_fft=n_fft)
+
+print('Waveform shape:', waveform.shape)
+print('Waveform dtype:', waveform.dtype)
+print('Peak absolute amplitude:', np.max(np.abs(waveform)))
+print('Waveform length in samples:', len(waveform))
+print('Duration:', len(waveform) / sr, 'seconds')
+
+# Save as WAV
+sf.write('reconstructed.wav', waveform, sr)
+print('Saved reconstructed.wav')
+
+# Verify: recompute magnitude STFT and compare
+S_recon = np.abs(librosa.stft(waveform, n_fft=n_fft, hop_length=hop_length))
+print('Reconstructed magnitude shape:', S_recon.shape)
+
+# Compute error metrics
+mse = np.mean((mag - S_recon)**2)
+print('MSE between original and reconstructed magnitude:', mse)
+
+# Check shapes match
+if mag.shape == S_recon.shape:
+    print('Shapes match exactly')
+else:
+    print(f'Shape mismatch: original {mag.shape} vs reconstructed {S_recon.shape}')
+    # Compare on overlapping frames
+    min_frames = min(mag.shape[1], S_recon.shape[1])
+    mse_overlap = np.mean((mag[:, :min_frames] - S_recon[:, :min_frames])**2)
+    print(f'MSE on overlapping frames: {mse_overlap}')
+" ✔ 
+💭 Thinking for 290 characters   
+💫 Executing cd /workspace && python3 -c "
+import soundfile as sf
+info = sf.info('reconstructed.wav')
+print('Sample rate:', info.samplerate)
+print('Channels:', info.channels)
+print('Duration:', info.duration, 'seconds')
+print('Format:', info.format)
+print('Subtype:', info.subtype)
+print('Frames:', info.frames)
+" ✔ 
+📋 Updating todo list (3 items) ✔ 
+🎉 Task Completed
+Successfully reconstructed the waveform from the magnitude spectrogram using Griffin-Lim and saved it to `/workspace/reconstructed.wav`.
+
+**Parameters used:**
+- `n_fft = 1024` (inferred from 513 frequency bins: `2 * (513 - 1)`)
+- `hop_length = 256` (`n_fft // 4`, librosa default)
+- `n_iter = 100` (sufficient for phase convergence)
+- Sample rate: 22050 Hz
+
+**Verification results:**
+- Output file: mono WAV, 22050 Hz, PCM_16, 117504 frames (~5.33 seconds)
+- Peak absolute amplitude: 0.685 (within [0.01, 1.0] range ✓)
+- Reconstructed magnitude STFT shape matches input exactly: (513, 460)
+- MSE between original and reconstructed magnitude: 0.00134 (very close match ✓)   
+  

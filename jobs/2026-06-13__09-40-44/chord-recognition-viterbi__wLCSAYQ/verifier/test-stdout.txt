@@ -1,0 +1,30 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 5 items
+
+tests/test_final_state.py .....                                          [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_each_segment_has_required_schema
+PASSED tests/test_final_state.py::test_chord_labels_match_regex_and_allowed_set
+PASSED tests/test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+PASSED tests/test_final_state.py::test_each_segment_duration_above_threshold
+PASSED tests/test_final_state.py::test_at_least_two_distinct_chord_labels
+======================== 5 passed, 3 warnings in 4.00s =========================

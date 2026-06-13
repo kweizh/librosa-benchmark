@@ -1,0 +1,57 @@
+- Initializing MCP connections...
+You
+# Shazam-style Constellation-Map Audio Fingerprinter ## Background You are given two WAV files inside `/workspace/`: * `/workspace/database.wav` — a clean reference recording (\~17 seconds, mono). * `/workspace/query.wav` — a noisy 5-second excerpt that was lifted from somewhere inside `database.wav`. It has additive white noise on top of the original signal. Your job is to find **where in the database the query starts**, using a Shazam-style constellation-map fingerprinting approach built with **librosa 0.11.0**. Write the result to `/workspace/match.json`. ## Requirements * Read both audio files with librosa and use the same sample rate for both. * Build a constellation map (spectral peak set) for each clip from the magnitude STFT. * Generate combinatorial hashes from peak pairs inside a target zone (`(freq_anchor, freq_target, delta_time)` style tuples) for both the database and the query. * Match the query against the database by collecting time-offset differences for hash collisions and finding the offset with the strongest histogram peak. * Write the result to `/workspace/match.json` with this exact JSON shape: ```json { "start_time": <float seconds from the start of database.wav>, "confidence": <float in [0.0, 1.0]> } ``` ## Implementation Hints * Use `librosa.load` (consider passing `sr=None` or pinning a fixed `sr`) to load both files at a consistent sample rate. * Compute the magnitude spectrogram via `librosa.stft` and convert to a log-magnitude representation (e.g. `librosa.amplitude_to_db(np.abs(librosa.stft(...)))`) before peak picking. * Extract local peaks (the "constellation map") from the 2D spectrogram. Common options: * 2D maximum filtering with `scipy.ndimage.maximum_filter` and comparing against the original spectrogram. * Per-frame `librosa.util.peak_pick`. * For hashing, pair each anchor peak with a small set of target peaks that follow it in time within a bounded time/frequency window, then build a hash key from `(freq_anchor, freq_target, delta_time_frames)`. * Match by computing, for every shared hash, `t_db - t_query` (in frames or seconds), then looking for the offset with the highest histogram count. Convert that offset back to seconds before writing the result. * Pick a `confidence` score that reflects how dominant the best offset is (for example, the share of matched pairs that fall on the winning offset). It must be strictly greater than 0.0 and not exceed 1.0. * This task is CPU- and memory-light; it should comfortably finish in well under a minute. ## Acceptance Criteria * Project path: /workspace * Command: `python3 /workspace/solution.py` (or any script of your choice — the grader only checks the output file). * The script must produce `/workspace/match.json` containing a JSON object with: * `start_time`: a float, in seconds, measured from the beginning of `database.wav`. * `confidence`: a float in the closed interval `[0.0, 1.0]`, strictly greater than `0.0`. * The reported `start_time` must be within `0.75` seconds of the true offset at which `query.wav` was extracted from `database.wav`. * The full solution must run end-to-end in under 60 seconds inside the provided Docker environment. * You may install no additional Python packages beyond what is already provided in the environment (librosa, numpy, scipy, soundfile, soxr).   
+
+Pochi
+I'll start by exploring the workspace to understand what we're working with, then implement the Shazam-style audio fingerprinting solution.   
+📂 Listing files in /workspace ✔ 
+📋 Updating todo list (3 items) ✔ 
+💫 Executing cd /workspace && python3 -c "
+import librosa
+import numpy as np
+
+# Check database.wav
+y_db, sr_db = librosa.load('database.wav', sr=None)
+print(f'database.wav: sr={sr_db}, duration={len(y_db)/sr_db:.3f}s, shape={y_db.shape}')
+
+# Check query.wav
+y_q, sr_q = librosa.load('query.wav', sr=None)
+print(f'query.wav: sr={sr_q}, duration={len(y_q)/sr_q:.3f}s, shape={y_q.shape}')
+
+# Check package versions
+import librosa
+print(f'librosa version: {librosa.__version__}')
+import scipy
+print(f'scipy version: {scipy.__version__}')
+import numpy
+print(f'numpy version: {numpy.__version__}')
+"
+ ✔ 
+Good. Both files are at 22050 Hz sample rate. The database is ~120 seconds (not 17 as mentioned, but that's fine — the query is 5 seconds). Now let me implement the solution.   
+📋 Updating todo list (3 items) ✔ 
+✏️  Writing /workspace/solution.py ✔ 
+📋 Updating todo list (3 items) ✔ 
+💫 Executing cd /workspace && python3 solution.py ✔ 
+The solution runs successfully. Let me verify the output file:   
+📖 Reading /workspace/match.json ✔ 
+📋 Updating todo list (3 items) ✔ 
+🎉 Task Completed
+The Shazam-style constellation-map audio fingerprinting solution is complete.
+
+**Implementation summary:**
+
+`/workspace/solution.py` implements the full fingerprinting pipeline:
+
+1. **Loading**: Both WAV files are loaded via `librosa.load` at a consistent 22050 Hz sample rate.
+2. **Spectrogram**: Magnitude STFT is computed (`n_fft=2048`, `hop_length=512`) and converted to dB scale via `librosa.amplitude_to_db`.
+3. **Peak extraction**: Local spectral peaks (constellation map) are found using `scipy.ndimage.maximum_filter` with a 20×20 neighborhood and a -60 dB amplitude threshold.
+4. **Hashing**: Each anchor peak is paired with up to 15 subsequent target peaks within 100 frames, producing hash keys of the form `(freq_anchor, freq_target, delta_time_frames)`.
+5. **Matching**: For every shared hash between database and query, time-offset differences `t_db - t_query` are collected. A histogram identifies the dominant offset.
+6. **Confidence**: Computed as the ratio of matches at the winning offset to total matches.
+
+**Result** (`/workspace/match.json`):
+- `start_time`: ~4.99 seconds
+- `confidence`: ~0.13 (13% of matched hash pairs agree on this offset, which is a strong signal given the noise and the large search space)
+
+The script completes in well under 60 seconds.   
+  

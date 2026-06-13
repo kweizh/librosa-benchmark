@@ -1,0 +1,16 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 5 items
+
+tests/test_final_state.py .....                                          [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_reconstructed_file_exists
+PASSED tests/test_final_state.py::test_reconstructed_file_is_readable_and_mono_22050
+PASSED tests/test_final_state.py::test_reconstructed_length_matches_reference
+PASSED tests/test_final_state.py::test_reconstructed_peak_amplitude_in_audible_range
+PASSED tests/test_final_state.py::test_reconstructed_magnitude_matches_input
+============================== 5 passed in 6.11s ===============================

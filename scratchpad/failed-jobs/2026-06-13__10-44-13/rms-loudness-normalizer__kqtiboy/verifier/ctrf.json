@@ -1,0 +1,332 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:52:05.679635+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 26,
+            "passed": 26,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781347925403,
+            "stop": 1781347925679
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_outputs_dir_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925609,
+                "stop": 1781347925610,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists_with_matching_layout",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925611,
+                "stop": 1781347925612,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists_with_matching_layout",
+                "status": "passed",
+                "duration": 13,
+                "start": 1781347925613,
+                "stop": 1781347925626,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists_with_matching_layout",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925627,
+                "stop": 1781347925628,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_output_file_exists_with_matching_layout",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925628,
+                "stop": 1781347925629,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_non_clipping_outputs_hit_target_rms",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781347925630,
+                "stop": 1781347925632,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_non_clipping_outputs_hit_target_rms",
+                "status": "passed",
+                "duration": 9,
+                "start": 1781347925632,
+                "stop": 1781347925641,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_non_clipping_outputs_hit_target_rms",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781347925641,
+                "stop": 1781347925644,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_clipping_case_uses_maximum_headroom",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781347925644,
+                "stop": 1781347925647,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_report_has_entry_for_each_input",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925647,
+                "stop": 1781347925648,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_report_entry_schema",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781347925649,
+                "stop": 1781347925649,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_entry_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925650,
+                "stop": 1781347925651,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_entry_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925651,
+                "stop": 1781347925652,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_entry_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925652,
+                "stop": 1781347925653,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_gain_db_matches_rms_delta",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925653,
+                "stop": 1781347925654,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_gain_db_matches_rms_delta",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925654,
+                "stop": 1781347925655,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_gain_db_matches_rms_delta",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925655,
+                "stop": 1781347925656,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_gain_db_matches_rms_delta",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781347925657,
+                "stop": 1781347925660,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_peak_after_not_clipped",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925660,
+                "stop": 1781347925661,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_peak_after_not_clipped",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925661,
+                "stop": 1781347925662,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_peak_after_not_clipped",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925663,
+                "stop": 1781347925664,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_report_peak_after_not_clipped",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347925664,
+                "stop": 1781347925665,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_actual_output_peak_not_clipped",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781347925665,
+                "stop": 1781347925667,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_actual_output_peak_not_clipped",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781347925667,
+                "stop": 1781347925670,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_actual_output_peak_not_clipped",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781347925670,
+                "stop": 1781347925675,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            },
+            {
+                "name": "test_final_state.py::test_actual_output_peak_not_clipped",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781347925676,
+                "stop": 1781347925679,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::name::['quiet_mono_16k.wav', 'loud_mono_44100.wav', 'pink_stereo_48k.wav', 'tone_mono_22050.wav']"
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:00:56.586536+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781344852698,
+            "stop": 1781344856586
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_mosaic_file_exists_and_is_readable",
+                "status": "passed",
+                "duration": 10,
+                "start": 1781344852926,
+                "stop": 1781344852936,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mosaic_sample_rate_matches_target",
+                "status": "passed",
+                "duration": 6,
+                "start": 1781344852936,
+                "stop": 1781344852942,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mosaic_length_close_to_target",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781344852942,
+                "stop": 1781344852943,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mosaic_peak_amplitude_in_range",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781344852943,
+                "stop": 1781344852945,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mosaic_is_closer_to_target_than_source",
+                "status": "passed",
+                "duration": 3640,
+                "start": 1781344852945,
+                "stop": 1781344856585,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

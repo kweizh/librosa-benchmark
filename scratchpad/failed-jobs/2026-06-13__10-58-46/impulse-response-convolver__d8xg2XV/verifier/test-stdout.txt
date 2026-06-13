@@ -1,0 +1,54 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 6 items
+
+tests/test_final_state.py .....F                                         [100%]
+
+=================================== FAILURES ===================================
+___________________ test_wet_initial_samples_track_dry_input ___________________
+
+signals = {'dry': array([-1.43813260e-03, -4.56000416e-04, -4.20127588e-04, ...,
+        8.13951465e-06, -3.10939649e-05,  1.304...-7.19695538e-03, ...,
+       -6.55855983e-05,  1.62946596e-03, -4.21438087e-03], shape=(11025,)), 'sr_dry': 22050, ...}
+
+    def test_wet_initial_samples_track_dry_input(signals):
+        """Causality check: the first 100 samples of the wet signal should be a
+        scaled copy of the first 100 samples of the dry signal, because in a typical
+        impulse response the response begins at (or very near) sample 0."""
+        dry = signals["dry"]
+        wet = signals["wet"]
+        head = 100
+        assert len(dry) >= head and len(wet) >= head, (
+            f"Both dry and wet signals must have at least {head} samples for the "
+            f"causality check."
+        )
+        dry_head = dry[:head]
+        wet_head = wet[:head]
+    
+        dry_energy = float(np.dot(dry_head, dry_head))
+        assert dry_energy > 0, "Dry signal head has zero energy; cannot run causality check."
+        scale = float(np.dot(wet_head, dry_head) / dry_energy)
+    
+        residual = float(np.mean(np.abs(wet_head - scale * dry_head)))
+        wet_mean_abs = float(np.mean(np.abs(wet_head))) + 1e-9
+>       assert residual <= 0.05 * wet_mean_abs + 1e-6, (
+            f"First {head} samples of wet should match a scaled copy of the first "
+            f"{head} samples of dry (residual {residual:.6f} vs allowed "
+            f"{0.05 * wet_mean_abs:.6f}). This indicates either an acausal output "
+            f"or an incorrect convolution."
+        )
+E       AssertionError: First 100 samples of wet should match a scaled copy of the first 100 samples of dry (residual 0.005200 vs allowed 0.000326). This indicates either an acausal output or an incorrect convolution.
+E       assert 0.005199883039624911 <= ((0.05 * 0.006522217796875) + 1e-06)
+
+tests/test_final_state.py:148: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_wet_output_file_exists_and_readable
+PASSED tests/test_final_state.py::test_wet_sample_rate_matches_dry
+PASSED tests/test_final_state.py::test_wet_length_matches_linear_convolution
+PASSED tests/test_final_state.py::test_wet_peak_amplitude_is_normalized
+PASSED tests/test_final_state.py::test_wet_matches_reference_fft_convolution
+FAILED tests/test_final_state.py::test_wet_initial_samples_track_dry_input - ...
+========================= 1 failed, 5 passed in 3.16s ==========================

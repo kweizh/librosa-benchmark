@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:25:21.840276+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781349918024,
+            "stop": 1781349921840
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_each_segment_has_required_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781349918065,
+                "stop": 1781349918067,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_chord_labels_match_regex_and_allowed_set",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349918068,
+                "stop": 1781349918069,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps",
+                "status": "passed",
+                "duration": 3767,
+                "start": 1781349918069,
+                "stop": 1781349921836,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_segment_duration_above_threshold",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781349921837,
+                "stop": 1781349921837,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_two_distinct_chord_labels",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349921838,
+                "stop": 1781349921839,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

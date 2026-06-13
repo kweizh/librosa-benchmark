@@ -1,0 +1,119 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:03:27.784949+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 10,
+            "passed": 10,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781348607731,
+            "stop": 1781348607784
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_csv_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348607770,
+                "stop": 1781348607771,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_csv_has_required_header",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781348607771,
+                "stop": 1781348607773,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_csv_has_minimum_row_count",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348607773,
+                "stop": 1781348607774,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_csv_rows_have_three_columns",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781348607775,
+                "stop": 1781348607775,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_sec_starts_near_zero_and_is_monotonic",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348607776,
+                "stop": 1781348607777,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_voiced_tokens_are_consistent_and_recognized",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348607777,
+                "stop": 1781348607778,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_voiced_fraction_within_sweep",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348607778,
+                "stop": 1781348607779,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_voiced_frequencies_are_in_range",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781348607779,
+                "stop": 1781348607781,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unvoiced_frequencies_are_nan_empty_or_zero",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348607781,
+                "stop": 1781348607782,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_voiced_frequency_median_error_below_5pct",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781348607782,
+                "stop": 1781348607784,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

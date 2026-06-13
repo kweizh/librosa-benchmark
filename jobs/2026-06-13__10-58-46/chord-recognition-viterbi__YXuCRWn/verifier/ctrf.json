@@ -1,0 +1,77 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:14:31.482850+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 4,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781349268008,
+            "stop": 1781349271482
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_each_segment_has_required_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781349268047,
+                "stop": 1781349268049,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_chord_labels_match_regex_and_allowed_set",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349268049,
+                "stop": 1781349268050,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps",
+                "status": "passed",
+                "duration": 3421,
+                "start": 1781349268051,
+                "stop": 1781349271472,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_segment_duration_above_threshold",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 7,
+                "start": 1781349271473,
+                "stop": 1781349271480,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "segments = [{'chord': 'E:min', 'end': 2.8328344671201813, 'start': 0.0}, {'chord': 'F#:min', 'end': 3.436553287981859, 'start': 2...22675737, 'start': 4.551111111111111}, {'chord': 'G#:maj', 'end': 5.6656689342403626, 'start': 5.108390022675737}, ...]\n\n    def test_each_segment_duration_above_threshold(segments):\n        for idx, seg in enumerate(segments):\n            duration = float(seg[\"end\"]) - float(seg[\"start\"])\n>           assert duration > 0.1, (\n                f\"Segment {idx} duration must be > 0.1s, got {duration} \"\n                f\"(start={seg['start']}, end={seg['end']}).\"\n            )\nE           AssertionError: Segment 117 duration must be > 0.1s, got 0.0928798185940991 (start=113.15083900226757, end=113.24371882086167).\nE           assert 0.0928798185940991 > 0.1\n\ntests/test_final_state.py:116: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_two_distinct_chord_labels",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781349271481,
+                "stop": 1781349271482,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

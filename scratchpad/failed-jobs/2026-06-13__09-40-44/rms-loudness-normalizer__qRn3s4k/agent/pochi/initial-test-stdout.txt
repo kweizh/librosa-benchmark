@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /bootstrap
+plugins: json-ctrf-0.5.2
+collected 10 items
+
+bootstrap/test_initial_state.py::test_librosa_importable PASSED
+bootstrap/test_initial_state.py::test_soundfile_importable PASSED
+bootstrap/test_initial_state.py::test_numpy_importable PASSED
+bootstrap/test_initial_state.py::test_workspace_exists PASSED
+bootstrap/test_initial_state.py::test_inputs_dir_exists PASSED
+bootstrap/test_initial_state.py::test_inputs_dir_contains_wavs PASSED
+bootstrap/test_initial_state.py::test_expected_input_files_present PASSED
+bootstrap/test_initial_state.py::test_input_files_are_valid_wav_with_expected_layout PASSED
+bootstrap/test_initial_state.py::test_outputs_dir_not_yet_present_or_empty PASSED
+bootstrap/test_initial_state.py::test_report_json_not_yet_present PASSED
+
+============================== 10 passed in 0.31s ==============================

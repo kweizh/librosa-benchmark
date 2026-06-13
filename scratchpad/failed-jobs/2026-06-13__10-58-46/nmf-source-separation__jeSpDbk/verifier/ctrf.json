@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:05:53.189255+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781348749964,
+            "stop": 1781348753189
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_all_component_files_exist_and_load",
+                "status": "passed",
+                "duration": 11,
+                "start": 1781348750163,
+                "stop": 1781348750174,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_component_matches_input_sample_rate",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348750175,
+                "stop": 1781348750176,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_component_length_within_tolerance",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348750176,
+                "stop": 1781348750177,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sum_of_components_is_close_to_input",
+                "status": "passed",
+                "duration": 22,
+                "start": 1781348750177,
+                "stop": 1781348750199,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_component_has_audible_energy",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781348750199,
+                "stop": 1781348750203,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_components_have_distinguishable_spectral_content",
+                "status": "passed",
+                "duration": 2984,
+                "start": 1781348750204,
+                "stop": 1781348753188,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

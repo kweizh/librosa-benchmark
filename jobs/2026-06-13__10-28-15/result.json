@@ -1,0 +1,60 @@
+{
+    "id": "9a0c8bd4-33dd-48f2-83f1-14f128518a2a",
+    "started_at": "2026-06-13T10:28:17.411020",
+    "updated_at": "2026-06-13T10:44:11.460113",
+    "finished_at": "2026-06-13T10:44:11.460113",
+    "n_total_trials": 20,
+    "stats": {
+        "n_completed_trials": 20,
+        "n_errored_trials": 0,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "pochi__claude-4-6-sonnet__pending-tasks": {
+                "n_trials": 20,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.85
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "pyin-pitch-tracker__NHKwUSP",
+                            "nmf-source-separation__xwTgPSG",
+                            "dtw-alignment-engine__wbDARVh",
+                            "streaming-stft-processor__VttKFtK",
+                            "harmonic-cqt-pitchgram__k5KDpaQ",
+                            "laplacian-segmentation__rPGgpN7",
+                            "spectral-contrast-classifier__JhUNEzz",
+                            "cqt-cens-aligner__YpBt4Tt",
+                            "hpss-multi-stem-mixer__vmtubbW",
+                            "vocal-separation-pipeline__AnfybiD",
+                            "griffin-lim-phase-reconstruction__XzRU8wW",
+                            "rms-loudness-normalizer__rTGJpHQ",
+                            "audio-mosaicing-engine__fHuFBCx",
+                            "chord-recognition-viterbi__WE6F6e2",
+                            "constellation-fingerprinter__QZWqNyZ",
+                            "plp-tempo-tracker__bBLPzey",
+                            "music-similarity-search__PCdCAuo"
+                        ],
+                        "0.0": [
+                            "impulse-response-convolver__BfkfZQ4",
+                            "novelty-segmenter__nzXUS2j",
+                            "onset-midi-quantizer__PBULcQV"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        },
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 498308,
+        "cost_usd": null
+    }
+}

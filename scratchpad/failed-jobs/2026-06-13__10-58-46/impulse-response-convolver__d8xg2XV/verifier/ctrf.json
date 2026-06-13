@@ -1,0 +1,86 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T11:03:05.025241+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 5,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781348581869,
+            "stop": 1781348585025
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_wet_output_file_exists_and_readable",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781348583429,
+                "stop": 1781348583434,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_wet_sample_rate_matches_dry",
+                "status": "passed",
+                "duration": 1506,
+                "start": 1781348583434,
+                "stop": 1781348584940,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_wet_length_matches_linear_convolution",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781348584940,
+                "stop": 1781348584941,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_wet_peak_amplitude_is_normalized",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781348584941,
+                "stop": 1781348584946,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_wet_matches_reference_fft_convolution",
+                "status": "passed",
+                "duration": 53,
+                "start": 1781348584946,
+                "stop": 1781348584999,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_wet_initial_samples_track_dry_input",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 25,
+                "start": 1781348584999,
+                "stop": 1781348585024,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "signals = {'dry': array([-1.43813260e-03, -4.56000416e-04, -4.20127588e-04, ...,\n        8.13951465e-06, -3.10939649e-05,  1.304...-7.19695538e-03, ...,\n       -6.55855983e-05,  1.62946596e-03, -4.21438087e-03], shape=(11025,)), 'sr_dry': 22050, ...}\n\n    def test_wet_initial_samples_track_dry_input(signals):\n        \"\"\"Causality check: the first 100 samples of the wet signal should be a\n        scaled copy of the first 100 samples of the dry signal, because in a typical\n        impulse response the response begins at (or very near) sample 0.\"\"\"\n        dry = signals[\"dry\"]\n        wet = signals[\"wet\"]\n        head = 100\n        assert len(dry) >= head and len(wet) >= head, (\n            f\"Both dry and wet signals must have at least {head} samples for the \"\n            f\"causality check.\"\n        )\n        dry_head = dry[:head]\n        wet_head = wet[:head]\n    \n        dry_energy = float(np.dot(dry_head, dry_head))\n        assert dry_energy > 0, \"Dry signal head has zero energy; cannot run causality check.\"\n        scale = float(np.dot(wet_head, dry_head) / dry_energy)\n    \n        residual = float(np.mean(np.abs(wet_head - scale * dry_head)))\n        wet_mean_abs = float(np.mean(np.abs(wet_head))) + 1e-9\n>       assert residual <= 0.05 * wet_mean_abs + 1e-6, (\n            f\"First {head} samples of wet should match a scaled copy of the first \"\n            f\"{head} samples of dry (residual {residual:.6f} vs allowed \"\n            f\"{0.05 * wet_mean_abs:.6f}). This indicates either an acausal output \"\n            f\"or an incorrect convolution.\"\n        )\nE       AssertionError: First 100 samples of wet should match a scaled copy of the first 100 samples of dry (residual 0.005200 vs allowed 0.000326). This indicates either an acausal output or an incorrect convolution.\nE       assert 0.005199883039624911 <= ((0.05 * 0.006522217796875) + 1e-06)\n\ntests/test_final_state.py:148: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

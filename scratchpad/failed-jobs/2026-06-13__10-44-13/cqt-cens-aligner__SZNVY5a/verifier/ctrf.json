@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T10:49:34.504145+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781347774219,
+            "stop": 1781347774503
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_cqt_db_is_2d_float_array",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781347774430,
+                "stop": 1781347774432,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_db_has_no_nan_or_inf",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781347774433,
+                "stop": 1781347774433,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_db_has_enough_beat_columns",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347774434,
+                "stop": 1781347774435,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_db_has_reasonable_n_bins",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781347774435,
+                "stop": 1781347774435,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_db_values_are_in_db_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781347774436,
+                "stop": 1781347774437,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_png_dimensions",
+                "status": "passed",
+                "duration": 29,
+                "start": 1781347774437,
+                "stop": 1781347774466,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_png_has_nontrivial_content",
+                "status": "passed",
+                "duration": 36,
+                "start": 1781347774467,
+                "stop": 1781347774503,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}
