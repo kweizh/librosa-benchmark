@@ -1,5 +1,183 @@
 1:"$Sreact.fragment"
-2:I[75049,["/librosa-benchmark/_next/static/chunks/d2c13bb33c4fcd54.js","/librosa-benchmark/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
-3:"$Sreact.suspense"
-0:{"buildId":"tyK7g2HooJScx8YXIeNoL","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","div",null,{"className":"container mx-auto px-4 sm:px-8 lg:px-12 py-8 max-w-screen-2xl h-[100dvh] flex flex-col overflow-hidden","children":[["$","div",null,{"className":"mb-6 space-y-4 shrink-0","children":[["$","div",null,{"className":"flex items-center gap-4","children":["$","a",null,{"href":"/","className":"text-sm text-muted-foreground hover:text-foreground transition-colors","children":"← Back to Leaderboard"}]}],["$","div",null,{"children":["$","h1",null,{"className":"text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50","children":"Task"}]}]]}],["$","div",null,{"className":"relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card/90 to-background/90 px-5 pb-10 pt-6 text-center shadow-[0_0_0_1px_hsl(var(--primary)/0.18),0_28px_72px_-32px_hsl(var(--foreground)/0.45)] backdrop-blur-sm sm:px-8 sm:pb-14 sm:pt-8","children":[["$","div",null,{"className":"pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-primary/20 blur-3xl sm:-right-14 sm:-top-14 sm:h-40 sm:w-40"}],["$","div",null,{"className":"pointer-events-none absolute -left-20 bottom-0 h-32 w-32 rounded-full bg-foreground/10 blur-3xl sm:h-36 sm:w-36"}],["$","div",null,{"className":"relative mx-auto mb-8 inline-flex items-center rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-xs font-semibold tracking-[0.12em] text-foreground sm:text-sm sm:tracking-[0.16em]","children":"⏳ PIPELINE PENDING REVIEW"}],["$","p",null,{"className":"relative mx-auto max-w-2xl px-4 text-center text-lg font-semibold tracking-wide text-foreground sm:px-5 sm:text-xl","children":[0," sample cases generated — pending review"]}],["$","p",null,{"className":"relative mx-auto mt-2 max-w-2xl px-4 text-left text-sm leading-relaxed text-muted-foreground sm:px-5","children":"Your sample cases are ready. Before moving forward, we do a quick review together to make sure everything looks right and aligns with real-world usage."}],["$","div",null,{"className":"relative mx-auto mt-8 max-w-2xl rounded-xl bg-primary/10 px-4 py-4 text-left sm:px-5","children":[["$","p",null,{"className":"text-base font-semibold text-foreground sm:text-lg text-center","children":"Next step: join Slack for review"}],["$","p",null,{"className":"mt-1 text-sm leading-relaxed text-muted-foreground","children":"We've sent you a Slack invitation to your registered email with Zealt. Please join and we'll walk through the next step together."}],["$","p",null,{"className":"mt-3 text-xs text-muted-foreground","children":["If you don't see it, just reach out at"," ",["$","a",null,{"href":"mailto:zealtdev@tabbyml.com","className":"font-normal text-foreground underline decoration-primary/60 underline-offset-4 hover:text-primary transition-colors","children":"zealtdev@tabbyml.com"}],"."]}]]}]]}]]}]]}],[["$","script","script-0",{"src":"/librosa-benchmark/_next/static/chunks/719c1c14683b9ed6.js","async":true}],["$","script","script-1",{"src":"/librosa-benchmark/_next/static/chunks/f9f579c42c486944.js","async":true}]],["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
-4:null
+2:"$Sreact.suspense"
+3:I[42654,["/librosa-benchmark/_next/static/chunks/babff0e7418ab052.js","/librosa-benchmark/_next/static/chunks/3ecbb78a8ff87549.js","/librosa-benchmark/_next/static/chunks/719c1c14683b9ed6.js","/librosa-benchmark/_next/static/chunks/f9f579c42c486944.js"],"TasksPageClient"]
+c:I[75049,["/librosa-benchmark/_next/static/chunks/d2c13bb33c4fcd54.js","/librosa-benchmark/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
+4:Ta99,# Chord Recognition with Chroma + Viterbi Decoding
+
+## Background
+Build a simple major/minor chord recognition pipeline using `librosa`. The pipeline must consume a single audio file, derive chroma observations, score them against 24 chord templates (12 major + 12 minor), and use Hidden Markov Model (HMM)-style Viterbi decoding to produce a temporally smooth chord sequence. The decoded state sequence must then be summarized as time-aligned chord segments.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Detect chords from the set of 24 labels:
+  `C:maj, C#:maj, D:maj, D#:maj, E:maj, F:maj, F#:maj, G:maj, G#:maj, A:maj, A#:maj, B:maj, C:min, C#:min, D:min, D#:min, E:min, F:min, F#:min, G:min, G#:min, A:min, A#:min, B:min`.
+- Use chroma observations together with `librosa.sequence.viterbi` to decode the most likely chord state per frame.
+- Merge consecutive frames that share the same decoded chord into segments and write them to `/workspace/chords.json`.
+
+## Implementation Hints
+- Use a librosa chroma feature appropriate for tonal content to obtain a `(12, n_frames)` observation matrix.
+- Define 24 chord templates corresponding to major and minor triads (one per root pitch class) and turn them into per-frame, per-state non-negative likelihoods that the Viterbi routine can consume.
+- Build a 24x24 transition matrix that favors staying in the current chord (self-bias) while still allowing transitions to any other chord; remember that each row must sum to 1.
+- Convert the decoded frame indices to seconds with `librosa.frames_to_time` (using the same `hop_length` used to compute the chroma) and clamp the final segment end to the audio duration so the segments cover the full track without gaps or overlaps.
+- Sanity-check the API signatures against the librosa 0.11.0 documentation; most feature and sequence functions are keyword-only.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the recognition pipeline is executed and the output artifact exists.
+- Output file: `/workspace/chords.json`
+- The output file must be a JSON array. Each element must be an object with the following schema:
+
+  ```json
+  {
+    "start": number,
+    "end": number,
+    "chord": string
+  }
+  ```
+
+  - `start` and `end` are floating-point timestamps in seconds with `start < end`.
+  - `chord` must match the regular expression `^[A-G]#?:(maj|min)$` and be one of the 24 allowed labels listed above.
+- The segments must be sorted by `start`, cover the audio from near 0s to near the audio duration, and not contain overlapping intervals.
+- The decoded sequence must contain at least 2 distinct chord labels (the pipeline must produce real variation, not a constant output).
+
+5:T9d1,# HPSS Multi-Stem Mixer
+
+## Background
+The file `/workspace/input.wav` is a short music recording. Build a small creative remixer that splits it into harmonic and percussive stems, processes each stem independently, and writes the mixed result back to disk.
+
+## Requirements
+Read `/workspace/input.wav` (preserving its native sample rate) and produce `/workspace/output.wav` by performing **exactly** the following steps, in order:
+
+1. Decompose the input into harmonic and percussive time-domain components using `librosa.effects.hpss` with `margin=(1.0, 5.0)` (strong percussive mask).
+2. Pitch-shift the harmonic component up by **7 semitones** using `librosa.effects.pitch_shift`.
+3. Time-stretch the percussive component by a rate of **0.85** (i.e. slow it down) using `librosa.effects.time_stretch`.
+4. Re-align the lengths of the pitch-shifted harmonic and the time-stretched percussive signals so they both have the same length as the original input waveform (pad with zeros or truncate as needed), and mix them with weights: `mix = 0.7 * harmonic_shifted + 0.5 * percussive_stretched`.
+5. Trim leading and trailing silence from the mix with `librosa.effects.trim(top_db=30)`.
+6. Write the result to `/workspace/output.wav` at the **same sample rate as the input**.
+
+## Implementation Hints
+- `librosa.effects.hpss` returns time-domain waveforms of the same length as the input.
+- `librosa.effects.pitch_shift` preserves the input length, but `librosa.effects.time_stretch` changes it; you will need to pad/truncate before mixing.
+- You may use `soundfile.write` to save the WAV.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Input file (already present): /workspace/input.wav
+- Output file (must be created by you): /workspace/output.wav
+- The output must be a readable WAV file (via `soundfile`).
+- The output sample rate must equal the input sample rate.
+- The output length (in samples) must be less than or equal to the input length (because of trimming).
+- The output peak absolute amplitude must lie in the range [0.05, 1.0].
+- The spectral centroid of the output (mean over frames) must be strictly higher than that of the input, reflecting the upward harmonic pitch shift.
+- The estimated tempo of the output (via `librosa.feature.tempo`) must be at most 0.95x the estimated tempo of the input, reflecting the percussive slow-down.
+- The output must not be identical to the input: cosine similarity between the (length-aligned) input and output waveforms must be strictly less than 0.95.
+
+6:Tb07,# Structural Boundary Detection with a Foote Novelty Curve
+
+## Background
+Structural segmentation of an audio recording can be performed by analyzing how a frame-level feature representation repeats over time. Foote's classic approach builds a self-similarity matrix (SSM) over short-time spectral features and convolves the diagonal of the SSM with a checkerboard kernel; large responses correspond to instants where the feature statistics change abruptly. Your job is to implement this novelty-curve pipeline with `librosa` (v0.11.0) and report the detected change-point timestamps.
+
+## Requirements
+- Read the input audio from `/workspace/input.wav`.
+- Compute a frame-level spectral feature representation (MFCCs over time).
+- Build a self-similarity matrix from the feature sequence using a cosine metric.
+- Construct a Foote-style checkerboard kernel and convolve it along the diagonal of the SSM to obtain a one-dimensional novelty curve.
+- Pick peaks from the novelty curve to identify structural change-points.
+- Convert each peak from a frame index to a timestamp in seconds.
+- Write the timestamps to `/workspace/boundaries.json` using the schema:
+  ```json
+  {
+    "boundaries_sec": [<float>, <float>, ...]
+  }
+  ```
+  Values must be in seconds, strictly increasing, and lie inside the audio's duration.
+
+## Implementation Hints
+- Inspect `librosa.feature.mfcc` for MFCC extraction and `librosa.segment.recurrence_matrix` (with `mode='affinity'`, `metric='cosine'`, and `full=True`) for the dense self-similarity matrix.
+- Build the checkerboard kernel yourself: a square matrix with positive values in the top-left and bottom-right quadrants and negative values in the off-diagonal quadrants, optionally tapered with a 2-D Gaussian window. Do not rely on any pre-built Foote shortcut in librosa.
+- Slide the kernel along the diagonal of the SSM to produce the novelty curve; mind boundary effects.
+- Convert frame indices to time using `librosa.frames_to_time` with the same `sr` and `hop_length` used for the MFCCs.
+- Use any peak-picking strategy you like (e.g., `librosa.util.peak_pick` or `scipy.signal.find_peaks`); tune it to ignore trivial peaks near the very start and very end of the signal.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the script is executed and the output artifact exists.
+- Output file: /workspace/boundaries.json
+- The file must be valid JSON containing an object with a `boundaries_sec` key.
+- `boundaries_sec` must be a list of numbers (in seconds), strictly increasing, with every value in the interval `[0, audio_duration]`.
+- At least two structural boundaries must be reported.
+- The detected boundaries must correspond to the major structural changes present in the input audio (verified against ground-truth change-points baked into the test environment).
+
+7:T6e3,# Monophonic Onset-Based MIDI Note Transcriber
+
+## Background
+Build a small offline monophonic note transcriber on top of librosa. The transcriber reads a short audio file containing a sequence of synthesized notes, detects where each note begins, estimates its pitch, quantizes the pitch to the nearest MIDI integer, and assigns a velocity proportional to the loudness of each note. The result is written to a JSON file describing every detected note.
+
+## Requirements
+- Read the input audio from `/workspace/input.wav`.
+- Detect note onsets using `librosa.onset.onset_detect` with `backtrack=True` so each onset is snapped back to the local energy minimum.
+- For every per-note segment, estimate the fundamental frequency with `librosa.pyin` and use the median of the voiced f0 values as the segment's pitch.
+- Convert each segment's pitch from Hz to a MIDI integer using `librosa.hz_to_midi`.
+- Derive a per-note integer velocity in `[1, 127]` from the per-note RMS energy.
+- Write the resulting list of notes to `/workspace/notes.json`.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the script is executed and the artifact `/workspace/notes.json` exists.
+- Output file: /workspace/notes.json
+- The file must be valid JSON containing a single JSON array. Each element of the array must be an object with exactly these four keys and types:
+  - `onset_sec` (float, seconds from the start of the audio)
+  - `offset_sec` (float, seconds from the start of the audio, strictly greater than `onset_sec`)
+  - `pitch_midi` (integer in `[0, 127]`)
+  - `velocity` (integer in `[1, 127]`)
+- The notes must be sorted strictly in ascending order by `onset_sec`.
+- Every `offset_sec` must be no greater than the audio duration plus a small tolerance of 0.1 s.
+
+8:Tabe,# Speech vs. Music Audio Classifier
+
+## Background
+You are given a small labeled training corpus and an unlabeled test corpus of short WAV recordings. Your job is to extract a fixed-dimensional feature vector from each clip, train a binary classifier that distinguishes spoken-voice clips from instrumental-music clips, predict labels on the test clips, and emit the predictions as a CSV file.
+
+## Inputs
+- `/workspace/train/speech/` — training WAV files whose ground-truth label is `speech`.
+- `/workspace/train/music/` — training WAV files whose ground-truth label is `music`.
+- `/workspace/test/` — unlabeled WAV files; you must produce a label for each one.
+
+## Required Feature Families
+For every audio file, build a single 1-D feature vector that concatenates the temporal **mean** and **standard deviation** (over time frames) of each of the following librosa feature families:
+- MFCCs with `n_mfcc=20`.
+- Spectral contrast with `n_bands=6`.
+- Zero crossing rate.
+- Spectral centroid.
+
+The order of concatenation is up to you, but it must be identical for every file (training and test).
+
+## Output
+Write the predictions to `/workspace/predictions.csv` with exactly the header line:
+
+```
+filename,label
+```
+
+Followed by one row per file found in `/workspace/test/`. Each `label` value must be either `speech` or `music`. The `filename` column must contain the basename of the test WAV file (e.g. `clip_00.wav`), not a full path. Do not include rows for files that are not in `/workspace/test/`, and do not produce duplicate `filename` rows.
+
+## Implementation Hints
+- Use `librosa.load` to read each WAV. You may choose your own sample rate, but be consistent across train and test.
+- Compute each feature family with the requested librosa API, then aggregate along the time axis to produce a fixed-size vector regardless of clip length.
+- Train any `sklearn.linear_model.LogisticRegression` model on the training features, then predict on the test features.
+- The training set is small (a few files per class) but the snippets were chosen to be clearly separable by the requested features. You do not need cross-validation or hyper-parameter tuning to pass.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Output file (must be created by you): /workspace/predictions.csv
+- The output is a CSV file whose first line is exactly `filename,label`.
+- There is exactly one row for every WAV file under /workspace/test/, identified by basename. No file under /workspace/test/ may be missing, and no extra files may appear.
+- Every `label` value is either `speech` or `music` (case-sensitive, no extra whitespace).
+- No `filename` value appears more than once.
+- Classification accuracy against the held-out ground truth is at least 80%.
+
+0:{"buildId":"ebbOmb-OYgRl-USkNgRsF","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","$2",null,{"fallback":["$","div",null,{"className":"container mx-auto py-8 text-center","children":"Loading tasks..."}],"children":["$","$L3",null,{"tasksData":[{"taskName":"chord-recognition-viterbi","instruction":"$4","trials":[{"job_name":"2026-06-13__11-16-38","trial_name":"chord-recognition-viterbi__apPg2kN","model":"gemini-3.1-pro","rawModel":"google/gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":153.143,"latency_breakdown":{"env_setup":4.192,"agent_setup":25.875,"agent_exec":104.061,"verifier":5.219},"taskName":"chord-recognition-viterbi","jobId":"apPg2kN","exec_duration":104.061},{"job_name":"2026-06-13__10-28-15","trial_name":"chord-recognition-viterbi__WE6F6e2","model":"claude-4-6-sonnet","rawModel":"anthropic/claude-4-6-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":199.958,"latency_breakdown":{"env_setup":4.082,"agent_setup":23.822,"agent_exec":154.443,"verifier":4.653},"taskName":"chord-recognition-viterbi","jobId":"WE6F6e2","exec_duration":154.443},{"job_name":"2026-06-13__10-58-46","trial_name":"chord-recognition-viterbi__YXuCRWn","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":275.005,"latency_breakdown":{"env_setup":4.232,"agent_setup":23.444,"agent_exec":229.412,"verifier":4.902},"taskName":"chord-recognition-viterbi","jobId":"YXuCRWn","exec_duration":229.412},{"job_name":"2026-06-13__10-44-13","trial_name":"chord-recognition-viterbi__3uVaRgB","model":"glm-5.1","rawModel":"zai/glm-5.1","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":183.48,"latency_breakdown":{"env_setup":2.628,"agent_setup":13.176,"agent_exec":149.344,"verifier":5.007},"taskName":"chord-recognition-viterbi","jobId":"3uVaRgB","exec_duration":149.344},{"job_name":"2026-06-13__09-40-44","trial_name":"chord-recognition-viterbi__wLCSAYQ","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":404.225,"latency_breakdown":{"env_setup":103.867,"agent_setup":14.244,"agent_exec":266.592,"verifier":5.575},"taskName":"chord-recognition-viterbi","jobId":"wLCSAYQ","exec_duration":266.592}]},{"taskName":"hpss-multi-stem-mixer","instruction":"$5","trials":[{"job_name":"2026-06-13__11-16-38","trial_name":"hpss-multi-stem-mixer__ERtDhLe","model":"gemini-3.1-pro","rawModel":"google/gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":83.245,"latency_breakdown":{"env_setup":2.664,"agent_setup":13.799,"agent_exec":48.066,"verifier":5.288},"taskName":"hpss-multi-stem-mixer","jobId":"ERtDhLe","exec_duration":48.066},{"job_name":"2026-06-13__10-28-15","trial_name":"hpss-multi-stem-mixer__vmtubbW","model":"claude-4-6-sonnet","rawModel":"anthropic/claude-4-6-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":181.62,"latency_breakdown":{"env_setup":2.441,"agent_setup":12.79,"agent_exec":147.451,"verifier":5.353},"taskName":"hpss-multi-stem-mixer","jobId":"vmtubbW","exec_duration":147.451},{"job_name":"2026-06-13__10-58-46","trial_name":"hpss-multi-stem-mixer__bQEyAFi","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":635.463,"latency_breakdown":{"env_setup":2.529,"agent_setup":14.133,"agent_exec":600.188,"verifier":5.358},"taskName":"hpss-multi-stem-mixer","jobId":"bQEyAFi","exec_duration":600.188},{"job_name":"2026-06-13__10-44-13","trial_name":"hpss-multi-stem-mixer__XjgLAKY","model":"glm-5.1","rawModel":"zai/glm-5.1","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":651.692,"latency_breakdown":{"env_setup":4.233,"agent_setup":22.984,"agent_exec":600.237,"verifier":7.869},"taskName":"hpss-multi-stem-mixer","jobId":"XjgLAKY","exec_duration":600.237},{"job_name":"2026-06-13__09-40-44","trial_name":"hpss-multi-stem-mixer__d4iYvjA","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":694.138,"latency_breakdown":{"env_setup":59.008,"agent_setup":15.204,"agent_exec":600.217,"verifier":5.578},"taskName":"hpss-multi-stem-mixer","jobId":"d4iYvjA","exec_duration":600.217}]},{"taskName":"novelty-segmenter","instruction":"$6","trials":[{"job_name":"2026-06-13__11-16-38","trial_name":"novelty-segmenter__mPctMGk","model":"gemini-3.1-pro","rawModel":"google/gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":169.116,"latency_breakdown":{"env_setup":2.542,"agent_setup":13.35,"agent_exec":135.915,"verifier":3.911},"taskName":"novelty-segmenter","jobId":"mPctMGk","exec_duration":135.915},{"job_name":"2026-06-13__10-28-15","trial_name":"novelty-segmenter__nzXUS2j","model":"claude-4-6-sonnet","rawModel":"anthropic/claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":180.748,"latency_breakdown":{"env_setup":2.559,"agent_setup":12.594,"agent_exec":141.282,"verifier":8.783},"taskName":"novelty-segmenter","jobId":"nzXUS2j","exec_duration":141.282},{"job_name":"2026-06-13__10-58-46","trial_name":"novelty-segmenter__2v5voJE","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":163.907,"latency_breakdown":{"env_setup":3.242,"agent_setup":13.857,"agent_exec":129.316,"verifier":3.885},"taskName":"novelty-segmenter","jobId":"2v5voJE","exec_duration":129.316},{"job_name":"2026-06-13__10-44-13","trial_name":"novelty-segmenter__jJiMvov","model":"glm-5.1","rawModel":"zai/glm-5.1","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":172.45,"latency_breakdown":{"env_setup":2.605,"agent_setup":13.16,"agent_exec":139.98,"verifier":3.686},"taskName":"novelty-segmenter","jobId":"jJiMvov","exec_duration":139.98},{"job_name":"2026-06-13__09-40-44","trial_name":"novelty-segmenter__K3Zjzjf","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":696.44,"latency_breakdown":{"env_setup":151.615,"agent_setup":14.474,"agent_exec":506.839,"verifier":7.303},"taskName":"novelty-segmenter","jobId":"K3Zjzjf","exec_duration":506.839}]},{"taskName":"onset-midi-quantizer","instruction":"$7","trials":[{"job_name":"2026-06-13__11-16-38","trial_name":"onset-midi-quantizer__8XtDWtx","model":"gemini-3.1-pro","rawModel":"google/gemini-3.1-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":197.299,"latency_breakdown":{"env_setup":3.99,"agent_setup":24.165,"agent_exec":154.592,"verifier":1.263},"taskName":"onset-midi-quantizer","jobId":"8XtDWtx","exec_duration":154.592},{"job_name":"2026-06-13__10-28-15","trial_name":"onset-midi-quantizer__PBULcQV","model":"claude-4-6-sonnet","rawModel":"anthropic/claude-4-6-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":194.224,"latency_breakdown":{"env_setup":2.503,"agent_setup":12.604,"agent_exec":164.123,"verifier":1.138},"taskName":"onset-midi-quantizer","jobId":"PBULcQV","exec_duration":164.123},{"job_name":"2026-06-13__10-58-46","trial_name":"onset-midi-quantizer__ECBqNYc","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":202.661,"latency_breakdown":{"env_setup":2.649,"agent_setup":12.921,"agent_exec":172.271,"verifier":1.345},"taskName":"onset-midi-quantizer","jobId":"ECBqNYc","exec_duration":172.271},{"job_name":"2026-06-13__10-44-13","trial_name":"onset-midi-quantizer__PLN6pfZ","model":"glm-5.1","rawModel":"zai/glm-5.1","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":160.621,"latency_breakdown":{"env_setup":2.695,"agent_setup":13.252,"agent_exec":130.144,"verifier":0.918},"taskName":"onset-midi-quantizer","jobId":"PLN6pfZ","exec_duration":130.144},{"job_name":"2026-06-13__09-40-44","trial_name":"onset-midi-quantizer__GXvoANV","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":393.398,"latency_breakdown":{"env_setup":3.591,"agent_setup":13.019,"agent_exec":361.062,"verifier":1.02},"taskName":"onset-midi-quantizer","jobId":"GXvoANV","exec_duration":361.062}]},{"taskName":"spectral-contrast-classifier","instruction":"$8","trials":[{"job_name":"2026-06-13__11-16-38","trial_name":"spectral-contrast-classifier__EoSMAFG","model":"gemini-3.1-pro","rawModel":"google/gemini-3.1-pro","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":155.418,"latency_breakdown":{"env_setup":2.987,"agent_setup":14.918,"agent_exec":122.52,"verifier":1.021},"taskName":"spectral-contrast-classifier","jobId":"EoSMAFG","exec_duration":122.52},{"job_name":"2026-06-13__10-28-15","trial_name":"spectral-contrast-classifier__JhUNEzz","model":"claude-4-6-sonnet","rawModel":"anthropic/claude-4-6-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":143.448,"latency_breakdown":{"env_setup":2.638,"agent_setup":12.737,"agent_exec":113.262,"verifier":0.94},"taskName":"spectral-contrast-classifier","jobId":"JhUNEzz","exec_duration":113.262},{"job_name":"2026-06-13__10-58-46","trial_name":"spectral-contrast-classifier__6hrUhTx","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":129.65,"latency_breakdown":{"env_setup":2.713,"agent_setup":12.736,"agent_exec":99.131,"verifier":0.983},"taskName":"spectral-contrast-classifier","jobId":"6hrUhTx","exec_duration":99.131},{"job_name":"2026-06-13__10-44-13","trial_name":"spectral-contrast-classifier__Pfy7EiX","model":"glm-5.1","rawModel":"zai/glm-5.1","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":167.869,"latency_breakdown":{"env_setup":4.337,"agent_setup":23.323,"agent_exec":125.548,"verifier":0.886},"taskName":"spectral-contrast-classifier","jobId":"Pfy7EiX","exec_duration":125.548},{"job_name":"2026-06-13__09-40-44","trial_name":"spectral-contrast-classifier__7CfPYZU","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":302.082,"latency_breakdown":{"env_setup":175.664,"agent_setup":14.46,"agent_exec":95.963,"verifier":0.964},"taskName":"spectral-contrast-classifier","jobId":"7CfPYZU","exec_duration":95.963}]}]}]}]]}],["$L9","$La"],"$Lb"]}],"loading":null,"isPartial":false}
+9:["$","script","script-0",{"src":"/librosa-benchmark/_next/static/chunks/719c1c14683b9ed6.js","async":true}]
+a:["$","script","script-1",{"src":"/librosa-benchmark/_next/static/chunks/f9f579c42c486944.js","async":true}]
+b:["$","$Lc",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@d"}]}]
+d:null
