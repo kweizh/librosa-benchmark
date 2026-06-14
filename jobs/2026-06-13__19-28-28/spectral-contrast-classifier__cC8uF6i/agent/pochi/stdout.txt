@@ -1,0 +1,59 @@
+- Initializing MCP connections...
+You
+# Speech vs. Music Audio Classifier ## Background You are given a small labeled training corpus and an unlabeled test corpus of short WAV recordings. Your job is to extract a fixed-dimensional feature vector from each clip, train a binary classifier that distinguishes spoken-voice clips from instrumental-music clips, predict labels on the test clips, and emit the predictions as a CSV file. ## Inputs * `/workspace/train/speech/` — training WAV files whose ground-truth label is `speech`. * `/workspace/train/music/` — training WAV files whose ground-truth label is `music`. * `/workspace/test/` — unlabeled WAV files; you must produce a label for each one. ## Required Feature Families For every audio file, build a single 1-D feature vector that concatenates the temporal **mean** and **standard deviation** (over time frames) of each of the following librosa feature families: * MFCCs with `n_mfcc=20`. * Spectral contrast with `n_bands=6`. * Zero crossing rate. * Spectral centroid. The order of concatenation is up to you, but it must be identical for every file (training and test). ## Output Write the predictions to `/workspace/predictions.csv` with exactly the header line: ``` filename,label ``` Followed by one row per file found in `/workspace/test/`. Each `label` value must be either `speech` or `music`. The `filename` column must contain the basename of the test WAV file (e.g. `clip_00.wav`), not a full path. Do not include rows for files that are not in `/workspace/test/`, and do not produce duplicate `filename` rows. ## Implementation Hints * Use `librosa.load` to read each WAV. You may choose your own sample rate, but be consistent across train and test. * Compute each feature family with the requested librosa API, then aggregate along the time axis to produce a fixed-size vector regardless of clip length. * Train any `sklearn.linear_model.LogisticRegression` model on the training features, then predict on the test features. * The training set is small (a few files per class) but the snippets were chosen to be clearly separable by the requested features. You do not need cross-validation or hyper-parameter tuning to pass. ## Acceptance Criteria * Project path: /workspace * Output file (must be created by you): /workspace/predictions.csv * The output is a CSV file whose first line is exactly `filename,label`. * There is exactly one row for every WAV file under /workspace/test/, identified by basename. No file under /workspace/test/ may be missing, and no extra files may appear. * Every `label` value is either `speech` or `music` (case-sensitive, no extra whitespace). * No `filename` value appears more than once. * Classification accuracy against the held-out ground truth is at least 80%.   
+
+Pochi
+I'll start by exploring the dataset and understanding what we're working with.   
+📋 Updating todo list (5 items) ✔ 
+📂 Listing files in /workspace recursively ✔ 
+Good — 4 speech training files, 4 music training files, 4 test files. Let me now write and run the classification script.   
+📋 Updating todo list (5 items) ✔ 
+✏️  Writing /workspace/classify.py ✔ 
+💫 Executing cd /workspace && python classify.py ✔ 
+The script ran successfully. Let me verify the output file format is correct, and also check the feature dimensions to make sure everything adds up.   
+📖 Reading /workspace/predictions.csv ✔ 
+💫 Executing cd /workspace && python -c "
+import numpy as np
+import librosa
+
+# Quick sanity check on feature dimensionality
+SR = 22050
+fpath = '/workspace/train/speech/speech_train_0.wav'
+y, sr = librosa.load(fpath, sr=SR)
+
+mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=20)
+print('mfcc shape:', mfcc.shape, '-> mean/std:', 20*2)
+
+contrast = librosa.feature.spectral_contrast(y=y, sr=sr, n_bands=6)
+print('contrast shape:', contrast.shape, '-> mean/std:', 7*2)
+
+zcr = librosa.feature.zero_crossing_rate(y)
+print('zcr shape:', zcr.shape, '-> mean/std:', 2)
+
+centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+print('centroid shape:', centroid.shape, '-> mean/std:', 2)
+
+print('Total dims:', 20*2 + 7*2 + 2 + 2)
+" ✔ 
+The feature dimensionality checks out: 40 + 14 + 2 + 2 = 58 dimensions. The CSV format is correct — header is exactly `filename,label` and there are 4 rows (one per test file). Let me also verify that spectral contrast with `n_bands=6` returns 7 rows (6 bands + 1 sub-band), which is the expected librosa behavior and matches the specification.   
+📋 Updating todo list (5 items) ✔ 
+🎉 Task Completed
+The speech vs. music classifier has been implemented and `/workspace/predictions.csv` has been generated.
+
+**Approach:**
+- Used `librosa.load` with a consistent sample rate of 22050 Hz across all files.
+- For each WAV, extracted a 58-dimensional feature vector:
+  - MFCC (`n_mfcc=20`): mean + std → 40 dims
+  - Spectral contrast (`n_bands=6`): mean + std → 14 dims (7 rows × 2)
+  - Zero crossing rate: mean + std → 2 dims
+  - Spectral centroid: mean + std → 2 dims
+- Trained `sklearn.linear_model.LogisticRegression` on the 8 training clips (4 speech, 4 music).
+- Predicted labels for all 4 test clips and wrote results to CSV.
+
+**Output file:** `/workspace/predictions.csv`
+- Header: `filename,label`
+- 4 rows, one per test WAV file, basename only
+- All labels are `speech` or `music` (case-sensitive, no extra whitespace)
+
+The source script is at `/workspace/classify.py` if you need to re-run or inspect it.   
+  

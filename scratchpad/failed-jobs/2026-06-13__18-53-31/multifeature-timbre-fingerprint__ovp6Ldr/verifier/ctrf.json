@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:09:47.776051+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781377783649,
+            "stop": 1781377787775
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_top_level_keys",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781377783843,
+                "stop": 1781377783845,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_feature_order_exact",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781377783846,
+                "stop": 1781377783847,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vector_shape_and_finite",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781377783847,
+                "stop": 1781377783848,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_similarities_keys_and_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781377783848,
+                "stop": 1781377783849,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vector_matches_reference",
+                "status": "passed",
+                "duration": 3924,
+                "start": 1781377783849,
+                "stop": 1781377787773,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predicted_label_is_argmax",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781377787773,
+                "stop": 1781377787775,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

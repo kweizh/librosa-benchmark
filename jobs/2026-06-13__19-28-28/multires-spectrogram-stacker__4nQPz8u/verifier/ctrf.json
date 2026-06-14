@@ -1,0 +1,146 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:32:42.320469+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 13,
+            "passed": 13,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781379158835,
+            "stop": 1781379162320
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_metadata_scalar_types_and_positivity",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379159072,
+                "stop": 1781379159074,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_metadata_freq_lists_are_numeric",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379159075,
+                "stop": 1781379159077,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_metadata_sample_rate_matches_input_wav",
+                "status": "passed",
+                "duration": 3182,
+                "start": 1781379159077,
+                "stop": 1781379162259,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_arrays_are_two_dimensional_and_finite",
+                "status": "passed",
+                "duration": 42,
+                "start": 1781379162261,
+                "stop": 1781379162303,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_arrays_share_common_time_grid",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379162303,
+                "stop": 1781379162305,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_stft_row_count_matches_n_fft",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379162305,
+                "stop": 1781379162307,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_row_count_matches_metadata",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379162307,
+                "stop": 1781379162309,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vqt_row_count_matches_metadata",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379162309,
+                "stop": 1781379162310,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_frequency_vector_lengths",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379162311,
+                "stop": 1781379162312,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_stft_freqs_match_librosa_helper",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379162312,
+                "stop": 1781379162313,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_freqs_match_librosa_helper",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379162313,
+                "stop": 1781379162315,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vqt_freqs_match_librosa_helper",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379162315,
+                "stop": 1781379162316,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_dynamic_range_above_threshold",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781379162316,
+                "stop": 1781379162319,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

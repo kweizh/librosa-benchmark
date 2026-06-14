@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T17:54:49.147080+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781373284947,
+            "stop": 1781373289146
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_each_segment_has_required_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781373284989,
+                "stop": 1781373284991,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_segment_labels_match_regex",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781373284992,
+                "stop": 1781373284993,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_segments_sorted_by_start",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781373284994,
+                "stop": 1781373284995,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps",
+                "status": "passed",
+                "duration": 4142,
+                "start": 1781373284996,
+                "stop": 1781373289138,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_segment_duration_above_threshold",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781373289140,
+                "stop": 1781373289141,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_minimum_segment_and_label_counts",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781373289142,
+                "stop": 1781373289143,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_one_label_is_reused",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781373289144,
+                "stop": 1781373289146,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

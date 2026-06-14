@@ -1,0 +1,123 @@
+- Initializing MCP connections...
+You
+# NMF Source Decomposition with Wiener Soft Masks ## Background Decompose a polyphonic mixture into 4 spectral sources using NMF, then resynthesize each source back to a waveform using Wiener-style soft masking applied to the original complex STFT. ## Requirements * Read `/workspace/mixture.wav` (mono, 22050 Hz). * Decompose its magnitude spectrogram into 4 NMF components with `librosa.decompose.decompose`. * For each component, build a Wiener-style soft mask, apply it to the original complex STFT, and resynthesize to a waveform via the inverse STFT. The summed component waveforms should reconstruct the mixture. * Write each resynthesized component to `/workspace/component_<i>.wav` for `i` in `0..3`. * Write per-component spectral statistics to `/workspace/components.json`. ## Implementation Hints * Keep STFT/iSTFT parameters consistent so component lengths match the mixture. * The soft mask for component `k` should be its magnitude-squared spectrogram divided by the sum of magnitude-squared spectrograms across all components. * Compute the spectral centroid per component from its resynthesized waveform. * Verify API signatures against the librosa 0.11.0 docs. ## Acceptance Criteria * Project path: /workspace * Ensure the decomposition pipeline is executed and the output artifacts exist. * Output audio files: `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, `/workspace/component_3.wav`. * Each file must be mono, with the same sample rate as `/workspace/mixture.wav`, and the same sample count as the mixture (±1 sample). * Output metadata file: `/workspace/components.json`. * Must be a JSON array of exactly 4 objects, each with the schema: ```json { "index": integer, "centroid_hz": number, "rms": number } ``` * The `index` values must be exactly `0, 1, 2, 3` (each appearing once). * Every `centroid_hz` must satisfy `0 < centroid_hz < sr / 2`. * The spread `max(centroid_hz) - min(centroid_hz)` across the 4 components must exceed 200 Hz. * Every `rms` must exceed `1e-4`. * Reconstruction quality: the sample-wise sum of the 4 component waveforms must approximate the mixture such that the mean absolute error is at most `5e-2` times the mixture RMS.   
+
+Pochi
+💭 Thinking for 125 characters   
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__)" 2>&1; python3 -c "import soundfile; print(soundfile.__version__)" 2>&1; python3 -c "import numpy; print(numpy.__version__)" 2>&1 ✔ 
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+y, sr = librosa.load('/workspace/mixture.wav', sr=None, mono=True)
+print(f'Sample rate: {sr}')
+print(f'Duration: {len(y)/sr:.3f}s')
+print(f'Samples: {len(y)}')
+print(f'dtype: {y.dtype}')
+print(f'min/max: {y.min():.4f} / {y.max():.4f}')
+" ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing python3 -c "
+import librosa, inspect
+sig = inspect.signature(librosa.decompose.decompose)
+print(sig)
+help(librosa.decompose.decompose)
+" 2>&1 | head -40 ✔ 
+✏️  Writing /workspace/decompose.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 decompose.py 2>&1 ✔ 
+All checks pass. Let me do a final formal validation of every acceptance criterion:   
+💫 Executing python3 -c "
+import json, librosa, numpy as np, soundfile as sf
+
+print('=== Acceptance Criteria Validation ===\n')
+
+# 1. Output files exist
+import os
+for i in range(4):
+    p = f'/workspace/component_{i}.wav'
+    assert os.path.exists(p), f'Missing {p}'
+    print(f'  [OK] {p} exists')
+
+# 2. Audio file properties
+y_mix, sr_mix = librosa.load('/workspace/mixture.wav', sr=None, mono=True)
+n_mix = len(y_mix)
+print(f'\nMixture: sr={sr_mix}, samples={n_mix}')
+
+for i in range(4):
+    info = sf.info(f'/workspace/component_{i}.wav')
+    y_i, sr_i = librosa.load(f'/workspace/component_{i}.wav', sr=None, mono=True)
+    assert sr_i == sr_mix,                       f'SR mismatch component {i}'
+    assert info.channels == 1,                   f'Not mono component {i}'
+    assert abs(len(y_i) - n_mix) <= 1,           f'Length mismatch component {i}: {len(y_i)} vs {n_mix}'
+    print(f'  [OK] component_{i}.wav  sr={sr_i}  channels={info.channels}  samples={len(y_i)}  |diff|={abs(len(y_i)-n_mix)}')
+
+# 3. JSON schema
+with open('/workspace/components.json') as f:
+    data = json.load(f)
+
+assert isinstance(data, list) and len(data) == 4, 'JSON must be array of 4'
+indices = sorted([d['index'] for d in data])
+assert indices == [0,1,2,3], f'Index values wrong: {indices}'
+
+centroids = [d['centroid_hz'] for d in data]
+rmss      = [d['rms'] for d in data]
+
+print(f'\nJSON contents:')
+for d in data:
+    assert isinstance(d['index'], int),          f'index not int: {d}'
+    assert isinstance(d['centroid_hz'], (int, float)), f'centroid_hz not number: {d}'
+    assert isinstance(d['rms'], (int, float)),    f'rms not number: {d}'
+    assert 0 < d['centroid_hz'] < sr_mix/2,      f'centroid out of range: {d}'
+    assert d['rms'] > 1e-4,                      f'rms too small: {d}'
+    print(f'  [OK] index={d[\"index\"]}  centroid_hz={d[\"centroid_hz\"]:.2f}  rms={d[\"rms\"]:.6f}')
+
+spread = max(centroids) - min(centroids)
+assert spread > 200, f'Centroid spread too small: {spread:.2f} Hz'
+print(f'\n  [OK] Centroid spread = {spread:.2f} Hz  (> 200 Hz)')
+
+# 4. Reconstruction quality
+y_recon = np.zeros(n_mix, dtype=np.float64)
+for i in range(4):
+    y_i, _ = librosa.load(f'/workspace/component_{i}.wav', sr=None, mono=True)
+    if len(y_i) < n_mix:
+        y_i = np.pad(y_i, (0, n_mix - len(y_i)))
+    y_recon += y_i[:n_mix].astype(np.float64)
+
+mix_rms = np.sqrt(np.mean(y_mix.astype(np.float64)**2))
+mae     = np.mean(np.abs(y_recon - y_mix.astype(np.float64)))
+ratio   = mae / mix_rms
+assert ratio <= 5e-2, f'MAE/RMS ratio {ratio:.6f} exceeds 5e-2'
+print(f'  [OK] Reconstruction MAE/RMS = {ratio:.6f}  (<= 5e-2)')
+
+print('\n=== ALL ACCEPTANCE CRITERIA PASSED ===')
+" 2>&1 ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+All acceptance criteria passed. Here's a summary of what was implemented in `/workspace/decompose.py`:
+
+### Pipeline
+
+1. **Load** `/workspace/mixture.wav` (mono, 22050 Hz, 220500 samples) via `librosa.load`.
+2. **STFT** with `n_fft=2048`, `hop_length=512`, `win_length=2048`, Hann window, `center=True` → complex spectrogram `D_mix` (1025 × 431).
+3. **NMF decomposition** via `librosa.decompose.decompose(S_mix, n_components=4, sort=True)` → `components` (1025 × 4) and `activations` (4 × 431). Each component's spectrogram is `outer(components[:,k], activations[k,:])`.
+4. **Wiener soft masks**: `mask_k = S_k² / Σ_j S_j²` (magnitude-squared ratio). Masks sum to 1 everywhere.
+5. **Masked iSTFT** per component: `D_k = mask_k * D_mix`, then `librosa.istft(..., length=n_samples)` to guarantee exact sample count.
+6. **Spectral statistics** computed from each resynthesized waveform (centroid via `librosa.feature.spectral_centroid`, RMS from signal energy).
+
+### Outputs
+
+| File | sr | Samples | Centroid (Hz) | RMS |
+|------|----|---------|--------------|-----|
+| `component_0.wav` | 22050 | 220500 | 141.17 | 0.136168 |
+| `component_1.wav` | 22050 | 220500 | 1059.76 | 0.190109 |
+| `component_2.wav` | 22050 | 220500 | 819.12 | 0.136168 |
+| `component_3.wav` | 22050 | 220500 | 2167.82 | 0.078453 |
+| `components.json` | — | — | — | — |
+
+### Validation results
+- ✅ All 4 `.wav` files: mono, 22050 Hz, 220500 samples (0 sample difference)
+- ✅ `components.json`: array of 4 objects, indices `0–3`, all `centroid_hz` in `(0, 11025)`, all `rms > 1e-4`
+- ✅ Centroid spread: **2026.65 Hz** (threshold: > 200 Hz)
+- ✅ Reconstruction MAE/RMS: **0.000144** (threshold: ≤ 0.05)   
+  

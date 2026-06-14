@@ -1,0 +1,116 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 7 items
+
+tests/test_final_state.py EEEEEEE                                        [100%]
+
+==================================== ERRORS ====================================
+___________ ERROR at setup of test_each_segment_has_required_schema ____________
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+______________ ERROR at setup of test_segment_labels_match_regex _______________
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+_______________ ERROR at setup of test_segments_sorted_by_start ________________
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+_ ERROR at setup of test_segments_cover_audio_without_significant_gaps_or_overlaps _
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+_________ ERROR at setup of test_each_segment_duration_above_threshold _________
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+___________ ERROR at setup of test_minimum_segment_and_label_counts ____________
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+_____________ ERROR at setup of test_at_least_one_label_is_reused ______________
+
+    @pytest.fixture(scope="module")
+    def segments():
+>       assert os.path.isfile(SEGMENTS_JSON), (
+            f"Expected output file {SEGMENTS_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/segments.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fe0b4c34220>('/workspace/segments.json')
+E        +    where <function isfile at 0x7fe0b4c34220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:17: AssertionError
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_each_segment_has_required_schema - Asse...
+ERROR tests/test_final_state.py::test_segment_labels_match_regex - AssertionE...
+ERROR tests/test_final_state.py::test_segments_sorted_by_start - AssertionErr...
+ERROR tests/test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+ERROR tests/test_final_state.py::test_each_segment_duration_above_threshold
+ERROR tests/test_final_state.py::test_minimum_segment_and_label_counts - Asse...
+ERROR tests/test_final_state.py::test_at_least_one_label_is_reused - Assertio...
+============================== 7 errors in 0.09s ===============================

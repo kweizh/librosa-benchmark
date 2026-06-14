@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:51:20.147866+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781380280087,
+            "stop": 1781380280147
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_has_required_keys",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380280131,
+                "stop": 1781380280133,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_is_cover_is_boolean",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380280134,
+                "stop": 1781380280135,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_best_transposition_is_int_in_range",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380280135,
+                "stop": 1781380280137,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_normalized_cost_is_finite_nonnegative",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380280137,
+                "stop": 1781380280139,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_best_offset_seconds_is_finite_nonnegative",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380280139,
+                "stop": 1781380280141,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_decision_rule_consistent",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380280141,
+                "stop": 1781380280142,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_is_cover_matches_ground_truth",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380280143,
+                "stop": 1781380280145,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_normalized_cost_consistent_with_truth",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380280145,
+                "stop": 1781380280147,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,82 @@
+Skipping image OS validation for hb__vocal-separation-mask: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-dbeun84 > /logs/artifacts/run-id && echo vocal-separation-mask__dBeuN84 > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model google/gemini-3.5-flash --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Vocal / Accompaniment Separation with Soft Masks
+
+## Background
+Use `librosa` to implement a foreground (vocal) vs. background (accompaniment) source separator based on nearest-neighbor median filtering of the magnitude STFT and complementary soft masks. The pipeline operates in the magnitude STFT domain, estimates a background by aggregating spectrally similar frames, derives complementary soft masks for vocal and accompaniment, applies each mask to the original complex STFT, and reconstructs two waveforms via the inverse STFT.
+
+## Requirements
+- Read the input mixture from `/workspace/input.wav` (mono).
+- Produce two output WAV files at the same sample rate as the input:
+  - `/workspace/vocal.wav` (foreground)
+  - `/workspace/accompaniment.wav` (background)
+- The two outputs must be derived from complementary soft masks applied to the original complex STFT (no naive subtraction of waveforms).
+
+## Implementation Hints
+- Allowed librosa APIs for the core separation: `librosa.load`, `librosa.stft`, `librosa.istft`, `librosa.decompose.nn_filter`, `librosa.util.softmask`.
+- The background magnitude estimate must use `librosa.decompose.nn_filter` with `aggregate=np.median` and a non-local cosine recurrence width constraint to prevent neighbors that are too close in time from being aggregated.
+- Complementary masks must be obtained from `librosa.util.softmask` (one mask for vocal, one for accompaniment), then multiplied element-wise with the original complex STFT before inverse transform.
+- Use the same STFT parameters (`n_fft`, `hop_length`, `win_length`) for analysis and synthesis so the reconstructed signal length matches the input.
+- Save outputs with `soundfile.write` (or equivalent) at the loaded sample rate; do not resample.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the separation pipeline is executed and both output artifacts exist.
+- Output files:
+  - `/workspace/vocal.wav`
+  - `/workspace/accompaniment.wav`
+- Both outputs are valid WAV files loadable by `soundfile`, mono, and have the same sample rate as the input.
+- Each output has a length within ±1 sample of the input length.
+- Each output is non-silent (per-file RMS energy strictly greater than 1e-4).
+- The element-wise sum of the two output waveforms reconstructs the input mixture to a mean-absolute-error of at most 5e-2 (soft masks must be complementary).
+- The cosine similarity between the magnitude STFTs of `vocal.wav` and `accompaniment.wav` (flattened) must be strictly less than the cosine similarity between the input mixture magnitude STFT and `accompaniment.wav` magnitude STFT (the masks must actually separate spectral content rather than copy the mixture).
+- Neither output may be a bitwise copy of the input.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured

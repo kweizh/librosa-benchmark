@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 6 items
+
+tests/test_final_state.py ......                                         [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_beat_times_within_audio_bounds
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_beat_times_within_audio_bounds
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_beat_times_within_audio_bounds
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_meta_schema_and_types
+PASSED tests/test_final_state.py::test_beat_times_strictly_increasing
+PASSED tests/test_final_state.py::test_beat_times_within_audio_bounds
+PASSED tests/test_final_state.py::test_mfcc_sync_shape
+PASSED tests/test_final_state.py::test_mfcc_sync_column_count_matches_boundary_convention
+PASSED tests/test_final_state.py::test_mfcc_sync_matches_recomputed_median
+======================== 6 passed, 3 warnings in 3.79s =========================

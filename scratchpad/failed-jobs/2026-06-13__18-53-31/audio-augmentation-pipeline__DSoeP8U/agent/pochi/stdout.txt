@@ -1,0 +1,203 @@
+- Initializing MCP connections...
+You
+# Audio Augmentation Pipeline with `librosa.effects` ## Background Build an ordered audio augmentation pipeline using `librosa` 0.11. The pipeline reads a single mono WAV, applies a fixed sequence of effects (pitch shift, time stretch, then silence trim), and persists both the resulting waveform and a metadata log capturing per-stage durations and trim indices. ## Requirements * Read the input audio from `/workspace/input.wav`. * Apply the following stages, in this exact order, on the loaded waveform: 1. Pitch shift up by `+3` semitones with `bins_per_octave=12` and energy scaling enabled (`scale=True`). 2. Time-stretch the pitch-shifted signal by `rate=0.85` (slow down). 3. Trim leading/trailing silence with `top_db=40`. * Write the final waveform to `/workspace/augmented.wav` as a mono file with the same sample rate as the input. * Write a metadata JSON log to `/workspace/aug_meta.json` describing the original sample rate, the per-stage durations (in seconds, measured on the waveform produced by that stage), the trim indices returned by the trim stage, and the parameters used. ## Implementation Hints * Use `librosa.effects.pitch_shift`, `librosa.effects.time_stretch`, and `librosa.effects.trim` for the three stages. All effect parameters in `librosa` 0.11 are keyword-only. * Measure each stage's duration from the waveform produced by that stage (length divided by sample rate). * The trim stage returns both the trimmed waveform and a 2-element `index` array; persist that index as `trim_indices`. * Use `soundfile` (or `librosa` helpers built on top of it) to write the final WAV file; preserve the input sample rate. * Cross-check API signatures against the `librosa` 0.11.0 documentation; do not assume positional argument order. ## Acceptance Criteria * Project path: /workspace * Ensure the augmentation pipeline is executed and the output artifacts exist. * Output files: * `/workspace/augmented.wav`: mono WAV whose sample rate matches the input. * `/workspace/aug_meta.json`: JSON object matching the schema below. ```json { "sample_rate": number, "input_duration_seconds": number, "after_pitch_shift_seconds": number, "after_time_stretch_seconds": number, "after_trim_seconds": number, "trim_indices": [number, number], "n_steps": 3.0, "rate": 0.85, "top_db": 40 } ``` * The augmented WAV sample count must equal `after_trim_seconds * sample_rate` within ±1 sample. * Pitch shift must preserve length within phase-vocoder rounding: `|after_pitch_shift_seconds - input_duration_seconds| / input_duration_seconds <= 0.02`. * Time stretch must satisfy `|after_time_stretch_seconds - after_pitch_shift_seconds / 0.85| / after_time_stretch_seconds <= 0.05`. * `after_trim_seconds <= after_time_stretch_seconds`. * `trim_indices` must be a `[start, end]` integer pair with `0 <= start < end` and `end <= round(after_time_stretch_seconds * sample_rate)`. * The median voiced F0 of the augmented audio (computed via `librosa.pyin`) divided by that of the input must lie in `[2**(2.5/12), 2**(3.5/12)]` (i.e., `+3` semitones ±0.5 semitone).   
+
+Pochi
+💭 Thinking for 348 characters   
+📋 Updating todo list (4 items) ✔ 
+💭 Thinking for 48 characters   
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__)" ✔ 
+💭 Thinking for 133 characters   
+💫 Executing python3 -c "import soundfile; print(soundfile.__version__)" ✔ 
+💭 Thinking for 79 characters   
+📋 Updating todo list (4 items) ✔ 
+✏️  Writing /workspace/augment.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 augment.py ✔ 
+💭 Thinking for 2179 characters   
+The F0 ratio (1.44) is outside the expected range [1.16, 1.22]. Let me investigate the `librosa.effects.pitch_shift` API in version 0.11.   
+💫 Executing python3 -c "import librosa; help(librosa.effects.pitch_shift)" ✔ 
+💭 Thinking for 1270 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_ps = librosa.effects.pitch_shift(y, sr=sr, n_steps=3, bins_per_octave=12, scale=True)
+
+# Check F0 with pyin
+f0_in, voiced_in, _ = librosa.pyin(y, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+f0_ps, voiced_ps, _ = librosa.pyin(y_ps, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+
+print('Input voiced F0 median:', np.nanmedian(f0_in[voiced_in]))
+print('PS voiced F0 median:', np.nanmedian(f0_ps[voiced_ps]))
+print('Ratio:', np.nanmedian(f0_ps[voiced_ps]) / np.nanmedian(f0_in[voiced_in]))
+print('Expected ratio for +3 semitones:', 2**(3/12))
+
+# Check lengths
+print('Input length:', len(y))
+print('PS length:', len(y_ps))
+" ✔ 
+💭 Thinking for 4383 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_ps = librosa.effects.pitch_shift(y, sr=sr, n_steps=3, bins_per_octave=12, scale=True)
+
+# Check spectral peaks
+S_in = np.abs(librosa.stft(y))
+S_ps = np.abs(librosa.stft(y_ps))
+
+# Find peak frequency in input
+freqs = librosa.fft_frequencies(sr=sr)
+mean_spec_in = np.mean(S_in, axis=1)
+mean_spec_ps = np.mean(S_ps, axis=1)
+
+peak_in = freqs[np.argmax(mean_spec_in)]
+peak_ps = freqs[np.argmax(mean_spec_ps)]
+
+print(f'Input peak freq: {peak_in:.2f} Hz')
+print(f'PS peak freq: {peak_ps:.2f} Hz')
+print(f'Ratio: {peak_ps/peak_in:.4f}')
+print(f'Expected: {2**(3/12):.4f}')
+
+# Check audio characteristics
+print(f'Audio duration: {len(y)/sr:.3f}s')
+print(f'Audio shape: {y.shape}')
+print(f'Audio range: [{y.min():.4f}, {y.max():.4f}]')
+print(f'Sample rate: {sr}')
+" ✔ 
+💭 Thinking for 3259 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+# Try pyin with different fmin/fmax
+f0_in, voiced_in, _ = librosa.pyin(y, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+print('Input F0 stats:')
+print(f'  Voiced frames: {voiced_in.sum()} / {len(voiced_in)}')
+print(f'  Median voiced F0: {np.nanmedian(f0_in[voiced_in]):.2f} Hz')
+print(f'  Mean voiced F0: {np.nanmean(f0_in[voiced_in]):.2f} Hz')
+
+# Check all detected F0 values
+voiced_f0 = f0_in[voiced_in]
+print(f'  Min voiced F0: {np.nanmin(voiced_f0):.2f} Hz')
+print(f'  Max voiced F0: {np.nanmax(voiced_f0):.2f} Hz')
+print(f'  Unique F0 values: {np.unique(voiced_f0[~np.isnan(voiced_f0)])[:20]}')
+" ✔ 
+💭 Thinking for 1031 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_ps = librosa.effects.pitch_shift(y, sr=sr, n_steps=3, bins_per_octave=12, scale=True)
+y_ts = librosa.effects.time_stretch(y_ps, rate=0.85)
+y_trim, index = librosa.effects.trim(y_ts, top_db=40)
+
+# Try with tighter fmin/fmax based on expected frequencies
+# Input F0 ~ 380, so after +3 semitones ~ 452
+# Use fmin=100, fmax=2000 for both
+f0_in, voiced_in, _ = librosa.pyin(y, sr=sr, fmin=100, fmax=2000)
+f0_aug, voiced_aug, _ = librosa.pyin(y_trim, sr=sr, fmin=100, fmax=2000)
+
+median_in = np.nanmedian(f0_in[voiced_in])
+median_aug = np.nanmedian(f0_aug[voiced_aug])
+ratio = median_aug / median_in
+
+print(f'Input median F0: {median_in:.2f}')
+print(f'Aug median F0: {median_aug:.2f}')
+print(f'Ratio: {ratio:.4f}')
+print(f'Expected range: [{2**(2.5/12):.4f}, {2**(3.5/12):.4f}]')
+print(f'In range: {2**(2.5/12) <= ratio <= 2**(3.5/12)}')
+" ✔ 
+💭 Thinking for 1197 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_ps = librosa.effects.pitch_shift(y, sr=sr, n_steps=3, bins_per_octave=12, scale=True)
+y_ts = librosa.effects.time_stretch(y_ps, rate=0.85)
+y_trim, index = librosa.effects.trim(y_ts, top_db=40)
+
+# Check F0 distribution for input
+f0_in, voiced_in, _ = librosa.pyin(y, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+v_in = f0_in[voiced_in]
+print('Input F0 distribution (percentiles):')
+for p in [10, 25, 50, 75, 90]:
+    print(f'  {p}th: {np.nanpercentile(v_in, p):.2f} Hz')
+
+# Check F0 distribution for augmented
+f0_aug, voiced_aug, _ = librosa.pyin(y_trim, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+v_aug = f0_aug[voiced_aug]
+print('Aug F0 distribution (percentiles):')
+for p in [10, 25, 50, 75, 90]:
+    print(f'  {p}th: {np.nanpercentile(v_aug, p):.2f} Hz')
+
+print()
+print(f'Ratio of medians: {np.nanmedian(v_aug) / np.nanmedian(v_in):.4f}')
+print(f'Ratio of 25th percentiles: {np.nanpercentile(v_aug, 25) / np.nanpercentile(v_in, 25):.4f}')
+print(f'Ratio of 10th percentiles: {np.nanpercentile(v_aug, 10) / np.nanpercentile(v_in, 10):.4f}')
+" ✔ 
+💭 Thinking for 2086 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_ps = librosa.effects.pitch_shift(y, sr=sr, n_steps=3, bins_per_octave=12, scale=True)
+y_ts = librosa.effects.time_stretch(y_ps, rate=0.85)
+y_trim, index = librosa.effects.trim(y_ts, top_db=40)
+
+# Try narrower fmax to avoid octave errors
+# Input F0 seems to be around 350-380 Hz range
+# After +3 semitones: ~415-452 Hz
+# Set fmax to avoid detecting 2nd harmonic (~830-900 Hz)
+for fmax_val in [600, 700, 800, 1000, 1500, 2093]:
+    f0_in, voiced_in, _ = librosa.pyin(y, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=fmax_val)
+    f0_aug, voiced_aug, _ = librosa.pyin(y_trim, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=fmax_val)
+    
+    median_in = np.nanmedian(f0_in[voiced_in])
+    median_aug = np.nanmedian(f0_aug[voiced_aug])
+    ratio = median_aug / median_in
+    
+    in_range = 2**(2.5/12) <= ratio <= 2**(3.5/12)
+    print(f'fmax={fmax_val}: in_F0={median_in:.1f}, aug_F0={median_aug:.1f}, ratio={ratio:.4f}, in_range={in_range}')
+" ✔ 
+💭 Thinking for 16486 characters   
+💫 Executing python3 -c "
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_ps = librosa.effects.pitch_shift(y, sr=sr, n_steps=3, bins_per_octave=12, scale=True)
+
+# Default pyin on just pitch-shifted signal
+f0_in, voiced_in, _ = librosa.pyin(y, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+f0_ps, voiced_ps, _ = librosa.pyin(y_ps, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
+
+median_in = np.nanmedian(f0_in[voiced_in])
+median_ps = np.nanmedian(f0_ps[voiced_ps])
+ratio = median_ps / median_in
+
+print(f'PS only - Input median F0: {median_in:.2f}, PS median F0: {median_ps:.2f}, ratio: {ratio:.4f}')
+print(f'Expected range: [{2**(2.5/12):.4f}, {2**(3.5/12):.4f}]')
+print(f'In range: {2**(2.5/12) <= ratio <= 2**(3.5/12)}')
+
+# Try with fmax set to avoid octave errors
+# Use fmax = 3 * fmin_detected to avoid 2nd harmonic detection
+f0_in2, voiced_in2, _ = librosa.pyin(y, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=800)
+f0_ps2, voiced_ps2, _ = librosa.pyin(y_ps, sr=sr, fmin=librosa.note_to_hz('C2'), fmax=800)
+
+median_in2 = np.nanmedian(f0_in2[voiced_in2])
+median_ps2 = np.nanmedian(f0_ps2[voiced_ps2])
+ratio2 = median_ps2 / median_in2
+
+print(f'fmax=800 - Input median F0: {median_in2:.2f}, PS median F0: {median_ps2:.2f}, ratio: {ratio2:.4f}')
+" ✔ 

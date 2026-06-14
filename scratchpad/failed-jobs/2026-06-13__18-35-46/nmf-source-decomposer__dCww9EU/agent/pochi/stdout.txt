@@ -1,0 +1,92 @@
+- Initializing MCP connections...
+You
+# NMF Source Decomposition with Wiener Soft Masks ## Background Decompose a polyphonic mixture into 4 spectral sources using NMF, then resynthesize each source back to a waveform using Wiener-style soft masking applied to the original complex STFT. ## Requirements * Read `/workspace/mixture.wav` (mono, 22050 Hz). * Decompose its magnitude spectrogram into 4 NMF components with `librosa.decompose.decompose`. * For each component, build a Wiener-style soft mask, apply it to the original complex STFT, and resynthesize to a waveform via the inverse STFT. The summed component waveforms should reconstruct the mixture. * Write each resynthesized component to `/workspace/component_<i>.wav` for `i` in `0..3`. * Write per-component spectral statistics to `/workspace/components.json`. ## Implementation Hints * Keep STFT/iSTFT parameters consistent so component lengths match the mixture. * The soft mask for component `k` should be its magnitude-squared spectrogram divided by the sum of magnitude-squared spectrograms across all components. * Compute the spectral centroid per component from its resynthesized waveform. * Verify API signatures against the librosa 0.11.0 docs. ## Acceptance Criteria * Project path: /workspace * Ensure the decomposition pipeline is executed and the output artifacts exist. * Output audio files: `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, `/workspace/component_3.wav`. * Each file must be mono, with the same sample rate as `/workspace/mixture.wav`, and the same sample count as the mixture (±1 sample). * Output metadata file: `/workspace/components.json`. * Must be a JSON array of exactly 4 objects, each with the schema: ```json { "index": integer, "centroid_hz": number, "rms": number } ``` * The `index` values must be exactly `0, 1, 2, 3` (each appearing once). * Every `centroid_hz` must satisfy `0 < centroid_hz < sr / 2`. * The spread `max(centroid_hz) - min(centroid_hz)` across the 4 components must exceed 200 Hz. * Every `rms` must exceed `1e-4`. * Reconstruction quality: the sample-wise sum of the 4 component waveforms must approximate the mixture such that the mean absolute error is at most `5e-2` times the mixture RMS.   
+
+Pochi
+💭 Thinking for 1071 characters   
+💫 Executing cat << 'EOF' > /workspace/nmf_separation.py
+import librosa
+import numpy as np
+import soundfile as sf
+import json
+
+def main():
+    y, sr = librosa.load('/workspace/mixture.wav', sr=None)
+    
+    D = librosa.stft(y)
+    S = np.abs(D)
+    
+    n_components = 4
+    W, H = librosa.decompose.decompose(S, n_components=n_components, sort=True)
+    
+    # Reconstruct components
+    S_comps = []
+    for k in range(n_components):
+        S_k = W[:, k:k+1] @ H[k:k+1, :]
+        S_comps.append(S_k)
+        
+    S_comps = np.array(S_comps)
+    
+    # Wiener-style soft mask
+    S_sq = S_comps ** 2
+    S_sq_sum = np.sum(S_sq, axis=0) + 1e-10
+    
+    components_info = []
+    
+    for k in range(n_components):
+        M_k = S_sq[k] / S_sq_sum
+        D_k = M_k * D
+        y_k = librosa.istft(D_k, length=len(y))
+        
+        sf.write(f'/workspace/component_{k}.wav', y_k, sr)
+        
+        centroid = librosa.feature.spectral_centroid(y=y_k, sr=sr)
+        mean_centroid = float(np.mean(centroid))
+        
+        rms = float(np.sqrt(np.mean(y_k**2)))
+        
+        components_info.append({
+            "index": k,
+            "centroid_hz": mean_centroid,
+            "rms": rms
+        })
+        
+    with open('/workspace/components.json', 'w') as f:
+        json.dump(components_info, f, indent=2)
+
+if __name__ == "__main__":
+    main()
+EOF
+python3 /workspace/nmf_separation.py
+ ✔ 
+💭 Thinking for 227 characters   
+💫 Executing ls -la /workspace ✔ 
+💫 Executing cat /workspace/components.json ✔ 
+💭 Thinking for 648 characters   
+💫 Executing cat << 'EOF' > /workspace/check_mae.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/mixture.wav', sr=None)
+y_sum = np.zeros_like(y)
+for i in range(4):
+    y_k, _ = librosa.load(f'/workspace/component_{i}.wav', sr=None)
+    y_sum += y_k
+
+mae = np.mean(np.abs(y - y_sum))
+rms = np.sqrt(np.mean(y**2))
+print(f"MAE: {mae}, RMS: {rms}, Ratio: {mae/rms}")
+EOF
+python3 /workspace/check_mae.py
+ ✔ 
+💭 Thinking for 226 characters   
+🎉 Task Completed
+The NMF source decomposition with Wiener soft masks has been successfully completed.
+
+1. The script reads the mixture waveform and computes the magnitude spectrogram.
+2. NMF decomposes the spectrogram into 4 components.
+3. Wiener-style soft masks are computed by taking the squared magnitude of each component divided by the sum of squared magnitudes across all components.
+4. The masks are applied to the original complex STFT and resynthesized into separate waveforms for each source.
+5. The output files `component_0.wav` through `component_3.wav` are successfully generated and perfectly reconstruct the original mixture (MAE is far below the requested threshold).
+6. The `components.json` file is correctly formatted with the `index`, `centroid_hz`, and `rms` values for each component, meeting all the acceptance criteria.   
+  

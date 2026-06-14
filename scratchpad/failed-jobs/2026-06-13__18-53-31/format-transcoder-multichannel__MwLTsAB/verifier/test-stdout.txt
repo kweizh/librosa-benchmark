@@ -1,0 +1,77 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 17 items
+
+tests/test_final_state.py ................F                              [100%]
+
+=================================== FAILURES ===================================
+_______________ test_output_not_identical_to_scipy_resample_poly _______________
+
+output_samples = (array([ 0.01672363,  0.10800171,  0.20401001, ..., -0.17678833,
+       -0.10263062,  0.05389404], shape=(96000,), dtype=float32), 16000)
+
+    def test_output_not_identical_to_scipy_resample_poly(output_samples):
+        """The output must use the soxr_hq backend, not scipy.signal.resample_poly."""
+        import soundfile as sf
+        from scipy.signal import resample_poly
+    
+        y_stereo, sr_in = sf.read(INPUT_FLAC, dtype="float32", always_2d=True)
+        assert sr_in == 44100, f"Input sample rate is unexpectedly {sr_in}."
+        assert y_stereo.shape[1] == 2, (
+            f"Input is expected to be stereo, got {y_stereo.shape[1]} channels."
+        )
+        # Weighted (equal-weight) downmix to mono — the same downmix the agent is asked to perform.
+        mono = (y_stereo[:, 0] + y_stereo[:, 1]) / 2.0
+        # Naive baseline resample with scipy.signal.resample_poly (sr_in=44100 -> 16000 => up=160, down=441).
+        y_poly = resample_poly(mono, 160, 441).astype(np.float32)
+    
+        y_out, sr_out = output_samples
+        y_out = np.asarray(y_out, dtype=np.float32)
+        assert sr_out == 16000, f"Output sample rate is unexpectedly {sr_out}."
+    
+        # Peak-normalize the baseline to -1 dBFS so amplitude differences alone don't bias the check.
+        target_peak = 10.0 ** (-1.0 / 20.0)
+        poly_peak = float(np.max(np.abs(y_poly)))
+        if poly_peak > 0:
+            y_poly = y_poly * (target_peak / poly_peak)
+    
+        # Align lengths for a sample-wise comparison.
+        n = min(len(y_out), len(y_poly))
+        assert n > 0, "Cannot compare empty signals."
+        diff = np.abs(y_out[:n] - y_poly[:n])
+        mean_abs_diff = float(np.mean(diff))
+    
+        assert not np.array_equal(y_out[:n], y_poly[:n]), (
+            "Output is byte-identical to a scipy.signal.resample_poly result; the soxr_hq backend was not used."
+        )
+        # Two different bandlimited resamplers should differ by far more than numerical noise.
+>       assert mean_abs_diff > 1e-4, (
+            f"Output is suspiciously close to a scipy.signal.resample_poly baseline "
+            f"(mean |diff| = {mean_abs_diff:.2e}); expected the soxr_hq backend to produce a clearly distinct waveform."
+        )
+E       AssertionError: Output is suspiciously close to a scipy.signal.resample_poly baseline (mean |diff| = 6.89e-05); expected the soxr_hq backend to produce a clearly distinct waveform.
+E       assert 6.890792428748682e-05 > 0.0001
+
+tests/test_final_state.py:227: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_soxr_is_installed_in_verifier_env
+PASSED tests/test_final_state.py::test_output_wav_samplerate_is_16000
+PASSED tests/test_final_state.py::test_output_wav_is_mono
+PASSED tests/test_final_state.py::test_output_wav_subtype_is_pcm_16
+PASSED tests/test_final_state.py::test_meta_has_required_keys
+PASSED tests/test_final_state.py::test_meta_orig_sample_rate
+PASSED tests/test_final_state.py::test_meta_orig_channels
+PASSED tests/test_final_state.py::test_meta_output_sample_rate
+PASSED tests/test_final_state.py::test_meta_output_channels
+PASSED tests/test_final_state.py::test_meta_resampler_backend
+PASSED tests/test_final_state.py::test_meta_output_duration_matches_file
+PASSED tests/test_final_state.py::test_meta_orig_duration_matches_input
+PASSED tests/test_final_state.py::test_meta_durations_close
+PASSED tests/test_final_state.py::test_output_peak_is_near_minus_1_dbfs
+PASSED tests/test_final_state.py::test_meta_peak_dbfs_near_minus_1
+PASSED tests/test_final_state.py::test_meta_peak_dbfs_matches_measured
+FAILED tests/test_final_state.py::test_output_not_identical_to_scipy_resample_poly
+========================= 1 failed, 16 passed in 1.76s =========================

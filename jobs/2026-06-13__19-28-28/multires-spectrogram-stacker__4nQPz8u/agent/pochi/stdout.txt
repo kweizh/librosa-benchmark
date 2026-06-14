@@ -1,0 +1,131 @@
+- Initializing MCP connections...
+You
+# Multi-Resolution Spectrogram Stack with librosa ## Background Produce a stacked time-frequency representation of a single audio file by computing three complementary spectrograms on the SAME time grid: a linear STFT, a Constant-Q transform (CQT), and a Variable-Q transform (VQT). Persist the dB-scaled magnitudes in one `.npz` archive together with a sidecar metadata JSON that fully describes the analysis parameters and the per-representation frequency vectors. ## Requirements * Read the input WAV file from `/workspace/input.wav`. * Compute all three transforms (STFT, CQT, VQT) using a SINGLE shared `hop_length` so the columns of every output share a common time grid. * Convert each magnitude spectrogram to dB. * Save the three dB arrays into `/workspace/spec_stack.npz` under the keys `stft_db`, `cqt_db`, `vqt_db`. * Save the analysis metadata as JSON into `/workspace/spec_meta.json`. ## Implementation Hints * Use `librosa.stft`, `librosa.cqt`, and `librosa.vqt` from librosa 0.11.0; nearly every kwarg is keyword-only. * Take magnitudes (`np.abs`) before converting to dB with `librosa.amplitude_to_db`. * The number of frames for STFT, CQT, and VQT must agree; choose a `hop_length` that is a power of two and divisible by `2 ** (n_octaves - 1)` so the recursive CQT/VQT implementation accepts it. * The frequency vectors should be derived from librosa's own helpers (consult the 0.11.0 docs to pick the correct helper for each transform). * All metadata numeric values must be plain JSON-serializable scalars; the frequency arrays must be plain JSON lists of numbers. ## Acceptance Criteria * Project path: /workspace * Ensure the spectrogram pipeline is executed and BOTH output artifacts exist. * Output files: * `/workspace/spec_stack.npz` containing exactly the arrays `stft_db`, `cqt_db`, `vqt_db` (real-valued, finite). * `/workspace/spec_meta.json` containing the keys `n_frames`, `hop_length`, `sample_rate`, `stft_freqs`, `cqt_freqs`, `vqt_freqs`, `n_fft`, `cqt_n_bins`, `cqt_bins_per_octave`, `vqt_n_bins`, `vqt_bins_per_octave`. * Shape constraints: * `stft_db.shape == (1 + n_fft // 2, n_frames)`. * `cqt_db.shape == (cqt_n_bins, n_frames)`. * `vqt_db.shape == (vqt_n_bins, n_frames)`. * The trailing dimension of all three arrays equals the metadata `n_frames`. * Frequency-vector constraints: * `len(stft_freqs) == stft_db.shape[0]`, `len(cqt_freqs) == cqt_n_bins`, `len(vqt_freqs) == vqt_n_bins`. * `cqt_freqs` is element-wise close to the standard librosa Constant-Q frequency helper output for the recorded `cqt_n_bins`, `fmin`, `bins_per_octave`. * `vqt_freqs` is element-wise close to the standard librosa interval-based frequency helper output for `intervals='equal'` with the recorded `vqt_n_bins`, `fmin`, `bins_per_octave`. * Each dB array must be finite everywhere and have dynamic range `> 20 dB` (i.e. `max - min > 20`).   
+
+Pochi
+I'll start by examining the workspace and input file, then implement the multi-resolution spectrogram stack.   
+📋 Updating todo list (4 items) ✔ 
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__)" ✔ 
+💫 Executing python3 -c "
+import soundfile as sf
+info = sf.info('/workspace/input.wav')
+print(f'Sample rate: {info.samplerate}')
+print(f'Duration: {info.duration:.3f}s')
+print(f'Channels: {info.channels}')
+" ✔ 
+Good — 22050 Hz mono, 10 seconds. Now let me design the parameters carefully. For CQT/VQT with librosa 0.11.0, `hop_length` must be a power of two and divisible by `2 ** (n_octaves - 1)`. Let me work out the math: - `sample_rate = 22050` - `n_fft = 2048` (power of two) - `hop_length = 512` (power of two, `512 = 2^9`) - For CQT: `n_bins = 84`, `bins_per_octave = 12`, `n_octaves = 84/12 = 7`. So `hop_length` must be divisible by `2^(7-1) = 64`. `512 / 64 = 8` ✓ - `fmin = librosa.note_to_hz('C1') ≈ 32.7`   
+📋 Updating todo list (4 items) ✔ 
+✏️  Writing /workspace/spec_pipeline.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 spec_pipeline.py ✔ 
+All three transforms share the same time grid (431 frames), and all dynamic ranges exceed 20 dB. Now let me run the full validation.   
+📋 Updating todo list (4 items) ✔ 
+💫 Executing python3 -c "
+import numpy as np
+import json
+import librosa
+
+# ── Load outputs ────────────────────────────────────────────────────────
+data = np.load('/workspace/spec_stack.npz')
+stft_db = data['stft_db']
+cqt_db = data['cqt_db']
+vqt_db = data['vqt_db']
+
+with open('/workspace/spec_meta.json') as f:
+    meta = json.load(f)
+
+# ── Required keys in NPZ ────────────────────────────────────────────────
+assert set(data.keys()) == {'stft_db', 'cqt_db', 'vqt_db'}, f'Keys: {set(data.keys())}'
+
+# ── Required keys in JSON ───────────────────────────────────────────────
+required_keys = {
+    'n_frames', 'hop_length', 'sample_rate', 'stft_freqs', 'cqt_freqs',
+    'vqt_freqs', 'n_fft', 'cqt_n_bins', 'cqt_bins_per_octave',
+    'vqt_n_bins', 'vqt_bins_per_octave'
+}
+assert set(meta.keys()) == required_keys, f'Missing/extra keys: {set(meta.keys()) ^ required_keys}'
+
+# ── Shape constraints ───────────────────────────────────────────────────
+n_frames = meta['n_frames']
+n_fft = meta['n_fft']
+cqt_n_bins = meta['cqt_n_bins']
+vqt_n_bins = meta['vqt_n_bins']
+
+assert stft_db.shape == (1 + n_fft // 2, n_frames), f'STFT shape {stft_db.shape}'
+assert cqt_db.shape == (cqt_n_bins, n_frames), f'CQT shape {cqt_db.shape}'
+assert vqt_db.shape == (vqt_n_bins, n_frames), f'VQT shape {vqt_db.shape}'
+
+# ── Frequency vector lengths ────────────────────────────────────────────
+assert len(meta['stft_freqs']) == stft_db.shape[0]
+assert len(meta['cqt_freqs']) == cqt_n_bins
+assert len(meta['vqt_freqs']) == vqt_n_bins
+
+# ── Frequency vector correctness ────────────────────────────────────────
+fmin = float(librosa.note_to_hz('C1'))
+expected_cqt = librosa.cqt_frequencies(
+    n_bins=cqt_n_bins, fmin=fmin, bins_per_octave=meta['cqt_bins_per_octave']
+)
+expected_vqt = librosa.cqt_frequencies(
+    n_bins=vqt_n_bins, fmin=fmin, bins_per_octave=meta['vqt_bins_per_octave']
+)
+assert np.allclose(meta['cqt_freqs'], expected_cqt, rtol=1e-10), 'CQT freqs mismatch'
+assert np.allclose(meta['vqt_freqs'], expected_vqt, rtol=1e-10), 'VQT freqs mismatch'
+
+# ── Finite everywhere ───────────────────────────────────────────────────
+assert np.all(np.isfinite(stft_db)), 'STFT has non-finite values'
+assert np.all(np.isfinite(cqt_db)), 'CQT has non-finite values'
+assert np.all(np.isfinite(vqt_db)), 'VQT has non-finite values'
+
+# ── Dynamic range > 20 dB ───────────────────────────────────────────────
+for name, arr in [('STFT', stft_db), ('CQT', cqt_db), ('VQT', vqt_db)]:
+    dr = arr.max() - arr.min()
+    assert dr > 20, f'{name} dynamic range {dr:.2f} <= 20'
+    print(f'{name}: shape={arr.shape}, dynamic_range={dr:.2f} dB')
+
+# ── JSON numeric types ──────────────────────────────────────────────────
+for k, v in meta.items():
+    if k.endswith('_freqs'):
+        assert isinstance(v, list), f'{k} is not a list'
+        assert all(isinstance(x, (int, float)) for x in v), f'{k} has non-numeric'
+    else:
+        assert isinstance(v, (int, float)), f'{k} is not a plain scalar: {type(v)}'
+
+print()
+print('ALL VALIDATION CHECKS PASSED')
+" ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+The multi-resolution spectrogram stack has been computed and validated. Here's a summary:
+
+**Output files:**
+- `/workspace/spec_stack.npz` — contains `stft_db`, `cqt_db`, `vqt_db` arrays
+- `/workspace/spec_meta.json` — contains all required metadata keys
+
+**Parameters used:**
+| Parameter | Value |
+|---|---|
+| `sample_rate` | 22050 Hz |
+| `n_fft` | 2048 |
+| `hop_length` | 512 (power of two, divisible by 2⁶=64 for CQT with 7 octaves) |
+| `fmin` | C1 (~32.7 Hz) |
+| `cqt_n_bins` / `vqt_n_bins` | 84 |
+| `bins_per_octave` | 12 |
+
+**Array shapes (all share 431 time frames):**
+| Array | Shape | Dynamic Range |
+|---|---|---|
+| `stft_db` | (1025, 431) | 80.00 dB |
+| `cqt_db` | (84, 431) | 80.00 dB |
+| `vqt_db` | (84, 431) | 80.00 dB |
+
+**Validation results — all checks passed:**
+- ✓ All three arrays share the same `n_frames` (common `hop_length=512`)
+- ✓ Shape constraints: `stft_db = (1 + n_fft/2, n_frames)`, `cqt_db = (cqt_n_bins, n_frames)`, `vqt_db = (vqt_n_bins, n_frames)`
+- ✓ Frequency vector lengths match array dimensions
+- ✓ `cqt_freqs` matches `librosa.cqt_frequencies` output
+- ✓ `vqt_freqs` matches `librosa.cqt_frequencies` output (VQT with `intervals='equal'` uses the same frequency grid)
+- ✓ All dB arrays are finite everywhere
+- ✓ All dynamic ranges > 20 dB
+- ✓ All metadata values are JSON-serializable scalars/lists   
+  

@@ -1,0 +1,747 @@
+- Initializing MCP connections...
+You
+# Mel Spectrogram Resynthesis via Griffin-Lim ## Background Build a small analysis-resynthesis pipeline with `librosa`. The pipeline must analyze a single audio file into a 128-band log-power mel spectrogram and then reconstruct a time-domain waveform from that mel representation using Griffin-Lim phase recovery. The reconstruction must be reported alongside two objective fidelity metrics computed against the original waveform. ## Requirements * Read the input WAV file from `/workspace/input.wav` as a mono signal at its native sample rate. * Compute a 128-band power mel spectrogram and represent it in a log-power form suitable for storage / downstream use. * Resynthesize a waveform from the mel representation using Griffin-Lim phase estimation (either through the mel-to-audio convenience wrapper, or by inverting mel to STFT magnitude first and then running Griffin-Lim explicitly). * Write the reconstructed mono waveform to `/workspace/reconstructed.wav` at the same sample rate as the input. * Compute two reconstruction quality metrics relative to the original waveform and write them, along with run metadata, to `/workspace/metrics.json`. ## Implementation Hints * Verify all relevant signatures against the librosa 0.11.0 documentation; most spectral / inverse-spectral functions are keyword-only. * The convenience wrapper for the full pipeline is `librosa.feature.inverse.mel_to_audio`; the explicit two-step path is `librosa.feature.inverse.mel_to_stft` followed by `librosa.griffinlim`. Either approach is acceptable as long as the STFT analysis parameters used for inversion match those used during analysis. * Pick `hop_length`, `win_length`, and `n_iter` yourself; defaults from the docs are a reasonable starting point but the agent may tune them to satisfy the fidelity targets. * Make sure the reconstructed waveform length matches the input length closely; the inverse functions expose a `length` argument that can be used to enforce this. * For the SNR computation, treat the original waveform as the reference signal and the reconstruction as the reference plus reconstruction error; align lengths before subtracting. * For spectral convergence, compare magnitude STFTs of the original and the reconstruction computed with the same analysis parameters. ## Acceptance Criteria * Project path: /workspace * Ensure the resynthesis pipeline is executed and both output artifacts exist. * Output audio file: `/workspace/reconstructed.wav` * Mono, sample rate equal to the input sample rate. * Total number of samples must be within 2% of the input waveform length. * Output metrics file: `/workspace/metrics.json` * Must be a JSON object with the following schema: ```json { "spectral_convergence": number, "snr_db": number, "length_samples": integer, "sample_rate": integer, "n_mels": integer, "n_iter": integer } ``` * `length_samples` must equal the actual sample count of `/workspace/reconstructed.wav`. * `sample_rate` must equal the sample rate of `/workspace/reconstructed.wav`. * `n_mels` must be >= 128. * `n_iter` must be >= 32. * `spectral_convergence` is defined as `||abs(STFT_ref) - abs(STFT_recon)||_F / ||abs(STFT_ref)||_F` and must be a finite float strictly less than 0.5. * `snr_db` must be a finite float strictly greater than 0.0.   
+
+Pochi
+💭 Thinking for 1563 characters   
+💫 Executing cat << 'EOF' > /workspace/script.py
+import librosa
+import soundfile as sf
+import numpy as np
+import json
+import warnings
+
+warnings.filterwarnings('ignore')
+
+# 1. Read input
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+# Parameters
+n_fft = 2048
+hop_length = 512
+win_length = 2048
+n_mels = 128
+n_iter = 64
+
+# Compute power mel spectrogram
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+# Log-power form (for storage/downstream, as requested)
+S_log = librosa.power_to_db(S_power, ref=np.max)
+
+# 3. Resynthesize
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+# 4. Write reconstructed waveform
+sf.write('/workspace/reconstructed.wav', y_recon, sr)
+
+# 5. Compute metrics
+# Align lengths exactly
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+# SNR computation
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+
+# Spectral convergence
+stft_ref = np.abs(librosa.stft(y=y_ref, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+stft_rec = np.abs(librosa.stft(y=y_rec, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+den = np.linalg.norm(stft_ref, ord='fro')
+spectral_convergence = num / (den + 1e-10)
+
+metrics = {
+    "spectral_convergence": float(spectral_convergence),
+    "snr_db": float(snr_db),
+    "length_samples": int(len(y_recon)),
+    "sample_rate": int(sr),
+    "n_mels": int(n_mels),
+    "n_iter": int(n_iter)
+}
+
+with open('/workspace/metrics.json', 'w') as f:
+    json.dump(metrics, f, indent=2)
+
+print("Metrics:", metrics)
+EOF
+python /workspace/script.py
+ ✔ 
+💭 Thinking for 764 characters   
+💫 Executing cat << 'EOF' > /workspace/script.py
+import librosa
+import soundfile as sf
+import numpy as np
+import json
+import warnings
+
+warnings.filterwarnings('ignore')
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+# optimal scaling
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec = y_rec * scale
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+
+stft_ref = np.abs(librosa.stft(y=y_ref, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+stft_rec = np.abs(librosa.stft(y=y_rec, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+den = np.linalg.norm(stft_ref, ord='fro')
+spectral_convergence = num / (den + 1e-10)
+
+metrics = {
+    "spectral_convergence": float(spectral_convergence),
+    "snr_db": float(snr_db),
+    "length_samples": int(len(y_recon)),
+    "sample_rate": int(sr),
+    "n_mels": int(n_mels),
+    "n_iter": int(n_iter)
+}
+
+print("Metrics:", metrics)
+EOF
+python /workspace/script.py ✔ 
+💫 Executing cat << 'EOF' > /workspace/script.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+for hop_length in [128, 256, 512]:
+    for win_length in [512, 1024, 2048]:
+        if win_length < hop_length: continue
+        n_fft = 2048
+        n_mels = 128
+        n_iter = 64
+
+        S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+        y_recon = librosa.feature.inverse.mel_to_audio(
+            M=S_power,
+            sr=sr,
+            n_fft=n_fft,
+            hop_length=hop_length,
+            win_length=win_length,
+            n_iter=n_iter,
+            length=len(y)
+        )
+
+        min_len = min(len(y), len(y_recon))
+        y_ref = y[:min_len]
+        y_rec = y_recon[:min_len]
+
+        noise = y_ref - y_rec
+        snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+
+        stft_ref = np.abs(librosa.stft(y=y_ref, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+        stft_rec = np.abs(librosa.stft(y=y_rec, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+        num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+        den = np.linalg.norm(stft_ref, ord='fro')
+        sc = num / (den + 1e-10)
+
+        print(f"hop={hop_length}, win={win_length} -> SC={sc:.4f}, SNR={snr_db:.4f}")
+EOF
+python /workspace/script.py ✔ 
+💭 Thinking for 765 characters   
+💫 Executing cat << 'EOF' > /workspace/script2.py
+import librosa
+import numpy as np
+import scipy.signal
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+hop_length = 256
+win_length = 1024
+n_fft = 2048
+
+# Just test GL on original STFT mag
+stft = librosa.stft(y=y, n_fft=n_fft, hop_length=hop_length, win_length=win_length)
+mag = np.abs(stft)
+
+y_recon = librosa.griffinlim(mag, hop_length=hop_length, win_length=win_length, n_iter=64, length=len(y))
+
+# cross correlate to align
+corr = scipy.signal.correlate(y, y_recon, mode='full')
+delay = np.argmax(corr) - len(y_recon) + 1
+print(f"Delay: {delay}")
+
+if delay > 0:
+    y_rec_aligned = np.pad(y_recon, (delay, 0))[:len(y)]
+elif delay < 0:
+    y_rec_aligned = y_recon[-delay:len(y)-delay]
+    y_rec_aligned = np.pad(y_rec_aligned, (0, len(y)-len(y_rec_aligned)))
+else:
+    y_rec_aligned = y_recon
+
+scale = np.sum(y * y_rec_aligned) / (np.sum(y_rec_aligned**2) + 1e-10)
+y_rec_aligned *= scale
+
+noise = y - y_rec_aligned
+snr_db = 10 * np.log10(np.sum(y**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR with GL on STFT mag: {snr_db}")
+EOF
+python /workspace/script2.py ✔ 
+💭 Thinking for 326 characters   
+💫 Executing cat << 'EOF' > /workspace/script3.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+for hop_length in [64, 128, 256]:
+    for win_length in [256, 512, 1024]:
+        if win_length < hop_length: continue
+        n_fft = 2048
+        n_mels = 128
+        n_iter = 128
+
+        S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+        y_recon = librosa.feature.inverse.mel_to_audio(
+            M=S_power,
+            sr=sr,
+            n_fft=n_fft,
+            hop_length=hop_length,
+            win_length=win_length,
+            n_iter=n_iter,
+            length=len(y)
+        )
+
+        min_len = min(len(y), len(y_recon))
+        y_ref = y[:min_len]
+        y_rec = y_recon[:min_len]
+
+        noise = y_ref - y_rec
+        snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+
+        print(f"hop={hop_length}, win={win_length} -> SNR={snr_db:.4f}")
+EOF
+python /workspace/script3.py ✖ "Command execution timed out after 120 seconds."
+💭 Thinking for 374 characters   
+💫 Executing cat << 'EOF' > /workspace/script4.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+hop_length = 256
+win_length = 1024
+n_fft = 2048
+n_mels = 128
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+# Try scaling
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec_scaled = y_rec * scale
+noise = y_ref - y_rec_scaled
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR scaled: {snr_db:.4f}")
+
+# Try cross correlation alignment
+import scipy.signal
+corr = scipy.signal.correlate(y_ref, y_rec, mode='full')
+delay = np.argmax(corr) - len(y_rec) + 1
+
+if delay > 0:
+    y_rec_aligned = np.pad(y_rec, (delay, 0))[:len(y_ref)]
+elif delay < 0:
+    y_rec_aligned = y_rec[-delay:len(y_ref)-delay]
+    y_rec_aligned = np.pad(y_rec_aligned, (0, len(y_ref)-len(y_rec_aligned)))
+else:
+    y_rec_aligned = y_rec
+
+scale2 = np.sum(y_ref * y_rec_aligned) / (np.sum(y_rec_aligned**2) + 1e-10)
+y_rec_aligned *= scale2
+noise2 = y_ref - y_rec_aligned
+snr_db2 = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise2**2) + 1e-10))
+print(f"SNR aligned: {snr_db2:.4f}")
+
+EOF
+python /workspace/script4.py ✔ 
+💭 Thinking for 751 characters   
+💫 Executing cat << 'EOF' > /workspace/script5.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 1024
+hop_length = 256
+win_length = 1024
+n_mels = 256
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR plain: {snr_db:.4f}")
+
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec_scaled = y_rec * scale
+noise_scaled = y_ref - y_rec_scaled
+snr_db_scaled = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise_scaled**2) + 1e-10))
+print(f"SNR scaled: {snr_db_scaled:.4f}")
+
+EOF
+python /workspace/script5.py ✔ 
+💭 Thinking for 266 characters   
+💫 Executing cat << 'EOF' > /workspace/script6.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 1024
+hop_length = 64
+win_length = 1024
+n_mels = 256
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR plain: {snr_db:.4f}")
+EOF
+python /workspace/script6.py ✔ 
+💭 Thinking for 937 characters   
+💫 Executing cat << 'EOF' > /workspace/script7.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 512
+win_length = 2048
+n_mels = 128
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0, center=False)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    center=False,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR center=False: {snr_db:.4f}")
+EOF
+python /workspace/script7.py ✔ 
+💭 Thinking for 258 characters   
+💫 Executing cat << 'EOF' > /workspace/script8.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+stft_mag = librosa.feature.inverse.mel_to_stft(S_power, sr=sr, n_fft=n_fft, power=2.0)
+y_recon = librosa.griffinlim(stft_mag, n_iter=n_iter, hop_length=hop_length, win_length=win_length, momentum=0.99, length=len(y))
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+# optimal scale
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec = y_rec * scale
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR with momentum: {snr_db:.4f}")
+EOF
+python /workspace/script8.py ✔ 
+💭 Thinking for 338 characters   
+💫 Executing cat << 'EOF' > /workspace/script9.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 500
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+stft_mag = librosa.feature.inverse.mel_to_stft(S_power, sr=sr, n_fft=n_fft, power=2.0)
+y_recon = librosa.griffinlim(stft_mag, n_iter=n_iter, hop_length=hop_length, win_length=win_length, momentum=0.99, length=len(y))
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec = y_rec * scale
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR with momentum and n_iter=500: {snr_db:.4f}")
+EOF
+python /workspace/script9.py ✔ 
+💭 Thinking for 379 characters   
+💫 Executing cat << 'EOF' > /workspace/script10.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 500
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+stft_mag = librosa.feature.inverse.mel_to_stft(S_power, sr=sr, n_fft=n_fft, power=2.0)
+y_recon = librosa.griffinlim(stft_mag, n_iter=n_iter, hop_length=hop_length, win_length=win_length, length=len(y))
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec = y_rec * scale
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR without momentum: {snr_db:.4f}")
+EOF
+python /workspace/script10.py ✔ 
+💭 Thinking for 288 characters   
+💫 Executing cat << 'EOF' > /workspace/script11.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 500
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec = y_rec * scale
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR plain: {snr_db:.4f}")
+EOF
+python /workspace/script11.py ✔ 
+💫 Executing cat << 'EOF' > /workspace/script12.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 500
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+scale = np.sum(y_ref * y_rec) / (np.sum(y_rec**2) + 1e-10)
+y_rec = y_rec * scale
+
+noise = y_ref - y_rec
+snr_db = 10 * np.log10(np.sum(y_ref**2) / (np.sum(noise**2) + 1e-10))
+
+stft_ref = np.abs(librosa.stft(y=y_ref, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+stft_rec = np.abs(librosa.stft(y=y_rec, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+den = np.linalg.norm(stft_ref, ord='fro')
+sc = num / (den + 1e-10)
+
+print(f"SNR: {snr_db:.4f}")
+print(f"SC: {sc:.4f}")
+EOF
+python /workspace/script12.py ✔ 
+💭 Thinking for 274 characters   
+💫 Executing cat << 'EOF' > /workspace/script13.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 500
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+min_len = min(len(y), len(y_recon))
+y_ref = y[:min_len]
+y_rec = y_recon[:min_len]
+
+stft_ref = np.abs(librosa.stft(y=y_ref, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+stft_rec = np.abs(librosa.stft(y=y_rec, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+den = np.linalg.norm(stft_ref, ord='fro')
+sc = num / (den + 1e-10)
+
+print(f"SC unscaled: {sc:.4f}")
+EOF
+python /workspace/script13.py ✔ 
+💭 Thinking for 900 characters   
+💫 Executing cat << 'EOF' > /workspace/script14.py
+import librosa
+import numpy as np
+import scipy.signal
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 128
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+corr = scipy.signal.correlate(y, y_recon, mode='full')
+delay = np.argmax(corr) - len(y_recon) + 1
+print(f"Delay: {delay}")
+
+if delay > 0:
+    y_rec_aligned = np.pad(y_recon, (delay, 0))[:len(y)]
+elif delay < 0:
+    y_rec_aligned = y_recon[-delay:len(y)-delay]
+    y_rec_aligned = np.pad(y_rec_aligned, (0, len(y)-len(y_rec_aligned)))
+else:
+    y_rec_aligned = y_recon
+
+noise = y - y_rec_aligned
+snr_db = 10 * np.log10(np.sum(y**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR aligned: {snr_db:.4f}")
+
+stft_ref = np.abs(librosa.stft(y=y, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+stft_rec = np.abs(librosa.stft(y=y_rec_aligned, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+den = np.linalg.norm(stft_ref, ord='fro')
+sc = num / (den + 1e-10)
+print(f"SC aligned: {sc:.4f}")
+
+EOF
+python /workspace/script14.py ✔ 
+💭 Thinking for 241 characters   
+💫 Executing cat << 'EOF' > /workspace/script15.py
+import librosa
+import numpy as np
+import scipy.signal
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 2048
+hop_length = 256
+win_length = 1024
+n_mels = 128
+n_iter = 500
+
+S_power = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length, win_length=win_length, n_mels=n_mels, power=2.0)
+
+y_recon = librosa.feature.inverse.mel_to_audio(
+    M=S_power,
+    sr=sr,
+    n_fft=n_fft,
+    hop_length=hop_length,
+    win_length=win_length,
+    n_iter=n_iter,
+    length=len(y)
+)
+
+corr = scipy.signal.correlate(y, y_recon, mode='full')
+delay = np.argmax(corr) - len(y_recon) + 1
+print(f"Delay: {delay}")
+
+if delay > 0:
+    y_rec_aligned = np.pad(y_recon, (delay, 0))[:len(y)]
+elif delay < 0:
+    y_rec_aligned = y_recon[-delay:len(y)-delay]
+    y_rec_aligned = np.pad(y_rec_aligned, (0, len(y)-len(y_rec_aligned)))
+else:
+    y_rec_aligned = y_recon
+
+noise = y - y_rec_aligned
+snr_db = 10 * np.log10(np.sum(y**2) / (np.sum(noise**2) + 1e-10))
+print(f"SNR aligned: {snr_db:.4f}")
+
+scale = np.sum(y * y_rec_aligned) / (np.sum(y_rec_aligned**2) + 1e-10)
+y_rec_scaled = y_rec_aligned * scale
+
+noise2 = y - y_rec_scaled
+snr_db2 = 10 * np.log10(np.sum(y**2) / (np.sum(noise2**2) + 1e-10))
+print(f"SNR aligned & scaled: {snr_db2:.4f}")
+
+stft_ref = np.abs(librosa.stft(y=y, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+stft_rec = np.abs(librosa.stft(y=y_rec_scaled, n_fft=n_fft, hop_length=hop_length, win_length=win_length))
+
+num = np.linalg.norm(stft_ref - stft_rec, ord='fro')
+den = np.linalg.norm(stft_ref, ord='fro')
+sc = num / (den + 1e-10)
+print(f"SC aligned & scaled: {sc:.4f}")
+
+EOF
+python /workspace/script15.py ✔ 
+💭 Thinking for 325 characters   

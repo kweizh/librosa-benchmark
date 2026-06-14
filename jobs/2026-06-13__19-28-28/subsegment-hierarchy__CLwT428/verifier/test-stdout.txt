@@ -1,0 +1,76 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 10 items
+
+tests/test_final_state.py .....F....                                     [100%]
+
+=================================== FAILURES ===================================
+____________________ test_fine_entries_have_required_schema ____________________
+
+hierarchy = {'coarse': [{'end': 1.18421768707483, 'index': 0, 'start': 0.0}, {'end': 1.7182766439909296, 'index': 1, 'start': 1.18...t': 1.3235374149659864}, {'end': 1.7182766439909296, 'index': 5, 'parent_index': 1, 'start': 1.6950566893424037}, ...]}
+
+    def test_fine_entries_have_required_schema(hierarchy):
+        fine = hierarchy["fine"]
+        for idx, seg in enumerate(fine):
+            assert isinstance(seg, dict), (
+                f"fine[{idx}] is not a JSON object, got: {type(seg).__name__}."
+            )
+            for key in ("index", "start", "end", "parent_index"):
+                assert key in seg, (
+                    f"fine[{idx}] is missing required key '{key}': {seg!r}."
+                )
+            assert _is_int(seg["index"]), (
+                f"fine[{idx}] 'index' must be an int, got: {seg['index']!r}."
+            )
+            assert _is_int(seg["parent_index"]), (
+                f"fine[{idx}] 'parent_index' must be an int, got: {seg['parent_index']!r}."
+            )
+            assert _is_number(seg["start"]), (
+                f"fine[{idx}] 'start' must be numeric, got: {seg['start']!r}."
+            )
+            assert _is_number(seg["end"]), (
+                f"fine[{idx}] 'end' must be numeric, got: {seg['end']!r}."
+            )
+            assert float(seg["start"]) < float(seg["end"]), (
+                f"fine[{idx}] must satisfy start < end, "
+                f"got start={seg['start']}, end={seg['end']}."
+            )
+>           assert float(seg["end"]) - float(seg["start"]) > 0.1, (
+                f"fine[{idx}] duration must be > 0.1s, "
+                f"got {float(seg['end']) - float(seg['start'])}s."
+            )
+E           AssertionError: fine[5] duration must be > 0.1s, got 0.023219954648525887s.
+E           assert (1.7182766439909296 - 1.6950566893424037) > 0.1
+E            +  where 1.7182766439909296 = float(1.7182766439909296)
+E            +  and   1.6950566893424037 = float(1.6950566893424037)
+
+tests/test_final_state.py:173: AssertionError
+=============================== warnings summary ===============================
+test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_coarse_entries_have_required_schema
+PASSED tests/test_final_state.py::test_coarse_indices_are_unique_and_dense
+PASSED tests/test_final_state.py::test_coarse_count_within_bounds
+PASSED tests/test_final_state.py::test_coarse_is_sorted_by_start
+PASSED tests/test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps
+PASSED tests/test_final_state.py::test_fine_indices_are_unique
+PASSED tests/test_final_state.py::test_fine_is_sorted_by_start
+PASSED tests/test_final_state.py::test_fine_parent_indices_are_valid
+PASSED tests/test_final_state.py::test_each_coarse_segment_has_exactly_three_children_that_cover_it
+FAILED tests/test_final_state.py::test_fine_entries_have_required_schema - As...
+=================== 1 failed, 9 passed, 3 warnings in 3.42s ====================

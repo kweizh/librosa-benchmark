@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T17:47:54.648580+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781372866872,
+            "stop": 1781372874648
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_hits_list_minimum_length",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781372866911,
+                "stop": 1781372866913,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_hit_has_required_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781372866913,
+                "stop": 1781372866914,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_fields_within_audio_bounds",
+                "status": "passed",
+                "duration": 3713,
+                "start": 1781372866915,
+                "stop": 1781372870628,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_seconds_non_decreasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781372870629,
+                "stop": 1781372870630,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_grid_index_non_decreasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781372870630,
+                "stop": 1781372870631,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_estimated_tempo_in_expected_range",
+                "status": "passed",
+                "duration": 4014,
+                "start": 1781372870631,
+                "stop": 1781372874645,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_snapped_time_within_grid_tolerance",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781372874646,
+                "stop": 1781372874648,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

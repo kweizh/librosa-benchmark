@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T17:56:59.418692+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781373411645,
+            "stop": 1781373419418
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_metrics_has_exact_required_keys",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781373412041,
+                "stop": 1781373412043,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_metrics_types_and_ranges",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781373412043,
+                "stop": 1781373412044,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstructed_sample_rate_matches_input",
+                "status": "passed",
+                "duration": 7096,
+                "start": 1781373412044,
+                "stop": 1781373419140,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_metrics_sample_rate_matches_reconstructed",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781373419141,
+                "stop": 1781373419143,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_metrics_length_matches_reconstructed",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781373419144,
+                "stop": 1781373419145,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstructed_length_within_two_percent_of_input",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781373419146,
+                "stop": 1781373419148,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_recomputed_metrics_pass_thresholds",
+                "status": "passed",
+                "duration": 84,
+                "start": 1781373419148,
+                "stop": 1781373419232,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reported_metrics_match_recomputation",
+                "status": "passed",
+                "duration": 160,
+                "start": 1781373419233,
+                "stop": 1781373419393,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

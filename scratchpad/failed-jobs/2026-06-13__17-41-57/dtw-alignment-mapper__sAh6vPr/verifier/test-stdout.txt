@@ -1,0 +1,34 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 9 items
+
+tests/test_final_state.py .........                                      [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_warping_path_endpoints
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_warping_path_endpoints
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_warping_path_endpoints
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_payload_has_required_top_level_keys
+PASSED tests/test_final_state.py::test_hop_length_and_sample_rate_are_positive_ints
+PASSED tests/test_final_state.py::test_total_cost_is_finite_non_negative
+PASSED tests/test_final_state.py::test_warping_path_pairs_well_formed
+PASSED tests/test_final_state.py::test_warping_path_monotonic_non_decreasing
+PASSED tests/test_final_state.py::test_warping_path_endpoints
+PASSED tests/test_final_state.py::test_timestamp_map_schema_and_sorting
+PASSED tests/test_final_state.py::test_timestamp_map_ref_time_spacing_and_span
+PASSED tests/test_final_state.py::test_timestamp_map_comp_time_monotonic_and_in_range
+======================== 9 passed, 3 warnings in 4.34s =========================

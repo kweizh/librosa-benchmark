@@ -1,0 +1,73 @@
+{
+    "id": "939445be-ad24-4073-99d2-90855e640c52",
+    "started_at": "2026-06-13T18:53:33.883118",
+    "updated_at": "2026-06-13T19:28:24.389126",
+    "finished_at": "2026-06-13T19:28:24.389126",
+    "n_total_trials": 24,
+    "stats": {
+        "n_completed_trials": 24,
+        "n_errored_trials": 6,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "pochi__glm-5.1__pending-tasks": {
+                "n_trials": 24,
+                "n_errors": 6,
+                "metrics": [
+                    {
+                        "mean": 0.625
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "pyin-pitch-tracker__wJrhM7f",
+                            "percussive-onset-midi__pwhhxiS",
+                            "reassigned-spectrogram-peaks__3g2Qa4n",
+                            "multires-spectrogram-stacker__3gR4cXc",
+                            "spectral-contrast-classifier__gdkCxjf",
+                            "multifeature-timbre-fingerprint__ovp6Ldr",
+                            "beat-sync-mfcc-aggregator__He3582m",
+                            "chord-recognition-viterbi__5o3ou2T",
+                            "cross-similarity-cover-detect__8LpKw2B",
+                            "nmf-source-decomposer__VouXc7T",
+                            "constellation-fingerprint-matche__qgSgdUv",
+                            "headless-spectrogram-renderer__kVS5CVL",
+                            "dtw-alignment-mapper__sG7J6Dy",
+                            "vocal-separation-mask__XRi5HtG",
+                            "f0-melody-extractor__GKgDt9Q"
+                        ],
+                        "0.0": [
+                            "subsegment-hierarchy__yTy7GSk",
+                            "laplacian-segmentation__oZeJEXQ",
+                            "hpss-multi-stem-mixer__wR4VWMQ",
+                            "tempogram-tempo-multi__hdRNZtY",
+                            "griffin-lim-resynthesizer__dPWmYjA",
+                            "audio-augmentation-pipeline__DSoeP8U",
+                            "novelty-segmenter__L7D5wkx",
+                            "format-transcoder-multichannel__MwLTsAB",
+                            "onset-midi-quantizer__sVqgV7B"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "subsegment-hierarchy__yTy7GSk",
+                        "laplacian-segmentation__oZeJEXQ",
+                        "hpss-multi-stem-mixer__wR4VWMQ",
+                        "griffin-lim-resynthesizer__dPWmYjA",
+                        "audio-augmentation-pipeline__DSoeP8U",
+                        "novelty-segmenter__L7D5wkx"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 377421,
+        "cost_usd": null
+    }
+}

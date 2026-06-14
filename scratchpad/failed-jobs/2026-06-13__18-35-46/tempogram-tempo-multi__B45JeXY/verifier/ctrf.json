@@ -1,0 +1,86 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:42:44.125846+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 5,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781376157174,
+            "stop": 1781376164125
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_each_candidate_has_required_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781376157208,
+                "stop": 1781376157210,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_tempo_bpm_within_allowed_range",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781376157211,
+                "stop": 1781376157213,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_salience_non_negative_and_non_increasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376157214,
+                "stop": 1781376157215,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_harmonic_rank_is_permutation_of_1_2_3",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376157215,
+                "stop": 1781376157216,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_one_candidate_matches_reference_tempo",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 3703,
+                "start": 1781376157216,
+                "stop": 1781376160919,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "candidates = [{'harmonic_rank': 1, 'salience': 106.35538482666016, 'tempo_bpm': 134.58251953125}, {'harmonic_rank': 2, 'salience': ...797, 'tempo_bpm': 201.873779296875}, {'harmonic_rank': 3, 'salience': 60.03498840332031, 'tempo_bpm': 67.291259765625}]\nreference_signals = {'librosa': <module 'librosa' from '/usr/local/lib/python3.12/dist-packages/librosa/__init__.py'>, 'np': <module 'nump...25312157e+01, 2.33437276e+00, 9.31600928e-02,\n       5.92461862e-02, 8.88906717e-02], dtype=float32), 'sr': 22050, ...}\n\n    def test_at_least_one_candidate_matches_reference_tempo(candidates, reference_signals):\n        np = reference_signals[\"np\"]\n        librosa = reference_signals[\"librosa\"]\n        sr = reference_signals[\"sr\"]\n        onset_env = reference_signals[\"onset_env\"]\n    \n>       ref_tempo_arr = librosa.feature.rhythm.tempo(\n            onset_envelope=onset_env, sr=sr, aggregate=np.mean\n        )\n\ntests/test_final_state.py:111: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nname = 'rhythm'\n\n    def __getattr__(name):\n        if name in submodules:\n            return importlib.import_module(f\"{package_name}.{name}\")\n        elif name in attr_to_modules:\n            submod_path = f\"{package_name}.{attr_to_modules[name]}\"\n            submod = importlib.import_module(submod_path)\n            attr = getattr(submod, name)\n    \n            # If the attribute lives in a file (module) with the same\n            # name as the attribute, ensure that the attribute and *not*\n            # the module is accessible on the package.\n            if name == attr_to_modules[name]:\n                pkg = sys.modules[package_name]\n                pkg.__dict__[name] = attr\n    \n            return attr\n        else:\n>           raise AttributeError(f\"No {package_name} attribute {name}\")\nE           AttributeError: No librosa.feature attribute rhythm\n\nusr/local/lib/python3.12/dist-packages/lazy_loader/__init__.py:90: AttributeError",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_top_candidate_matches_beat_track_tempo",
+                "status": "passed",
+                "duration": 3204,
+                "start": 1781376160920,
+                "stop": 1781376164124,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

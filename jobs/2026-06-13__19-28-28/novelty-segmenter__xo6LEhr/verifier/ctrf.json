@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:46:57.999122+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 5,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781380015317,
+            "stop": 1781380017998
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_file_exists_and_has_expected_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380015349,
+                "stop": 1781380015350,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_boundaries_are_floats_and_strictly_increasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380015351,
+                "stop": 1781380015352,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_boundaries_lie_inside_audio_duration",
+                "status": "passed",
+                "duration": 2636,
+                "start": 1781380015352,
+                "stop": 1781380017988,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_two_boundaries_detected",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380017989,
+                "stop": 1781380017990,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_ground_truth_change_point_is_covered",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1781380017991,
+                "stop": 1781380017997,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::ground_truth_sec::[5.0, 10.0]"
+                ],
+                "trace": "ground_truth_sec = 5.0\n\n    @pytest.mark.parametrize(\"ground_truth_sec\", GROUND_TRUTH_BOUNDARIES_SEC)\n    def test_each_ground_truth_change_point_is_covered(ground_truth_sec):\n        data = _load_boundaries()\n        boundaries = [float(v) for v in data[\"boundaries_sec\"]]\n        nearest = min((abs(b - ground_truth_sec) for b in boundaries), default=float(\"inf\"))\n>       assert nearest <= GROUND_TRUTH_TOLERANCE_SEC, (\n            f\"No detected boundary within {GROUND_TRUTH_TOLERANCE_SEC:.2f}s of the \"\n            f\"ground-truth change-point at {ground_truth_sec:.2f}s. \"\n            f\"Closest detected boundary distance was {nearest:.3f}s. \"\n            f\"Detected: {boundaries}.\"\n        )\nE       AssertionError: No detected boundary within 1.00s of the ground-truth change-point at 5.00s. Closest detected boundary distance was 1.664s. Detected: [0.5340589569160997, 1.6021768707482993, 3.0882539682539685, 6.664126984126984, 8.428843537414966, 9.543401360544218, 10.820498866213152, 11.981496598639456, 13.096054421768708].\nE       assert 1.664126984126984 <= 1.0\n\ntests/test_final_state.py:91: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_each_ground_truth_change_point_is_covered",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380017997,
+                "stop": 1781380017998,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "tags": [
+                    "parametrize::ground_truth_sec::[5.0, 10.0]"
+                ]
+            }
+        ]
+    }
+}

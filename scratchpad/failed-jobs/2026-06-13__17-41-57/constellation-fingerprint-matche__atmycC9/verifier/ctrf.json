@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:07:49.662290+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781374060979,
+            "stop": 1781374069661
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_match_json_has_exactly_required_keys",
+                "status": "passed",
+                "duration": 9,
+                "start": 1781374061119,
+                "stop": 1781374061128,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_match_json_value_types",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781374061131,
+                "stop": 1781374061135,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_offset_seconds_matches_ground_truth",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781374061137,
+                "stop": 1781374061142,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_match_score_meets_minimum",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781374061143,
+                "stop": 1781374061147,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reference_hash_count_greater_than_query_hash_count",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781374061148,
+                "stop": 1781374061151,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_offset_seconds_in_feasible_range",
+                "status": "passed",
+                "duration": 8509,
+                "start": 1781374061151,
+                "stop": 1781374069660,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

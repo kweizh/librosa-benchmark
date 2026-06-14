@@ -1,0 +1,47 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 7 items
+
+tests/test_final_state.py ......F                                        [100%]
+
+=================================== FAILURES ===================================
+_________________ test_classification_accuracy_meets_threshold _________________
+
+predictions = (['filename', 'label'], [['music_test_0.wav', 'speech'], ['music_test_1.wav', 'music'], ['speech_test_0.wav', 'music'], ['speech_test_1.wav', 'music']])
+
+    def test_classification_accuracy_meets_threshold(predictions):
+        _, rows = predictions
+        predicted = {row[0]: row[1] for row in rows}
+    
+        # Restrict scoring to filenames we have ground truth for. The other coverage
+        # tests already guarantee that the predictions exactly cover the test set,
+        # which itself equals GROUND_TRUTH.keys() because the Dockerfile generated it.
+        relevant = [name for name in GROUND_TRUTH if name in predicted]
+        assert relevant, (
+            "No predicted rows match the ground-truth test set; cannot score accuracy."
+        )
+    
+        correct = sum(1 for name in relevant if predicted[name] == GROUND_TRUTH[name])
+        accuracy = correct / len(GROUND_TRUTH)
+    
+>       assert accuracy >= MIN_ACCURACY, (
+            f"Classification accuracy {accuracy:.2f} is below the required "
+            f"threshold of {MIN_ACCURACY:.2f}. Per-file predictions: "
+            f"{[(n, predicted.get(n), GROUND_TRUTH[n]) for n in GROUND_TRUTH]}."
+        )
+E       AssertionError: Classification accuracy 0.25 is below the required threshold of 0.80. Per-file predictions: [('speech_test_0.wav', 'music', 'speech'), ('speech_test_1.wav', 'music', 'speech'), ('music_test_0.wav', 'speech', 'music'), ('music_test_1.wav', 'music', 'music')].
+E       assert 0.25 >= 0.8
+
+tests/test_final_state.py:126: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_predictions_file_exists
+PASSED tests/test_final_state.py::test_predictions_header_is_exact
+PASSED tests/test_final_state.py::test_predictions_rows_have_two_columns
+PASSED tests/test_final_state.py::test_predictions_cover_exactly_test_set
+PASSED tests/test_final_state.py::test_no_duplicate_filenames
+PASSED tests/test_final_state.py::test_all_labels_are_valid
+FAILED tests/test_final_state.py::test_classification_accuracy_meets_threshold
+========================= 1 failed, 6 passed in 0.05s ==========================

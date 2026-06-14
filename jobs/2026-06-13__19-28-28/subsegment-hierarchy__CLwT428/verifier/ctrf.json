@@ -1,0 +1,122 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:39:03.874746+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 10,
+            "passed": 9,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781379540446,
+            "stop": 1781379543874
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_coarse_entries_have_required_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379540507,
+                "stop": 1781379540509,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_indices_are_unique_and_dense",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379540509,
+                "stop": 1781379540511,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_count_within_bounds",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379540511,
+                "stop": 1781379540512,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_is_sorted_by_start",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379540513,
+                "stop": 1781379540514,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps",
+                "status": "passed",
+                "duration": 3343,
+                "start": 1781379540514,
+                "stop": 1781379543857,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_fine_entries_have_required_schema",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 11,
+                "start": 1781379543858,
+                "stop": 1781379543869,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "hierarchy = {'coarse': [{'end': 1.18421768707483, 'index': 0, 'start': 0.0}, {'end': 1.7182766439909296, 'index': 1, 'start': 1.18...t': 1.3235374149659864}, {'end': 1.7182766439909296, 'index': 5, 'parent_index': 1, 'start': 1.6950566893424037}, ...]}\n\n    def test_fine_entries_have_required_schema(hierarchy):\n        fine = hierarchy[\"fine\"]\n        for idx, seg in enumerate(fine):\n            assert isinstance(seg, dict), (\n                f\"fine[{idx}] is not a JSON object, got: {type(seg).__name__}.\"\n            )\n            for key in (\"index\", \"start\", \"end\", \"parent_index\"):\n                assert key in seg, (\n                    f\"fine[{idx}] is missing required key '{key}': {seg!r}.\"\n                )\n            assert _is_int(seg[\"index\"]), (\n                f\"fine[{idx}] 'index' must be an int, got: {seg['index']!r}.\"\n            )\n            assert _is_int(seg[\"parent_index\"]), (\n                f\"fine[{idx}] 'parent_index' must be an int, got: {seg['parent_index']!r}.\"\n            )\n            assert _is_number(seg[\"start\"]), (\n                f\"fine[{idx}] 'start' must be numeric, got: {seg['start']!r}.\"\n            )\n            assert _is_number(seg[\"end\"]), (\n                f\"fine[{idx}] 'end' must be numeric, got: {seg['end']!r}.\"\n            )\n            assert float(seg[\"start\"]) < float(seg[\"end\"]), (\n                f\"fine[{idx}] must satisfy start < end, \"\n                f\"got start={seg['start']}, end={seg['end']}.\"\n            )\n>           assert float(seg[\"end\"]) - float(seg[\"start\"]) > 0.1, (\n                f\"fine[{idx}] duration must be > 0.1s, \"\n                f\"got {float(seg['end']) - float(seg['start'])}s.\"\n            )\nE           AssertionError: fine[5] duration must be > 0.1s, got 0.023219954648525887s.\nE           assert (1.7182766439909296 - 1.6950566893424037) > 0.1\nE            +  where 1.7182766439909296 = float(1.7182766439909296)\nE            +  and   1.6950566893424037 = float(1.6950566893424037)\n\ntests/test_final_state.py:173: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_fine_indices_are_unique",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379543869,
+                "stop": 1781379543870,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_fine_is_sorted_by_start",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781379543871,
+                "stop": 1781379543871,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_fine_parent_indices_are_valid",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379543872,
+                "stop": 1781379543873,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_coarse_segment_has_exactly_three_children_that_cover_it",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379543873,
+                "stop": 1781379543874,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

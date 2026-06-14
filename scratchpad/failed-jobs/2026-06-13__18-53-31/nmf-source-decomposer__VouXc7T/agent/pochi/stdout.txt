@@ -1,0 +1,47 @@
+- Initializing MCP connections...
+You
+# NMF Source Decomposition with Wiener Soft Masks ## Background Decompose a polyphonic mixture into 4 spectral sources using NMF, then resynthesize each source back to a waveform using Wiener-style soft masking applied to the original complex STFT. ## Requirements * Read `/workspace/mixture.wav` (mono, 22050 Hz). * Decompose its magnitude spectrogram into 4 NMF components with `librosa.decompose.decompose`. * For each component, build a Wiener-style soft mask, apply it to the original complex STFT, and resynthesize to a waveform via the inverse STFT. The summed component waveforms should reconstruct the mixture. * Write each resynthesized component to `/workspace/component_<i>.wav` for `i` in `0..3`. * Write per-component spectral statistics to `/workspace/components.json`. ## Implementation Hints * Keep STFT/iSTFT parameters consistent so component lengths match the mixture. * The soft mask for component `k` should be its magnitude-squared spectrogram divided by the sum of magnitude-squared spectrograms across all components. * Compute the spectral centroid per component from its resynthesized waveform. * Verify API signatures against the librosa 0.11.0 docs. ## Acceptance Criteria * Project path: /workspace * Ensure the decomposition pipeline is executed and the output artifacts exist. * Output audio files: `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, `/workspace/component_3.wav`. * Each file must be mono, with the same sample rate as `/workspace/mixture.wav`, and the same sample count as the mixture (±1 sample). * Output metadata file: `/workspace/components.json`. * Must be a JSON array of exactly 4 objects, each with the schema: ```json { "index": integer, "centroid_hz": number, "rms": number } ``` * The `index` values must be exactly `0, 1, 2, 3` (each appearing once). * Every `centroid_hz` must satisfy `0 < centroid_hz < sr / 2`. * The spread `max(centroid_hz) - min(centroid_hz)` across the 4 components must exceed 200 Hz. * Every `rms` must exceed `1e-4`. * Reconstruction quality: the sample-wise sum of the 4 component waveforms must approximate the mixture such that the mean absolute error is at most `5e-2` times the mixture RMS.   
+
+Pochi
+💭 Thinking for 560 characters   
+📋 Updating todo list (4 items) ✔ 
+💭 Thinking for 65 characters   
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__)" ✔ 
+💭 Thinking for 182 characters   
+💫 Executing python3 -c "
+import librosa
+y, sr = librosa.load('/workspace/mixture.wav', sr=None, mono=True)
+print(f'sr={sr}, len={len(y)}, duration={len(y)/sr:.3f}s, dtype={y.dtype}')
+" ✔ 
+💫 Executing python3 -c "
+import librosa
+help(librosa.decompose.decompose)
+" ✔ 
+💭 Thinking for 1029 characters   
+📋 Updating todo list (4 items) ✔ 
+✏️  Writing /workspace/decompose_nmf.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 decompose_nmf.py ✔ 
+💭 Thinking for 500 characters   
+💫 Executing cat /workspace/components.json ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+NMF source decomposition completed successfully. All output artifacts are in `/workspace/`:
+
+**Audio files** (mono, 22050 Hz, 220500 samples each — matching the mixture exactly):
+- `component_0.wav` — centroid: 142.6 Hz, rms: 0.136
+- `component_1.wav` — centroid: 1055.1 Hz, rms: 0.190
+- `component_2.wav` — centroid: 820.0 Hz, rms: 0.136
+- `component_3.wav` — centroid: 2169.1 Hz, rms: 0.078
+
+**Metadata**: `components.json` — JSON array of 4 objects with `index`, `centroid_hz`, and `rms` fields.
+
+**Acceptance criteria verified**:
+- All `centroid_hz` values are in `(0, sr/2)` ✓
+- Centroid spread = 2026.4 Hz > 200 Hz ✓
+- All `rms` values > 1e-4 ✓
+- Reconstruction MAE / mixture RMS = 0.000002 ≪ 0.05 ✓
+
+The pipeline uses consistent STFT/iSTFT parameters (`n_fft=2048`, `hop_length=512`) and applies Wiener-style soft masks (magnitude-squared of each component divided by the sum of magnitude-squared across all components) to the original complex STFT, ensuring perfect reconstruction when components are summed.   
+  

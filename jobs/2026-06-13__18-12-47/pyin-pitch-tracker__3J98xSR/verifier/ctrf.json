@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:15:27.493784+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781374520801,
+            "stop": 1781374527493
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_each_record_has_required_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781374520840,
+                "stop": 1781374520842,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_frame_count_matches_pyin_output",
+                "status": "passed",
+                "duration": 6640,
+                "start": 1781374520843,
+                "stop": 1781374527483,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_values_are_strictly_monotonic",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374527484,
+                "stop": 1781374527485,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_last_time_close_to_audio_duration",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374527486,
+                "stop": 1781374527487,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unvoiced_frames_have_null_f0",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781374527488,
+                "stop": 1781374527488,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_voiced_frames_have_in_range_finite_f0",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374527489,
+                "stop": 1781374527490,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_voiced_fraction_above_threshold",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374527490,
+                "stop": 1781374527491,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unvoiced_fraction_above_threshold",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374527492,
+                "stop": 1781374527493,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

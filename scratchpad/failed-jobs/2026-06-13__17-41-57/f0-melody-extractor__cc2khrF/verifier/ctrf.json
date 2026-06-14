@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:12:32.660925+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781374349459,
+            "stop": 1781374352660
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_melody_has_minimum_length",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374349496,
+                "stop": 1781374349497,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_note_has_required_schema",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781374349498,
+                "stop": 1781374349498,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_midi_note_in_piano_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374349499,
+                "stop": 1781374349500,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_notes_sorted_and_non_overlapping",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781374349500,
+                "stop": 1781374349500,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_note_duration_above_threshold",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781374349501,
+                "stop": 1781374349501,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_note_timestamps_within_audio_bounds",
+                "status": "passed",
+                "duration": 3155,
+                "start": 1781374349502,
+                "stop": 1781374352657,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mean_f0_within_50_cents_of_midi",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374352658,
+                "stop": 1781374352659,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_distinct_pitch_count",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374352659,
+                "stop": 1781374352660,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

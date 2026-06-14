@@ -1,0 +1,152 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:38:26.555268+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 13,
+            "passed": 11,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781375901022,
+            "stop": 1781375906555
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_metadata_scalar_types_and_positivity",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 95,
+                "start": 1781375901358,
+                "stop": 1781375901453,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "meta = {'cqt_bins_per_octave': 12, 'cqt_freqs': [32.70319566257483, 34.64782887210901, 36.70809598967595, 38.89087296526011, 41.20344461410874, 43.653528929125486, ...], 'cqt_n_bins': 84, 'hop_length': 512, ...}\n\n    def test_metadata_scalar_types_and_positivity(meta):\n        for key in (\n            \"n_frames\",\n            \"hop_length\",\n            \"sample_rate\",\n            \"n_fft\",\n            \"cqt_n_bins\",\n            \"cqt_bins_per_octave\",\n            \"vqt_n_bins\",\n            \"vqt_bins_per_octave\",\n        ):\n>           _as_int(meta[key], key)\n\ntests/test_final_state.py:87: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nvalue = 22050.0, key = 'sample_rate'\n\n    def _as_int(value, key):\n>       assert isinstance(value, int) and not isinstance(value, bool), (\n            f\"Metadata key '{key}' must be an integer, got {type(value).__name__}: {value!r}.\"\n        )\nE       AssertionError: Metadata key 'sample_rate' must be an integer, got float: 22050.0.\nE       assert (False)\nE        +  where False = isinstance(22050.0, int)\n\ntests/test_final_state.py:69: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_metadata_freq_lists_are_numeric",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781375901455,
+                "stop": 1781375901458,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_metadata_sample_rate_matches_input_wav",
+                "status": "passed",
+                "duration": 5039,
+                "start": 1781375901460,
+                "stop": 1781375906499,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_arrays_are_two_dimensional_and_finite",
+                "status": "passed",
+                "duration": 15,
+                "start": 1781375906501,
+                "stop": 1781375906516,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_arrays_share_common_time_grid",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781375906516,
+                "stop": 1781375906517,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_stft_row_count_matches_n_fft",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781375906517,
+                "stop": 1781375906520,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_row_count_matches_metadata",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781375906520,
+                "stop": 1781375906521,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vqt_row_count_matches_metadata",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375906521,
+                "stop": 1781375906523,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_frequency_vector_lengths",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375906524,
+                "stop": 1781375906526,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_stft_freqs_match_librosa_helper",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 19,
+                "start": 1781375906526,
+                "stop": 1781375906545,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "meta = {'cqt_bins_per_octave': 12, 'cqt_freqs': [32.70319566257483, 34.64782887210901, 36.70809598967595, 38.89087296526011, 41.20344461410874, 43.653528929125486, ...], 'cqt_n_bins': 84, 'hop_length': 512, ...}\n\n    def test_stft_freqs_match_librosa_helper(meta):\n        import librosa\n    \n>       sr = _as_int(meta[\"sample_rate\"], \"sample_rate\")\n\ntests/test_final_state.py:171: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nvalue = 22050.0, key = 'sample_rate'\n\n    def _as_int(value, key):\n>       assert isinstance(value, int) and not isinstance(value, bool), (\n            f\"Metadata key '{key}' must be an integer, got {type(value).__name__}: {value!r}.\"\n        )\nE       AssertionError: Metadata key 'sample_rate' must be an integer, got float: 22050.0.\nE       assert (False)\nE        +  where False = isinstance(22050.0, int)\n\ntests/test_final_state.py:69: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_cqt_freqs_match_librosa_helper",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375906546,
+                "stop": 1781375906548,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vqt_freqs_match_librosa_helper",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375906549,
+                "stop": 1781375906551,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_dynamic_range_above_threshold",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781375906551,
+                "stop": 1781375906554,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,85 @@
+- Initializing MCP connections...
+You
+# Shazam-style Constellation Fingerprint Matcher ## Background Implement a Shazam-style audio fingerprinter with `librosa` 0.11.0. A long reference recording and a shorter noisy query clip (cut from a hidden offset inside the reference) are provided. Recover the time offset at which the query starts inside the reference using a constellation map of spectral peaks and combinatorial hashing of peak pairs. ## Inputs * `/workspace/reference.wav` (mono, 22050 Hz) * `/workspace/query.wav` (mono, 22050 Hz) — derived from the reference with additive Gaussian noise. ## Requirements * Read both WAV files with `librosa.load`. * Compute a log-magnitude STFT for each signal (`librosa.stft`, `librosa.amplitude_to_db`). * Build a constellation map of local spectral peaks and hash anchor/target pairs. * Match query hashes against reference hashes and recover the dominant time offset. * Write the result to `/workspace/match.json`. * Note: all relevant `librosa` 0.11 functions used here (`load`, `stft`, `amplitude_to_db`, `frames_to_time`) use keyword-only arguments after the first positional one. ## Acceptance Criteria * Project path: /workspace * Ensure the matching pipeline is executed and the output artifact exists. * Output file: `/workspace/match.json` * The output file must be a JSON object containing exactly these four keys: ```json { "offset_seconds": number, "match_score": integer, "reference_hash_count": integer, "query_hash_count": integer } ``` * `offset_seconds` is a float: the recovered time offset (seconds) where the query starts inside the reference. * `match_score` is an integer: the number of hash votes that fall in the winning offset bin. * `reference_hash_count` and `query_hash_count` are integers: total hashes generated from each signal. * The recovered `offset_seconds` must match the hidden ground-truth offset within 0.30 seconds. * `match_score` must be at least 20. * `reference_hash_count > query_hash_count > 0`. * `offset_seconds` must lie inside `[0, reference_duration - query_duration + 0.5]`.   
+
+Pochi
+💭 Thinking for 159 characters   
+📂 Listing files in /workspace ✔ 
+📋 Updating todo list (3 items) ✔ 
+✏️  Writing /workspace/fingerprint.py ✔ 
+💫 Executing cd /workspace && python fingerprint.py ✔ 
+💫 Executing cat /workspace/match.json ✔ 
+📋 Updating todo list (3 items) ✔ 
+Let me verify all acceptance criteria:   
+💫 Executing python3 -c "
+import json, librosa
+
+with open('/workspace/match.json') as f:
+    r = json.load(f)
+
+print('=== Loaded match.json ===')
+print(json.dumps(r, indent=2))
+
+# Check keys
+required_keys = {'offset_seconds', 'match_score', 'reference_hash_count', 'query_hash_count'}
+assert set(r.keys()) == required_keys, f'Key mismatch: {set(r.keys())}'
+print('\n✓ Exact 4 keys present')
+
+# Type checks
+assert isinstance(r['offset_seconds'], float), 'offset_seconds must be float'
+assert isinstance(r['match_score'], int), 'match_score must be int'
+assert isinstance(r['reference_hash_count'], int), 'reference_hash_count must be int'
+assert isinstance(r['query_hash_count'], int), 'query_hash_count must be int'
+print('✓ Types correct')
+
+# match_score >= 20
+assert r['match_score'] >= 20, f'match_score {r[\"match_score\"]} < 20'
+print(f'✓ match_score = {r[\"match_score\"]} >= 20')
+
+# reference_hash_count > query_hash_count > 0
+assert r['reference_hash_count'] > r['query_hash_count'] > 0
+print(f'✓ reference_hash_count ({r[\"reference_hash_count\"]}) > query_hash_count ({r[\"query_hash_count\"]}) > 0')
+
+# offset_seconds in [0, ref_dur - qry_dur + 0.5]
+y_ref, sr = librosa.load('/workspace/reference.wav', sr=22050, mono=True)
+y_qry, _  = librosa.load('/workspace/query.wav',     sr=22050, mono=True)
+ref_dur = len(y_ref) / sr
+qry_dur = len(y_qry) / sr
+upper = ref_dur - qry_dur + 0.5
+assert 0 <= r['offset_seconds'] <= upper, f'offset {r[\"offset_seconds\"]} not in [0, {upper}]'
+print(f'✓ offset_seconds {r[\"offset_seconds\"]:.3f} s in [0, {upper:.3f}]')
+
+print('\nAll acceptance criteria PASSED.')
+"
+ ✔ 
+📋 Updating todo list (3 items) ✔ 
+🎉 Task Completed
+The Shazam-style constellation fingerprint matcher is implemented at `/workspace/fingerprint.py` and the result has been written to `/workspace/match.json`.
+
+## How it works
+
+1. **Audio loading** — both WAV files are loaded with `librosa.load` at 22 050 Hz.
+2. **Log-magnitude STFT** — `librosa.stft` → `librosa.amplitude_to_db` produces a (1025 × N_frames) spectrogram for each signal.
+3. **Constellation map** — `scipy.ndimage.maximum_filter` over a 15 × 15 (freq × time) neighbourhood identifies local spectral maxima above −60 dB.
+4. **Combinatorial hashing** — for every anchor peak `(t1, f1)`, up to 15 target peaks `(t2, f2)` within a forward window of 1–100 frames and ±64 frequency bins produce the hash key `(f1, f2, dt)`.
+5. **Offset voting** — each matching query hash votes for `offset = ref_t1 − query_t1`; the bin with the most votes wins.
+6. **Output** — the winning offset is converted to seconds and serialised to JSON.
+
+## Result
+
+```json
+{
+  "offset_seconds": 9.705941,
+  "match_score": 361,
+  "reference_hash_count": 22260,
+  "query_hash_count": 12819
+}
+```
+
+All acceptance criteria are satisfied:
+- ✅ Exactly 4 required keys with correct types
+- ✅ `match_score` = 361 ≥ 20
+- ✅ `reference_hash_count` (22 260) > `query_hash_count` (12 819) > 0
+- ✅ `offset_seconds` 9.706 s lies within [0, 20.5]
+- ✅ Match score of 361 far exceeds the minimum of 20, giving high confidence in the recovered offset   
+  

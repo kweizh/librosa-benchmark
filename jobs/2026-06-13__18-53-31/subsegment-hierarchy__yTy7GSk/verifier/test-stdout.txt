@@ -1,0 +1,161 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 10 items
+
+tests/test_final_state.py EEEEEEEEEE                                     [100%]
+
+==================================== ERRORS ====================================
+__________ ERROR at setup of test_coarse_entries_have_required_schema __________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+__________ ERROR at setup of test_coarse_indices_are_unique_and_dense __________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+______________ ERROR at setup of test_coarse_count_within_bounds _______________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+_______________ ERROR at setup of test_coarse_is_sorted_by_start _______________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+___ ERROR at setup of test_coarse_covers_audio_without_big_gaps_or_overlaps ____
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+___________ ERROR at setup of test_fine_entries_have_required_schema ___________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+________________ ERROR at setup of test_fine_indices_are_unique ________________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+________________ ERROR at setup of test_fine_is_sorted_by_start ________________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+_____________ ERROR at setup of test_fine_parent_indices_are_valid _____________
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+_ ERROR at setup of test_each_coarse_segment_has_exactly_three_children_that_cover_it _
+
+    @pytest.fixture(scope="module")
+    def hierarchy():
+>       assert os.path.isfile(HIERARCHY_JSON), (
+            f"Expected output file {HIERARCHY_JSON} to exist after the task completes."
+        )
+E       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.
+E       assert False
+E        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')
+E        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+tests/test_final_state.py:14: AssertionError
+=========================== short test summary info ============================
+ERROR tests/test_final_state.py::test_coarse_entries_have_required_schema - A...
+ERROR tests/test_final_state.py::test_coarse_indices_are_unique_and_dense - A...
+ERROR tests/test_final_state.py::test_coarse_count_within_bounds - AssertionE...
+ERROR tests/test_final_state.py::test_coarse_is_sorted_by_start - AssertionEr...
+ERROR tests/test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps
+ERROR tests/test_final_state.py::test_fine_entries_have_required_schema - Ass...
+ERROR tests/test_final_state.py::test_fine_indices_are_unique - AssertionErro...
+ERROR tests/test_final_state.py::test_fine_is_sorted_by_start - AssertionErro...
+ERROR tests/test_final_state.py::test_fine_parent_indices_are_valid - Asserti...
+ERROR tests/test_final_state.py::test_each_coarse_segment_has_exactly_three_children_that_cover_it
+============================== 10 errors in 0.20s ==============================

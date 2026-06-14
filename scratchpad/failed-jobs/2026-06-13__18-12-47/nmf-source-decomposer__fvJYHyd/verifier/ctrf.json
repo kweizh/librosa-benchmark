@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:32:51.695480+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781375568269,
+            "stop": 1781375571695
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_components_json_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375568482,
+                "stop": 1781375568484,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_components_centroids_within_nyquist",
+                "status": "passed",
+                "duration": 3181,
+                "start": 1781375568485,
+                "stop": 1781375571666,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_components_centroid_spread",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781375571667,
+                "stop": 1781375571668,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_components_rms_nonzero",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781375571668,
+                "stop": 1781375571669,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reconstruction_matches_mixture",
+                "status": "passed",
+                "duration": 24,
+                "start": 1781375571669,
+                "stop": 1781375571693,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:52:02.164385+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781380321837,
+            "stop": 1781380322164
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_meta_has_exact_keys",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380322044,
+                "stop": 1781380322046,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_meta_dimensions_match_png",
+                "status": "passed",
+                "duration": 74,
+                "start": 1781380322046,
+                "stop": 1781380322120,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_meta_dpi_threshold",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380322120,
+                "stop": 1781380322121,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_meta_panel_titles_exact",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380322121,
+                "stop": 1781380322122,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_image_is_not_uniform",
+                "status": "passed",
+                "duration": 41,
+                "start": 1781380322122,
+                "stop": 1781380322163,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

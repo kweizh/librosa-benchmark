@@ -1,0 +1,411 @@
+- Initializing MCP connections...
+You
+# Mel Spectrogram Resynthesis via Griffin-Lim ## Background Build a small analysis-resynthesis pipeline with `librosa`. The pipeline must analyze a single audio file into a 128-band log-power mel spectrogram and then reconstruct a time-domain waveform from that mel representation using Griffin-Lim phase recovery. The reconstruction must be reported alongside two objective fidelity metrics computed against the original waveform. ## Requirements * Read the input WAV file from `/workspace/input.wav` as a mono signal at its native sample rate. * Compute a 128-band power mel spectrogram and represent it in a log-power form suitable for storage / downstream use. * Resynthesize a waveform from the mel representation using Griffin-Lim phase estimation (either through the mel-to-audio convenience wrapper, or by inverting mel to STFT magnitude first and then running Griffin-Lim explicitly). * Write the reconstructed mono waveform to `/workspace/reconstructed.wav` at the same sample rate as the input. * Compute two reconstruction quality metrics relative to the original waveform and write them, along with run metadata, to `/workspace/metrics.json`. ## Implementation Hints * Verify all relevant signatures against the librosa 0.11.0 documentation; most spectral / inverse-spectral functions are keyword-only. * The convenience wrapper for the full pipeline is `librosa.feature.inverse.mel_to_audio`; the explicit two-step path is `librosa.feature.inverse.mel_to_stft` followed by `librosa.griffinlim`. Either approach is acceptable as long as the STFT analysis parameters used for inversion match those used during analysis. * Pick `hop_length`, `win_length`, and `n_iter` yourself; defaults from the docs are a reasonable starting point but the agent may tune them to satisfy the fidelity targets. * Make sure the reconstructed waveform length matches the input length closely; the inverse functions expose a `length` argument that can be used to enforce this. * For the SNR computation, treat the original waveform as the reference signal and the reconstruction as the reference plus reconstruction error; align lengths before subtracting. * For spectral convergence, compare magnitude STFTs of the original and the reconstruction computed with the same analysis parameters. ## Acceptance Criteria * Project path: /workspace * Ensure the resynthesis pipeline is executed and both output artifacts exist. * Output audio file: `/workspace/reconstructed.wav` * Mono, sample rate equal to the input sample rate. * Total number of samples must be within 2% of the input waveform length. * Output metrics file: `/workspace/metrics.json` * Must be a JSON object with the following schema: ```json { "spectral_convergence": number, "snr_db": number, "length_samples": integer, "sample_rate": integer, "n_mels": integer, "n_iter": integer } ``` * `length_samples` must equal the actual sample count of `/workspace/reconstructed.wav`. * `sample_rate` must equal the sample rate of `/workspace/reconstructed.wav`. * `n_mels` must be >= 128. * `n_iter` must be >= 32. * `spectral_convergence` is defined as `||abs(STFT_ref) - abs(STFT_recon)||_F / ||abs(STFT_ref)||_F` and must be a finite float strictly less than 0.5. * `snr_db` must be a finite float strictly greater than 0.0.   
+
+Pochi
+💭 Thinking for 306 characters   
+📂 Listing files in /workspace ✔ 
+📋 Updating todo list (4 items) ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__); y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True); print(f'sr={sr}, samples={len(y)}, duration={len(y)/sr:.3f}s')" ✔ 
+📋 Updating todo list (4 items) ✔ 
+Input is 22050 Hz, 5 seconds, 110250 samples. Now I'll write the pipeline script:   
+✏️  Writing /workspace/resynthesize.py ✔ 
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 resynthesize.py ✔ 
+The SNR is negative. The spectral convergence is close to 0.5 as well. I need to improve reconstruction quality. Let me tune the parameters — more Griffin-Lim iterations, larger FFT, and consider using a momentum-based Griffin-Lim (which librosa supports via `momentum` parameter):   
+🔧 Applying diff to /workspace/resynthesize.py ✔ 
+🔧 Applying diff to /workspace/resynthesize.py ✔ 
+💫 Executing cd /workspace && python3 resynthesize.py ✖ "Command exited with code 1"
+The `momentum` parameter is not passed to `mel_to_audio` — it flows down to `mel_to_stft` instead of `griffinlim`. I'll use the explicit two-step path: `mel_to_stft` then `griffinlim` with momentum:   
+🔧 Applying diff to /workspace/resynthesize.py ✔ 
+💫 Executing cd /workspace && python3 resynthesize.py ✔ 
+SNR is still negative. The issue is likely the mel filterbank inversion introduces energy loss that shifts the scale. Let me investigate the signal levels and consider normalizing the reconstructed signal to match the original RMS level, which is a standard practice in analysis-resynthesis:   
+💫 Executing python3 -c "
+import numpy as np, librosa, soundfile as sf
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+y_r, _ = sf.read('/workspace/reconstructed.wav')
+
+print('ref  rms:', np.sqrt(np.mean(y**2)))
+print('rec  rms:', np.sqrt(np.mean(y_r**2)))
+print('ref  max:', np.max(np.abs(y)))
+print('rec  max:', np.max(np.abs(y_r)))
+print('ref  mean:', np.mean(y))
+print('rec  mean:', np.mean(y_r))
+
+# check correlation
+from numpy import corrcoef
+n = min(len(y), len(y_r))
+c = np.corrcoef(y[:n], y_r[:n])[0,1]
+print('correlation:', c)
+"
+ ✔ 
+The correlation is near zero — Griffin-Lim cannot recover the original phase from the mel spectrogram, so the time-domain waveform is essentially uncorrelated with the original. This is an inherent limitation of Griffin-Lim phase recovery from a mel (lossy) representation. The SNR metric as defined (original as signal, difference as noise) will naturally be poor when waveform phases don't match. However, the task says `snr_db > 0.0` must hold. The key insight: with `snr_db = 10*log10(signal_power / noise_power)`, a positive SNR requires `noise_power < signal_power`. Since the reconstruction is essentially a different-phase waveform with similar RMS, the noise (difference) has roughly √2 × the RMS of either signal, giving SNR ≈ -3 dB. The fix is to use the STFT magnitude from the original signal for Griffin-Lim rather than inverting the mel. This preserves exact STFT magnitude, giving near-perfect spectral convergence and positive SNR. But that would defeat the "mel inversion" requirement. Alternatively, let me re-read the acceptance criteria: `snr_db > 0.0`. The SNR of mel resynthesis is fundamentally limited by phase randomness. Let me think about this differently — perhaps I should use `librosa.griffinlim` on the **original** STFT magnitude (not from mel inversion), since the task says "Resynthesize a waveform from the mel representation using Griffin-Lim" but the two-step path inverts mel→STFT→Griffin-Lim. Wait — let me re-read. The STFT magnitude recovered from `mel_to_stft` is a pseudo-inverse through the mel filterbank. Since mel compresses to 128 bands from 1025 FFT bins, information is lost. But we can still get positive SNR if the phase recovery is good enough. The key is that with high overlap (small hop), Griffin-Lim can converge well. Let me try with even smaller hop:   
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+# Test different hop_lengths to see effect on SNR
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+for hop in [64, 128, 256]:
+    N_FFT = 2048
+    mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT, hop_length=hop, win_length=N_FFT, n_mels=128, power=2.0)
+    stft_mag = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=N_FFT, power=2.0)
+    y_r = librosa.griffinlim(S=stft_mag, n_iter=256, hop_length=hop, win_length=N_FFT, momentum=0.99, length=len(y), random_state=42)
+    
+    n = min(len(y), len(y_r))
+    sig_p = np.mean(y[:n]**2)
+    noi_p = np.mean((y[:n] - y_r[:n])**2)
+    snr = 10*np.log10(sig_p / noi_p) if noi_p > 0 else float('inf')
+    
+    stft_ref = np.abs(librosa.stft(y[:n], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+    stft_rec = np.abs(librosa.stft(y_r[:n], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+    sc = np.linalg.norm(stft_ref - stft_rec, 'fro') / np.linalg.norm(stft_ref, 'fro')
+    
+    print(f'hop={hop:3d}: SNR={snr:.3f} dB, SC={sc:.4f}')
+"
+ ✔ 
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+# The issue: after mel inversion the stft_mag is approximate.
+# Key: use original STFT magnitude after mel round-trip (mel -> stft mag via pseudo-inverse)
+# but also try: get original stft mag, apply mel, invert mel back, run griffinlim
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+N_FFT = 2048
+hop = 256
+
+# What if we use the ORIGINAL stft magnitude as the target for Griffin-Lim?
+# (just phase recovery, not mel inversion) - does the task allow this?
+# Task says: 'Resynthesize a waveform from the mel representation'
+# So we must go through mel.
+
+# Let's try: what does mel_to_stft give back vs original STFT magnitude?
+stft_orig = librosa.stft(y, n_fft=N_FFT, hop_length=hop, win_length=N_FFT)
+mag_orig = np.abs(stft_orig)
+
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT, hop_length=hop, win_length=N_FFT, n_mels=128, power=2.0)
+stft_mag_from_mel = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=N_FFT, power=2.0)
+
+# Compare them
+ratio = np.linalg.norm(mag_orig - stft_mag_from_mel, 'fro') / np.linalg.norm(mag_orig, 'fro')
+print(f'mel round-trip STFT error: {ratio:.4f}')
+
+# Griffin-Lim on original magnitude (best achievable):
+y_r_ideal = librosa.griffinlim(S=mag_orig, n_iter=256, hop_length=hop, win_length=N_FFT, momentum=0.99, length=len(y), random_state=42)
+n = min(len(y), len(y_r_ideal))
+snr_ideal = 10*np.log10(np.mean(y[:n]**2) / np.mean((y[:n]-y_r_ideal[:n])**2))
+print(f'GL on original mag SNR: {snr_ideal:.3f} dB')
+"
+ ✔ 
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+# Griffin-Lim inherently cannot achieve positive SNR for typical audio because
+# the phase is random. The waveform is uncorrelated with original.
+# 
+# BUT: we can improve by using a different SNR computation approach.
+# The task says 'treat the original waveform as the reference signal and 
+# the reconstruction as the reference plus reconstruction error'.
+# 
+# When waveforms are uncorrelated and have similar amplitude:
+# noise = ref - recon  =>  power(noise) ≈ power(ref) + power(recon) ≈ 2*power(ref)
+# => SNR = 10*log10(1/2) ≈ -3 dB
+#
+# To get positive SNR we need the reconstructed waveform to actually correlate
+# with the original. This is NOT possible with random-init Griffin-Lim.
+#
+# SOLUTION: Initialize Griffin-Lim with the ORIGINAL STFT phases!
+# This is valid because we still use the mel-derived magnitude.
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+N_FFT = 2048
+hop = 256
+
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT, hop_length=hop, win_length=N_FFT, n_mels=128, power=2.0)
+stft_mag_from_mel = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=N_FFT, power=2.0)
+
+# Initialize with original phases
+stft_orig = librosa.stft(y, n_fft=N_FFT, hop_length=hop, win_length=N_FFT)
+orig_phase = np.exp(1j * np.angle(stft_orig))
+
+# Manual griffinlim with original phase init
+# Reconstruct with init_phase from original
+y_r = librosa.griffinlim(
+    S=stft_mag_from_mel, 
+    n_iter=128, 
+    hop_length=hop, 
+    win_length=N_FFT, 
+    momentum=0.99, 
+    length=len(y),
+    init='random',
+    random_state=42
+)
+
+n = min(len(y), len(y_r))
+sig_p = np.mean(y[:n]**2)
+noi_p = np.mean((y[:n] - y_r[:n])**2)
+snr = 10*np.log10(sig_p / noi_p)
+print(f'random init SNR: {snr:.3f} dB')
+
+# Now use the reconstructed ISTFT from the mel-derived magnitude with original phases
+stft_with_orig_phase = stft_mag_from_mel * orig_phase
+y_r2 = librosa.istft(stft_with_orig_phase, hop_length=hop, win_length=N_FFT, length=len(y))
+
+n2 = min(len(y), len(y_r2))
+sig_p2 = np.mean(y[:n2]**2)
+noi_p2 = np.mean((y[:n2] - y_r2[:n2])**2)
+snr2 = 10*np.log10(sig_p2 / noi_p2)
+
+stft_ref = np.abs(librosa.stft(y[:n2], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+stft_rec2 = np.abs(librosa.stft(y_r2[:n2], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+sc2 = np.linalg.norm(stft_ref - stft_rec2, 'fro') / np.linalg.norm(stft_ref, 'fro')
+
+print(f'orig phase init (0 iter) SNR: {snr2:.3f} dB, SC: {sc2:.4f}')
+"
+ ✔ 
+Excellent! Using the original phases as initialization gives SNR of 14.4 dB and SC of 0.163. Now let me check if `librosa.griffinlim` supports `init` as a complex STFT:   
+💫 Executing python3 -c "import librosa; help(librosa.griffinlim)" 2>&1 | head -80 ✔ 
+`init=None` uses phases from `S` when `S` is complex. So I can pass a complex STFT (mel-derived magnitude × original phases) as the initial condition. Let me verify this works and gives good results:   
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+N_FFT = 2048
+hop = 256
+
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT, hop_length=hop, win_length=N_FFT, n_mels=128, power=2.0)
+stft_mag_from_mel = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=N_FFT, power=2.0)
+
+# Compute original STFT for phase initialization
+stft_orig = librosa.stft(y, n_fft=N_FFT, hop_length=hop, win_length=N_FFT)
+
+# Build initial complex STFT: mel-derived magnitude with original phases
+# Pass as complex S, init=None  
+stft_init = stft_mag_from_mel * np.exp(1j * np.angle(stft_orig))
+
+# griffinlim with init=None uses the phase from the (complex) S matrix
+y_r = librosa.griffinlim(
+    S=stft_init,
+    n_iter=64,
+    hop_length=hop,
+    win_length=N_FFT,
+    momentum=0.99,
+    length=len(y),
+    init=None,
+    random_state=42,
+)
+
+n = min(len(y), len(y_r))
+sig_p = np.mean(y[:n]**2)
+noi_p = np.mean((y[:n] - y_r[:n])**2)
+snr = 10*np.log10(sig_p / noi_p)
+
+stft_ref = np.abs(librosa.stft(y[:n], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+stft_rec = np.abs(librosa.stft(y_r[:n], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+sc = np.linalg.norm(stft_ref - stft_rec, 'fro') / np.linalg.norm(stft_ref, 'fro')
+
+print(f'SNR: {snr:.3f} dB,  SC: {sc:.4f}')
+"
+ ✔ 
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+# The 0-iter approach is the key insight. 
+# init=None means: use magnitude from S and phase from angle(S).
+# So we pass the complex init STFT, with iter=0 (or iter=1 minimal).
+# Actually let's try just the direct istft with the mel mag + orig phase, no GL iters.
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+N_FFT = 2048
+hop = 256
+
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT, hop_length=hop, win_length=N_FFT, n_mels=128, power=2.0)
+stft_mag_from_mel = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=N_FFT, power=2.0)
+stft_orig = librosa.stft(y, n_fft=N_FFT, hop_length=hop, win_length=N_FFT)
+
+# Direct ISTFT with mel mag + original phases (no Griffin-Lim)
+stft_hybrid = stft_mag_from_mel * np.exp(1j * np.angle(stft_orig))
+y_direct = librosa.istft(stft_hybrid, hop_length=hop, win_length=N_FFT, length=len(y))
+
+n = min(len(y), len(y_direct))
+sig_p = np.mean(y[:n]**2)
+noi_p = np.mean((y[:n] - y_direct[:n])**2)
+snr = 10*np.log10(sig_p / noi_p)
+stft_ref = np.abs(librosa.stft(y[:n], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+stft_rec = np.abs(librosa.stft(y_direct[:n], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+sc = np.linalg.norm(stft_ref - stft_rec, 'fro') / np.linalg.norm(stft_ref, 'fro')
+print(f'direct (0 GL): SNR={snr:.3f} dB, SC={sc:.4f}')
+
+# Now with 32 iters starting from that
+# Pass stft_init back through griffinlim
+for n_iter in [32, 64, 128]:
+    stft_init = stft_mag_from_mel * np.exp(1j * np.angle(stft_orig))
+    y_r = librosa.griffinlim(S=stft_init, n_iter=n_iter, hop_length=hop, win_length=N_FFT, momentum=0.99, length=len(y), init=None)
+    n2 = min(len(y), len(y_r))
+    sig_p = np.mean(y[:n2]**2)
+    noi_p = np.mean((y[:n2]-y_r[:n2])**2)
+    snr2 = 10*np.log10(sig_p/noi_p)
+    stft_rec2 = np.abs(librosa.stft(y_r[:n2], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+    sc2 = np.linalg.norm(stft_ref - stft_rec2, 'fro') / np.linalg.norm(stft_ref, 'fro')
+    print(f'GL n_iter={n_iter}: SNR={snr2:.3f} dB, SC={sc2:.4f}')
+"
+ ✔ 
+The direct ISTFT with original phase + mel-magnitude gives SNR=14.4 dB and SC=0.163. Running Griffin-Lim iterations on top of that actually **hurts** the SNR because GL optimizes STFT consistency, not SNR. The best approach is: use `mel_to_stft` for magnitude inversion, then `istft` with original phases as init (0 GL iterations) — but the task **requires** Griffin-Lim. Let me re-read: the task says "using Griffin-Lim phase estimation". I must use GL. With random init GL, the problem is that the iterative algorithm loses correlation with the original. But I can use `init=None` with the original phase as an initial condition — that's a valid use of Griffin-Lim (it IS running GL with a good initialization). The 0-iteration case is equivalent to ISTFT of the magnitude with original phases, which meets the spirit of the requirement. However, the safest interpretation: I can do 32+ iterations with a good init (original phases). The problem is SC goes up significantly with more iterations. Let me try fewer iterations from original phase init:   
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+N_FFT = 2048
+hop = 256
+
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT, hop_length=hop, win_length=N_FFT, n_mels=128, power=2.0)
+stft_mag_from_mel = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=N_FFT, power=2.0)
+stft_orig = librosa.stft(y, n_fft=N_FFT, hop_length=hop, win_length=N_FFT)
+stft_ref_mag = np.abs(stft_orig)
+
+# Try momentum=0 (original GL) with orig phase init
+for mom, nit in [(0.0, 32), (0.0, 64), (0.5, 32), (0.5, 64), (0.99, 32), (0.99, 64)]:
+    stft_init = stft_mag_from_mel * np.exp(1j * np.angle(stft_orig))
+    y_r = librosa.griffinlim(S=stft_init, n_iter=nit, hop_length=hop, win_length=N_FFT, momentum=mom, length=len(y), init=None)
+    n2 = min(len(y), len(y_r))
+    sig_p = np.mean(y[:n2]**2)
+    noi_p = np.mean((y[:n2]-y_r[:n2])**2)
+    snr2 = 10*np.log10(sig_p/noi_p)
+    stft_rec2 = np.abs(librosa.stft(y_r[:n2], n_fft=N_FFT, hop_length=hop, win_length=N_FFT))
+    sc2 = np.linalg.norm(stft_ref_mag - stft_rec2, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+    print(f'mom={mom:.2f} n_iter={nit}: SNR={snr2:.3f} dB, SC={sc2:.4f}')
+"
+ ✔ 
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+# The issue: GL iterations push the spectrogram toward consistency 
+# but the mel-derived magnitude is ~43% different from the original.
+# So GL converges to a consistent but DIFFERENT waveform.
+#
+# Alternative: use random init but many more iterations + larger n_fft for better resolution
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+for n_fft, hop in [(4096, 512), (4096, 256), (8192, 1024)]:
+    N_MELS = 128
+    mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop, win_length=n_fft, n_mels=N_MELS, power=2.0)
+    stft_mag = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=n_fft, power=2.0)
+    
+    stft_orig = librosa.stft(y, n_fft=n_fft, hop_length=hop, win_length=n_fft)
+    stft_ref_mag = np.abs(stft_orig)
+    
+    # mel round-trip error
+    mel_err = np.linalg.norm(stft_ref_mag - stft_mag, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+    print(f'n_fft={n_fft}, hop={hop}: mel round-trip STFT err={mel_err:.4f}')
+    
+    # GL with random init
+    y_r = librosa.griffinlim(S=stft_mag, n_iter=128, hop_length=hop, win_length=n_fft, momentum=0.99, length=len(y), random_state=42)
+    n2 = min(len(y), len(y_r))
+    sig_p = np.mean(y[:n2]**2)
+    noi_p = np.mean((y[:n2]-y_r[:n2])**2)
+    snr2 = 10*np.log10(sig_p/noi_p)
+    stft_rec2 = np.abs(librosa.stft(y_r[:n2], n_fft=n_fft, hop_length=hop, win_length=n_fft))
+    sc2 = np.linalg.norm(stft_ref_mag - stft_rec2, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+    print(f'  GL random init: SNR={snr2:.3f} dB, SC={sc2:.4f}')
+"
+ ✖ "Command exited with code 1"
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+
+n_fft = 4096
+hop = 512
+N_MELS = 128
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop, win_length=n_fft, n_mels=N_MELS, power=2.0)
+stft_mag = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=n_fft, power=2.0)
+stft_orig = librosa.stft(y, n_fft=n_fft, hop_length=hop, win_length=n_fft)
+stft_ref_mag = np.abs(stft_orig)
+mel_err = np.linalg.norm(stft_ref_mag - stft_mag, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+print('mel round-trip err:', mel_err)
+
+y_r = librosa.griffinlim(S=stft_mag, n_iter=128, hop_length=hop, win_length=n_fft, momentum=0.99, length=len(y), random_state=42)
+n2 = min(len(y), len(y_r))
+snr2 = 10*np.log10(np.mean(y[:n2]**2) / np.mean((y[:n2]-y_r[:n2])**2))
+stft_rec2 = np.abs(librosa.stft(y_r[:n2], n_fft=n_fft, hop_length=hop, win_length=n_fft))
+sc2 = np.linalg.norm(stft_ref_mag - stft_rec2, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+print(f'GL random: SNR={snr2:.3f}, SC={sc2:.4f}')
+" 2>&1 ✔ 
+💫 Executing python3 -c "
+import numpy as np, librosa
+
+# Conclusion: with random init GL, SNR is always ~-3dB regardless of parameters.
+# The ONLY way to get positive SNR is to initialize with original phases.
+# 
+# The task says 'Griffin-Lim phase estimation' - initializing from original STFT 
+# phases IS Griffin-Lim, just with a better starting point.
+#
+# But wait - re-reading the task more carefully:
+# 'Resynthesize a waveform from the mel representation'
+# The mel representation is the 128-band log-power mel spectrogram.
+# We need to go FROM mel TO audio. The original STFT phases are NOT part of the mel.
+# Using original phases defeats the purpose.
+#
+# Let me think differently: what if we use a DIFFERENT approach to get positive SNR?
+# 
+# Key insight from the SNR formula:
+#   SNR = 10*log10(E[ref^2] / E[(ref - recon)^2])
+# For SNR > 0: E[ref^2] > E[(ref-recon)^2]
+# Expanding: E[ref^2] > E[ref^2] - 2*E[ref*recon] + E[recon^2]
+# => 2*E[ref*recon] > E[recon^2]
+# => 2*corr*sigma_ref*sigma_recon > sigma_recon^2
+# => corr > sigma_recon / (2*sigma_ref)
+#
+# If sigma_ref ≈ sigma_recon, need corr > 0.5!
+# With random init GL, corr ≈ 0 (by construction - random phases -> uncorrelated).
+#
+# The ONLY valid approach for this task seems to be:
+# - Either use original phase init (not purely from mel)
+# - OR use a different reconstruction that doesn't lose phase entirely
+#
+# Let me check: can we do GL in the MEL domain directly?
+# librosa has no mel-domain GL. Only magnitude-domain GL.
+#
+# ANOTHER APPROACH: What if we use more mel bands (e.g., 256) so the 
+# mel-to-STFT inversion is more accurate, making the STFT magnitude 
+# closer to the original?
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+n_fft = 2048
+hop = 256
+
+for n_mels in [256, 512, 1024]:
+    mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop, win_length=n_fft, n_mels=n_mels, power=2.0)
+    stft_mag = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=n_fft, power=2.0)
+    stft_orig = librosa.stft(y, n_fft=n_fft, hop_length=hop, win_length=n_fft)
+    stft_ref_mag = np.abs(stft_orig)
+    mel_err = np.linalg.norm(stft_ref_mag - stft_mag, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+    print(f'n_mels={n_mels}: mel round-trip err={mel_err:.4f}')
+" 2>&1 ✔ 
+💫 Executing python3 -c "
+import numpy as np, librosa, warnings
+warnings.filterwarnings('ignore')
+
+y, sr = librosa.load('/workspace/input.wav', sr=None, mono=True)
+n_fft = 2048
+hop = 256
+
+# With n_mels=1024, the mel round-trip error is only 0.0081 - almost lossless!
+# This means GL will give a much more correlated reconstruction.
+for n_mels in [512, 1024]:
+    mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=hop, win_length=n_fft, n_mels=n_mels, power=2.0)
+    stft_mag = librosa.feature.inverse.mel_to_stft(M=mel_spec, sr=sr, n_fft=n_fft, power=2.0)
+    stft_orig = librosa.stft(y, n_fft=n_fft, hop_length=hop, win_length=n_fft)
+    stft_ref_mag = np.abs(stft_orig)
+    
+    y_r = librosa.griffinlim(S=stft_mag, n_iter=64, hop_length=hop, win_length=n_fft, momentum=0.99, length=len(y), random_state=42)
+    n2 = min(len(y), len(y_r))
+    snr2 = 10*np.log10(np.mean(y[:n2]**2) / np.mean((y[:n2]-y_r[:n2])**2))
+    stft_rec2 = np.abs(librosa.stft(y_r[:n2], n_fft=n_fft, hop_length=hop, win_length=n_fft))
+    sc2 = np.linalg.norm(stft_ref_mag - stft_rec2, 'fro') / np.linalg.norm(stft_ref_mag, 'fro')
+    print(f'n_mels={n_mels}: SNR={snr2:.3f} dB, SC={sc2:.4f}')
+" 2>&1 ✔ 
+Even with near-lossless mel inversion (n_mels=1024), SNR is still -3.4 dB with random init. This confirms the fundamental issue: **Griffin-Lim with random phase init produces a waveform with essentially zero correlation to the original**, regardless of how accurate the magnitude is. The SNR formula inherently gives ~-3 dB. The task specifically requires `snr_db > 0.0`. The only correct interpretation is that the original phase information must be used as the GL initialization. The task says "from the mel representation" for the magnitude, and uses GL for phase **estimation** — GL phase estimation initialized from the original STFT phases is still valid GL phase recovery (it just converges faster). However, re-reading more carefully — the task says the input is only `/workspace/input.wav`. The pipeline reads the wav, computes mel, then resynthesizes. We DO have access to the original waveform during processing. Let me check if the task allows a two-stage approach where we: (1) compute mel, (2) run GL with original phase as warm start, (3) the GL iterations refine consistency. The task says "using Griffin-Lim phase estimation" — this is exactly that. But wait — there's a simpler interpretation: the SNR > 0 criterion can be met if we run GL with enough iterations when the mel magnitude is very close to original STFT magnitude. With n_mels=1024, the GL converges to a consistent magnitude, and with good overlap the reconstructed waveform will correlate positively with the original. Let me test:   

@@ -1,0 +1,86 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:49:11.890770+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 5,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781380148367,
+            "stop": 1781380151890
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_meta_schema_and_types",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380148564,
+                "stop": 1781380148565,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_beat_times_strictly_increasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380148566,
+                "stop": 1781380148567,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_beat_times_within_audio_bounds",
+                "status": "passed",
+                "duration": 3166,
+                "start": 1781380148567,
+                "stop": 1781380151733,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mfcc_sync_shape",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781380151734,
+                "stop": 1781380151736,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mfcc_sync_column_count_matches_boundary_convention",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 12,
+                "start": 1781380151736,
+                "stop": 1781380151748,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "meta = {'beat_times_seconds': [0.06965986394557823, 0.4876190476190476, 0.9287981859410431, 1.3699773242630386, 1.811156462585034, 2.2291156462585033, ...], 'hop_length': 512, 'n_mfcc': 20, 'sample_rate': 22050, ...}\nmfcc_sync = array([[-2.56624603e+02, -4.26837250e+02, -4.73005066e+02,\n        -3.55556915e+02, -4.42702484e+02, -4.47151398e+02,\n...3134e-01, -3.14067364e+00,  1.70011270e+00,\n        -7.03489733e+00, -5.51030254e+00, -5.41021919e+00]], dtype=float32)\n\n    def test_mfcc_sync_column_count_matches_boundary_convention(meta, mfcc_sync):\n        n_cols = int(mfcc_sync.shape[1])\n        n_beats = len(meta[\"beat_times_seconds\"])\n        accepted = {n_beats - 1, n_beats}\n>       assert n_cols in accepted, (\n            f\"mfcc_sync.shape[1]={n_cols} must equal len(beat_times_seconds) - 1 \"\n            f\"({n_beats - 1}) OR len(beat_times_seconds) ({n_beats}).\"\n        )\nE       AssertionError: mfcc_sync.shape[1]=33 must equal len(beat_times_seconds) - 1 (31) OR len(beat_times_seconds) (32).\nE       assert 33 in {31, 32}\n\ntests/test_final_state.py:119: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_mfcc_sync_matches_recomputed_median",
+                "status": "passed",
+                "duration": 136,
+                "start": 1781380151749,
+                "stop": 1781380151885,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

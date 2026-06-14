@@ -1,0 +1,33 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 8 items
+
+tests/test_final_state.py ........                                       [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_note_timestamps_within_audio_bounds
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_note_timestamps_within_audio_bounds
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_note_timestamps_within_audio_bounds
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_melody_has_minimum_length
+PASSED tests/test_final_state.py::test_each_note_has_required_schema
+PASSED tests/test_final_state.py::test_midi_note_in_piano_range
+PASSED tests/test_final_state.py::test_notes_sorted_and_non_overlapping
+PASSED tests/test_final_state.py::test_each_note_duration_above_threshold
+PASSED tests/test_final_state.py::test_note_timestamps_within_audio_bounds
+PASSED tests/test_final_state.py::test_mean_f0_within_50_cents_of_midi
+PASSED tests/test_final_state.py::test_distinct_pitch_count
+======================== 8 passed, 3 warnings in 3.39s =========================

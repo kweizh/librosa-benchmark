@@ -1,0 +1,38 @@
+- Initializing MCP connections...
+You
+# Speech vs. Music Audio Classifier ## Background You are given a small labeled training corpus and an unlabeled test corpus of short WAV recordings. Your job is to extract a fixed-dimensional feature vector from each clip, train a binary classifier that distinguishes spoken-voice clips from instrumental-music clips, predict labels on the test clips, and emit the predictions as a CSV file. ## Inputs * `/workspace/train/speech/` — training WAV files whose ground-truth label is `speech`. * `/workspace/train/music/` — training WAV files whose ground-truth label is `music`. * `/workspace/test/` — unlabeled WAV files; you must produce a label for each one. ## Required Feature Families For every audio file, build a single 1-D feature vector that concatenates the temporal **mean** and **standard deviation** (over time frames) of each of the following librosa feature families: * MFCCs with `n_mfcc=20`. * Spectral contrast with `n_bands=6`. * Zero crossing rate. * Spectral centroid. The order of concatenation is up to you, but it must be identical for every file (training and test). ## Output Write the predictions to `/workspace/predictions.csv` with exactly the header line: ``` filename,label ``` Followed by one row per file found in `/workspace/test/`. Each `label` value must be either `speech` or `music`. The `filename` column must contain the basename of the test WAV file (e.g. `clip_00.wav`), not a full path. Do not include rows for files that are not in `/workspace/test/`, and do not produce duplicate `filename` rows. ## Implementation Hints * Use `librosa.load` to read each WAV. You may choose your own sample rate, but be consistent across train and test. * Compute each feature family with the requested librosa API, then aggregate along the time axis to produce a fixed-size vector regardless of clip length. * Train any `sklearn.linear_model.LogisticRegression` model on the training features, then predict on the test features. * The training set is small (a few files per class) but the snippets were chosen to be clearly separable by the requested features. You do not need cross-validation or hyper-parameter tuning to pass. ## Acceptance Criteria * Project path: /workspace * Output file (must be created by you): /workspace/predictions.csv * The output is a CSV file whose first line is exactly `filename,label`. * There is exactly one row for every WAV file under /workspace/test/, identified by basename. No file under /workspace/test/ may be missing, and no extra files may appear. * Every `label` value is either `speech` or `music` (case-sensitive, no extra whitespace). * No `filename` value appears more than once. * Classification accuracy against the held-out ground truth is at least 80%.   
+
+Pochi
+💭 Thinking for 80 characters   
+📂 Listing files in /workspace recursively ✔ 
+Now I have a clear picture of the data. Let me write the classifier script and run it.   
+✏️  Writing /workspace/classify.py ✔ 
+💫 Executing cd /workspace && python classify.py ✔ 
+💫 Executing cat /workspace/predictions.csv ✔ 
+🎉 Task Completed
+The classifier is complete and `/workspace/predictions.csv` has been written.
+
+**What was done:**
+
+1. **Feature extraction** — for every WAV file, `classify.py` loads the audio at 22 050 Hz and computes four librosa feature families, then aggregates each over the time axis (mean + std), producing a **58-dimensional** fixed vector:
+   | Family | Shape | mean+std dims |
+   |---|---|---|
+   | MFCC (`n_mfcc=20`) | (20, T) | 40 |
+   | Spectral contrast (`n_bands=6`) | (7, T) | 14 |
+   | Zero crossing rate | (1, T) | 2 |
+   | Spectral centroid | (1, T) | 2 |
+
+2. **Training** — features are `StandardScaler`-normalised, then a `LogisticRegression` (max_iter=1000) is fit on the 8 labelled clips (4 speech + 4 music). Training accuracy reached **100%**.
+
+3. **Prediction** — all 4 test clips were classified and written to CSV:
+
+```
+filename,label
+music_test_0.wav,music
+music_test_1.wav,music
+speech_test_0.wav,speech
+speech_test_1.wav,speech
+```
+
+The output file has exactly the required `filename,label` header, one row per test file (no duplicates, no missing files), and every label is either `speech` or `music`.   
+  

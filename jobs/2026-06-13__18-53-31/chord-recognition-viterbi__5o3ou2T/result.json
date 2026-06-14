@@ -1,0 +1,117 @@
+{
+    "id": "f1880fe7-cd22-46fd-9f6d-689954d6ff0c",
+    "task_name": "chord-recognition-viterbi",
+    "trial_name": "chord-recognition-viterbi__5o3ou2T",
+    "trial_uri": "file:///home/kweizh/zealt/zealt-agent/jobs/2026-06-13__18-53-31/chord-recognition-viterbi__5o3ou2T",
+    "task_id": {
+        "path": "/home/kweizh/zealt/librosa-benchmark/scratchpad/pending-tasks/chord-recognition-viterbi"
+    },
+    "source": "pending-tasks",
+    "task_checksum": "667533e9c568d984cad1f708442cddcef17d7f19ff7d0af7a4f989cf07f5024a",
+    "config": {
+        "task": {
+            "path": "/home/kweizh/zealt/librosa-benchmark/scratchpad/pending-tasks/chord-recognition-viterbi",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": "pending-tasks"
+        },
+        "trial_name": "chord-recognition-viterbi__5o3ou2T",
+        "trials_dir": "jobs/2026-06-13__18-53-31",
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "agents.pochi:Pochi",
+            "model_name": "zai/glm-5.1",
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "kwargs": {},
+            "env": {},
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "suppress_override_warnings": false,
+            "mounts": [
+                {
+                    "type": "bind",
+                    "source": "test_initial_state.py",
+                    "target": "/bootstrap/test_initial_state.py"
+                }
+            ],
+            "extra_docker_compose": [],
+            "env": {},
+            "kwargs": {}
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "env": {},
+            "disable": false
+        },
+        "artifacts": [
+            "/home/user"
+        ],
+        "extra_instruction_paths": [],
+        "job_id": "939445be-ad24-4073-99d2-90855e640c52"
+    },
+    "agent_info": {
+        "name": "pochi",
+        "version": "0.6.14",
+        "model_info": {
+            "name": "glm-5.1",
+            "provider": "zai"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 18387,
+        "cost_usd": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-06-13T19:14:54.022366Z",
+    "finished_at": "2026-06-13T19:20:36.246756Z",
+    "environment_setup": {
+        "started_at": "2026-06-13T19:14:54.026634Z",
+        "finished_at": "2026-06-13T19:14:56.675512Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-06-13T19:14:56.675548Z",
+        "finished_at": "2026-06-13T19:15:09.939574Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-06-13T19:15:09.939700Z",
+        "finished_at": "2026-06-13T19:20:17.840603Z"
+    },
+    "verifier": {
+        "started_at": "2026-06-13T19:20:19.275751Z",
+        "finished_at": "2026-06-13T19:20:24.504379Z"
+    },
+    "step_results": null
+}

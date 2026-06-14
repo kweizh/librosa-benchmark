@@ -1,0 +1,43 @@
+# F0-Based Monophonic Melody to MIDI Notes
+
+## Background
+Use `librosa` to convert a monophonic recording at `/workspace/input.wav` into a time-aligned sequence of MIDI notes. Estimate fundamental frequency (F0) per frame, smooth it, and segment voiced frames into discrete notes based on rounded MIDI pitch changes and unvoiced gaps.
+
+## Requirements
+- Read `/workspace/input.wav`.
+- Estimate F0 with `librosa.pyin` (it returns `f0`, `voiced_flag`, `voiced_prob`).
+- Apply a median filter to the voiced F0 trace before quantization.
+- Group consecutive voiced frames into notes; cut a new note whenever the rounded MIDI value changes or whenever at least one unvoiced frame interrupts the sequence.
+- Write the result to `/workspace/melody.json`.
+
+## Implementation Hints
+- Convert F0 in Hz to MIDI with the standard formula `12 * log2(f0 / 440) + 69` and round to the nearest integer for the note label.
+- Compute frame timestamps with `librosa.times_like` using the same `sr` and `hop_length` you passed to `librosa.pyin`.
+- Report each note's `mean_f0_hz` as the mean of the (smoothed) voiced F0 values that contributed to that note.
+- Verify keyword names and return order against the librosa 0.11.0 documentation.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the extraction pipeline is executed and the output artifact exists.
+- Output file: `/workspace/melody.json`
+- The output file must be a JSON array. Each element must be an object with the following schema:
+
+  ```json
+  {
+    "start": number,
+    "end": number,
+    "midi_note": integer,
+    "mean_f0_hz": number
+  }
+  ```
+
+  - `start` and `end` are floating-point timestamps in seconds.
+  - `midi_note` is an integer in `[21, 108]`.
+  - `mean_f0_hz` is a positive float representing the mean F0 over the note window.
+- Notes must be sorted by `start` and must not overlap in time.
+- Every note must satisfy `end - start > 0.05` seconds.
+- For every note, the mean F0 must be within 50 cents of the reported MIDI pitch (i.e. `abs(1200 * log2(mean_f0_hz / midi_to_hz(midi_note))) <= 50`).
+- The set of `midi_note` values across the sequence must contain at least 4 distinct pitches.
+- The output must contain at least 5 notes.
+- All `start` / `end` values must lie in `[0, audio_duration + 0.05]`.
+

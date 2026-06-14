@@ -1,0 +1,49 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 7 items
+
+tests/test_final_state.py ....F..                                        [100%]
+
+=================================== FAILURES ===================================
+______________ test_output_spectral_centroid_is_higher_than_input ______________
+
+input_audio = (array([ 0.        ,  0.        ,  0.        , ..., -0.02096558,
+       -0.01870728, -0.01654053], shape=(441000,)), 22050)
+output_audio = (array([ 0.00073242,  0.00112915,  0.00115967, ..., -0.00842285,
+       -0.00726318, -0.00515747], shape=(441000,)), 22050)
+
+    def test_output_spectral_centroid_is_higher_than_input(input_audio, output_audio):
+        import librosa
+    
+        in_y, sr_in = input_audio
+        out_y, sr_out = output_audio
+    
+        centroid_in = librosa.feature.spectral_centroid(
+            y=in_y.astype(np.float32), sr=sr_in
+        )
+        centroid_out = librosa.feature.spectral_centroid(
+            y=out_y.astype(np.float32), sr=sr_out
+        )
+        mean_in = float(np.mean(centroid_in))
+        mean_out = float(np.mean(centroid_out))
+>       assert mean_out > mean_in, (
+            f"Output mean spectral centroid {mean_out:.2f} Hz is not strictly "
+            f"greater than the input mean spectral centroid {mean_in:.2f} Hz; "
+            f"the harmonic component should have been pitch-shifted up."
+        )
+E       AssertionError: Output mean spectral centroid 1963.30 Hz is not strictly greater than the input mean spectral centroid 2220.12 Hz; the harmonic component should have been pitch-shifted up.
+E       assert 1963.295775601012 > 2220.1177451834305
+
+tests/test_final_state.py:117: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_output_file_exists_and_readable
+PASSED tests/test_final_state.py::test_output_sample_rate_matches_input
+PASSED tests/test_final_state.py::test_output_length_not_exceeding_input
+PASSED tests/test_final_state.py::test_output_peak_amplitude_in_range
+PASSED tests/test_final_state.py::test_output_tempo_is_slower_than_input
+PASSED tests/test_final_state.py::test_output_is_not_identical_to_input
+FAILED tests/test_final_state.py::test_output_spectral_centroid_is_higher_than_input
+========================= 1 failed, 6 passed in 3.85s ==========================

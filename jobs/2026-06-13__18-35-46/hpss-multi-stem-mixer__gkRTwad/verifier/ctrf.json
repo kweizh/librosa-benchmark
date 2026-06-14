@@ -1,0 +1,95 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:49:35.087770+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 6,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781376571108,
+            "stop": 1781376575087
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_output_file_exists_and_readable",
+                "status": "passed",
+                "duration": 8,
+                "start": 1781376571318,
+                "stop": 1781376571326,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_sample_rate_matches_input",
+                "status": "passed",
+                "duration": 16,
+                "start": 1781376571327,
+                "stop": 1781376571343,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_length_not_exceeding_input",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376571343,
+                "stop": 1781376571344,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_peak_amplitude_in_range",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781376571344,
+                "stop": 1781376571346,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_spectral_centroid_is_higher_than_input",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 3185,
+                "start": 1781376571347,
+                "stop": 1781376574532,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "input_audio = (array([ 0.        ,  0.        ,  0.        , ..., -0.02096558,\n       -0.01870728, -0.01654053], shape=(441000,)), 22050)\noutput_audio = (array([ 0.00073242,  0.00112915,  0.00115967, ..., -0.00842285,\n       -0.00744629, -0.00537109], shape=(441000,)), 22050)\n\n    def test_output_spectral_centroid_is_higher_than_input(input_audio, output_audio):\n        import librosa\n    \n        in_y, sr_in = input_audio\n        out_y, sr_out = output_audio\n    \n        centroid_in = librosa.feature.spectral_centroid(\n            y=in_y.astype(np.float32), sr=sr_in\n        )\n        centroid_out = librosa.feature.spectral_centroid(\n            y=out_y.astype(np.float32), sr=sr_out\n        )\n        mean_in = float(np.mean(centroid_in))\n        mean_out = float(np.mean(centroid_out))\n>       assert mean_out > mean_in, (\n            f\"Output mean spectral centroid {mean_out:.2f} Hz is not strictly \"\n            f\"greater than the input mean spectral centroid {mean_in:.2f} Hz; \"\n            f\"the harmonic component should have been pitch-shifted up.\"\n        )\nE       AssertionError: Output mean spectral centroid 1963.65 Hz is not strictly greater than the input mean spectral centroid 2220.12 Hz; the harmonic component should have been pitch-shifted up.\nE       assert 1963.6498638042767 > 2220.1177451834305\n\ntests/test_final_state.py:117: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_output_tempo_is_slower_than_input",
+                "status": "passed",
+                "duration": 508,
+                "start": 1781376574533,
+                "stop": 1781376575041,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_output_is_not_identical_to_input",
+                "status": "passed",
+                "duration": 45,
+                "start": 1781376575042,
+                "stop": 1781376575087,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

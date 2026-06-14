@@ -1,0 +1,66 @@
+- Initializing MCP connections...
+You
+# Probabilistic YIN (pYIN) Pitch Tracking ## Background Extract a per-frame fundamental-frequency (F0) contour from a monophonic audio clip using `librosa`. The contour must include voicing decisions and per-frame voicing probability and be serialized as JSON with one record per analysis frame. ## Requirements * Read the input WAV file from `/workspace/input.wav`. * Run pYIN-based F0 estimation over the note range `C2` to `C7`. * Emit one record per analysis frame to `/workspace/pitch_track.json` with timestamps in seconds, the F0 value in Hertz (or JSON `null` when unvoiced), the voicing flag, and the voicing probability. ## Implementation Hints * Use `librosa.pyin` with `fmin` and `fmax` derived from `librosa.note_to_hz` for the required note range; rely on its default `hop_length` and `frame_length`. * Convert per-frame indices to seconds using a librosa helper that is consistent with the pYIN hop length. * Non-finite F0 values returned by pYIN represent unvoiced frames; they must be serialized as JSON `null`, not strings or `NaN`. * Voicing probability is a separate output of pYIN and must be carried into the JSON as a plain float. * Sanity-check function signatures, keyword-only arguments, and return-tuple ordering against the librosa 0.11.0 documentation. ## Acceptance Criteria * Project path: /workspace * Ensure the pitch-tracking pipeline is executed and the output artifact exists. * Output file: `/workspace/pitch_track.json` * The output file must be a JSON array of objects, one per analysis frame, with the following schema: ```json { "time": number, "f0_hz": number | null, "voiced": boolean, "voiced_prob": number } ``` * The number of records must equal the number of frames returned by `librosa.pyin` for this input. * `time` values must be strictly monotonically increasing across the list and the final `time` must be within 0.1 seconds of the audio duration. * For every record, `voiced_prob` must lie in the closed interval `[0.0, 1.0]`. * For every record where `voiced` is `false`, `f0_hz` must be JSON `null`. * For every record where `voiced` is `true`, `f0_hz` must be a finite number in the closed interval `[librosa.note_to_hz('C2'), librosa.note_to_hz('C7')]`. * At least 30% of records must have `voiced` equal to `true`. * At least 5% of records must have `voiced` equal to `false`.   
+
+Pochi
+💭 Thinking for 79 characters   
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__)" ✔ 
+💫 Executing python3 -c "import librosa; help(librosa.pyin)" 2>&1 | head -80 ✔ 
+💫 Executing python3 -c "import librosa; help(librosa.pyin)" 2>&1 | tail -30 ✔ 
+Now I have all the information needed. Let me write the pitch tracking script:   
+✏️  Writing /workspace/pitch_track.py ✔ 
+💫 Executing cd /workspace && python3 pitch_track.py ✔ 
+💫 Executing python3 -c "
+import json
+with open('/workspace/pitch_track.json') as f:
+    data = json.load(f)
+print('Total records:', len(data))
+print('First 3 records:')
+for r in data[:3]:
+    print(' ', r)
+print('Last 3 records:')
+for r in data[-3:]:
+    print(' ', r)
+" ✔ 
+💫 Executing python3 -c "
+import json
+with open('/workspace/pitch_track.json') as f:
+    data = json.load(f)
+# show a few unvoiced frames
+unvoiced = [r for r in data if not r['voiced']]
+print('Sample unvoiced frames:')
+for r in unvoiced[:5]:
+    print(' ', r)
+" ✔ 
+Everything works perfectly. Let me verify the output file exists and is well-formed:   
+💫 Executing ls -lh /workspace/pitch_track.json && python3 -m json.tool /workspace/pitch_track.json > /dev/null && echo "Valid JSON" ✔ 
+🎉 Task Completed
+The pYIN pitch tracking pipeline is implemented in `/workspace/pitch_track.py` and the output artifact `/workspace/pitch_track.json` has been successfully generated.
+
+**Summary of what was done:**
+
+1. Loaded `/workspace/input.wav` with its native sample rate (22 050 Hz, 8 s, mono).
+2. Called `librosa.pyin` with:
+   - `fmin = librosa.note_to_hz('C2')` ≈ 65.41 Hz
+   - `fmax = librosa.note_to_hz('C7')` ≈ 2093.00 Hz
+   - Default `frame_length=2048`, `hop_length=512` (frame_length // 4)
+   - `fill_na=np.nan` so unvoiced frames carry NaN (replaced with JSON `null`)
+3. Computed per-frame timestamps via `librosa.times_like(f0, sr=sr, hop_length=hop_length)`.
+4. Serialised each frame as `{"time", "f0_hz", "voiced", "voiced_prob"}`, mapping non-finite F0 → `null`.
+
+**Output statistics (345 frames):**
+| Metric | Value |
+|--------|-------|
+| Total frames | 345 |
+| Time range | 0.0000 s → 7.9877 s (audio duration 8.000 s) |
+| Voiced frames | 306 (88.7 %) ≥ 30 % ✓ |
+| Unvoiced frames | 39 (11.3 %) ≥ 5 % ✓ |
+| voiced_prob range | [0.0, 1.0] ✓ |
+| Unvoiced f0_hz | all `null` ✓ |
+| Voiced f0_hz range | within [C2, C7] ✓ |
+| Times strictly monotone | ✓ |
+| Final time within 0.1 s of duration | ✓ |
+
+All acceptance criteria are satisfied.   
+  

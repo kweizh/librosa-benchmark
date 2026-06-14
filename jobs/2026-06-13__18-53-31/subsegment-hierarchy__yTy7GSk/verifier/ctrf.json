@@ -1,0 +1,129 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:04:03.793031+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 10,
+            "passed": 0,
+            "failed": 10,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781377443590,
+            "stop": 1781377443792
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_coarse_entries_have_required_schema",
+                "status": "failed",
+                "duration": 27,
+                "start": 1781377443670,
+                "stop": 1781377443697,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_indices_are_unique_and_dense",
+                "status": "failed",
+                "duration": 10,
+                "start": 1781377443698,
+                "stop": 1781377443708,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_count_within_bounds",
+                "status": "failed",
+                "duration": 10,
+                "start": 1781377443709,
+                "stop": 1781377443719,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_is_sorted_by_start",
+                "status": "failed",
+                "duration": 13,
+                "start": 1781377443719,
+                "stop": 1781377443732,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_coarse_covers_audio_without_big_gaps_or_overlaps",
+                "status": "failed",
+                "duration": 10,
+                "start": 1781377443733,
+                "stop": 1781377443743,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_fine_entries_have_required_schema",
+                "status": "failed",
+                "duration": 10,
+                "start": 1781377443743,
+                "stop": 1781377443753,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_fine_indices_are_unique",
+                "status": "failed",
+                "duration": 9,
+                "start": 1781377443753,
+                "stop": 1781377443762,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_fine_is_sorted_by_start",
+                "status": "failed",
+                "duration": 10,
+                "start": 1781377443763,
+                "stop": 1781377443773,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_fine_parent_indices_are_valid",
+                "status": "failed",
+                "duration": 8,
+                "start": 1781377443774,
+                "stop": 1781377443782,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            },
+            {
+                "name": "test_final_state.py::test_each_coarse_segment_has_exactly_three_children_that_cover_it",
+                "status": "failed",
+                "duration": 9,
+                "start": 1781377443783,
+                "stop": 1781377443792,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "@pytest.fixture(scope=\"module\")\n    def hierarchy():\n>       assert os.path.isfile(HIERARCHY_JSON), (\n            f\"Expected output file {HIERARCHY_JSON} to exist after the task completes.\"\n        )\nE       AssertionError: Expected output file /workspace/hierarchy.json to exist after the task completes.\nE       assert False\nE        +  where False = <function isfile at 0x7fbfc01c0220>('/workspace/hierarchy.json')\nE        +    where <function isfile at 0x7fbfc01c0220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_final_state.py:14: AssertionError"
+            }
+        ]
+    }
+}

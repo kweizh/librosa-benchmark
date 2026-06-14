@@ -1,0 +1,2194 @@
+Skipping image OS validation for hb__pyin-pitch-tracker: docker inspect returned 1
+Skipping image OS validation for hb__percussive-onset-midi: docker inspect returned 1
+Skipping image OS validation for hb__reassigned-spectrogram-peaks: docker inspect returned 1
+Skipping image OS validation for hb__multires-spectrogram-stacker: docker inspect returned 1
+Skipping image OS validation for hb__subsegment-hierarchy: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Running command: apt-get update && apt-get install -y curl ripgrep
+Running command: apt-get update && apt-get install -y curl ripgrep
+Running command: apt-get update && apt-get install -y curl ripgrep
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-p2shy5i > /logs/artifacts/run-id && echo percussive-onset-midi__P2sHY5i > /logs/artifacts/trial_id
+Running command: echo zr-ps8iw5e > /logs/artifacts/run-id && echo pyin-pitch-tracker__Ps8iw5e > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Running command: echo zr-clwt428 > /logs/artifacts/run-id && echo subsegment-hierarchy__CLwT428 > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Running command: echo zr-4nqpz8u > /logs/artifacts/run-id && echo multires-spectrogram-stacker__4nQPz8u > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Running command: echo zr-ysrxdeq > /logs/artifacts/run-id && echo reassigned-spectrogram-peaks__ysRxdEq > /logs/artifacts/trial_id
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Hierarchical Music Segmentation with librosa
+
+## Background
+Produce a 2-level hierarchical segmentation of a short tonal audio clip using `librosa` 0.11. The coarse layer captures large-scale structural sections; the fine layer refines each coarse section into 3 sub-sections. The output must record both layers and the parent linkage between them.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Build a beat-synchronous `chroma_cqt` feature matrix as the segmentation feature.
+- Use `librosa.segment.agglomerative` to obtain coarse boundaries (k between 4 and 8 inclusive).
+- For each coarse segment, use `librosa.segment.subsegment` with `n_segments=3` to refine it into exactly 3 fine sub-segments.
+- Write both layers, with parent linkage, to `/workspace/hierarchy.json`.
+
+## Implementation Hints
+- Use `librosa.beat.beat_track` to obtain beat frames at a consistent `hop_length` and use those beats both for the beat-synchronous feature aggregation (`librosa.util.sync`) and as the unit of segmentation.
+- Call `librosa.segment.agglomerative` on the beat-synchronous chroma matrix; the returned values are left-boundary indices in the aggregated coordinate system (always starting at 0). You will need to map them back to beat boundaries and then to time using the same `hop_length`.
+- When calling `librosa.segment.subsegment`, pass the original chroma matrix along with the segment boundary frames; the returned array merges in the input boundaries, so be careful to extract exactly 3 fine sub-segments per coarse segment.
+- Convert all boundary frames to seconds via `librosa.frames_to_time` (using the same `hop_length` used for chroma), and clamp the last coarse and last fine boundaries to the audio duration so the coarse layer covers the full track and each coarse segment is fully covered by its 3 children.
+- All `librosa` feature and segmentation routines on 0.11 are keyword-only past the leading positional arguments; confirm signatures against the official 0.11 docs.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the segmentation pipeline is executed and the output artifact exists.
+- Output file: `/workspace/hierarchy.json`
+- The output file must be a JSON object matching the schema:
+
+  ```json
+  {
+    "coarse": [
+      {"index": int, "start": float, "end": float}
+    ],
+    "fine": [
+      {"index": int, "start": float, "end": float, "parent_index": int}
+    ]
+  }
+  ```
+
+- The `coarse` list must be sorted by `start`, contain between 4 and 8 entries inclusive, be non-overlapping, start within 0.3s of 0, end within 0.5s of the audio duration, and have no internal gap larger than 0.3s. Each coarse segment must be strictly longer than 0.5s.
+- The `fine` list must be sorted by `start`. For each coarse segment `c` there must be exactly 3 fine entries whose `parent_index` equals `c["index"]`; those 3 children, in start-sorted order, must cover `[c.start, c.end]` with no gap larger than 0.05s and no overlap larger than 0.05s. Every fine segment must be strictly longer than 0.1s.
+- Every `parent_index` must be a valid index into `coarse`.
+
+
+EOF
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Probabilistic YIN (pYIN) Pitch Tracking
+
+## Background
+Extract a per-frame fundamental-frequency (F0) contour from a monophonic audio clip using `librosa`. The contour must include voicing decisions and per-frame voicing probability and be serialized as JSON with one record per analysis frame.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Run pYIN-based F0 estimation over the note range `C2` to `C7`.
+- Emit one record per analysis frame to `/workspace/pitch_track.json` with timestamps in seconds, the F0 value in Hertz (or JSON `null` when unvoiced), the voicing flag, and the voicing probability.
+
+## Implementation Hints
+- Use `librosa.pyin` with `fmin` and `fmax` derived from `librosa.note_to_hz` for the required note range; rely on its default `hop_length` and `frame_length`.
+- Convert per-frame indices to seconds using a librosa helper that is consistent with the pYIN hop length.
+- Non-finite F0 values returned by pYIN represent unvoiced frames; they must be serialized as JSON `null`, not strings or `NaN`.
+- Voicing probability is a separate output of pYIN and must be carried into the JSON as a plain float.
+- Sanity-check function signatures, keyword-only arguments, and return-tuple ordering against the librosa 0.11.0 documentation.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the pitch-tracking pipeline is executed and the output artifact exists.
+- Output file: `/workspace/pitch_track.json`
+- The output file must be a JSON array of objects, one per analysis frame, with the following schema:
+
+  ```json
+  {
+    "time": number,
+    "f0_hz": number | null,
+    "voiced": boolean,
+    "voiced_prob": number
+  }
+  ```
+
+- The number of records must equal the number of frames returned by `librosa.pyin` for this input.
+- `time` values must be strictly monotonically increasing across the list and the final `time` must be within 0.1 seconds of the audio duration.
+- For every record, `voiced_prob` must lie in the closed interval `[0.0, 1.0]`.
+- For every record where `voiced` is `false`, `f0_hz` must be JSON `null`.
+- For every record where `voiced` is `true`, `f0_hz` must be a finite number in the closed interval `[librosa.note_to_hz('C2'), librosa.note_to_hz('C7')]`.
+- At least 30% of records must have `voiced` equal to `true`.
+- At least 5% of records must have `voiced` equal to `false`.
+
+
+EOF
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Percussive Onset Grid Quantizer with HPSS, Beat Tracking, and Velocity Estimation
+
+## Background
+Build a drum-hit grid quantizer with `librosa`. The pipeline must isolate the percussive content from a mixed audio file, detect drum onsets on the percussive component, recover a global tempo with beat tracking on the same percussive signal, snap each onset to the nearest 16th-note position derived from that tempo, and assign a normalized velocity per hit from the local onset envelope amplitude.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Separate the percussive waveform from the harmonic content with HPSS.
+- Detect onsets on the percussive component using an onset strength envelope and peak picking.
+- Recover a global tempo (BPM) from beat tracking on the percussive component and derive a 16th-note grid with spacing `60 / tempo / 4` seconds, starting at time 0.
+- Snap each detected onset to the nearest 16th-note grid position.
+- Estimate a per-hit velocity from the local onset envelope amplitude, normalized into `(0.0, 1.0]`.
+- Write the result to `/workspace/hits.json`.
+
+## Implementation Hints
+- Use HPSS on the loaded waveform to isolate a percussive-only signal before any onset or beat analysis; both detection and tempo estimation must run on that signal, not on the original mix.
+- Reuse a single `hop_length` for the onset envelope, peak picking, beat tracking, and frame-to-time conversion so onset frame indices and times are consistent.
+- Choose peak-picking parameters that yield at least 5 well-separated hits for a ~12s drum loop near 120 BPM.
+- Derive the grid index of a snapped onset from its raw onset time and the 16th-note step; preserve the original onset time as `raw_time_seconds` and store the snapped time as `time_seconds`.
+- Sample the onset strength envelope at (or near) each detected onset frame for the per-hit amplitude and rescale across the set of detected hits so the maximum velocity lands at `1.0` while strictly positive minima remain strictly above `0.0`.
+- Verify all signatures against the librosa 0.11.0 documentation; the onset, beat, and frame conversion APIs are keyword-only.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the quantization pipeline is executed and the output artifact exists.
+- Output file: `/workspace/hits.json`
+- The output file must be a JSON array. Each element must be an object with the following schema:
+
+  ```json
+  {
+    "time_seconds": number,
+    "grid_index": integer,
+    "velocity": number,
+    "raw_time_seconds": number
+  }
+  ```
+
+  - The array must contain at least 5 hits.
+  - `time_seconds` and `raw_time_seconds` are floats in `[0, audio_duration + 1e-3]` seconds.
+  - `grid_index` is a non-negative integer.
+  - `velocity` is a float in `(0.0, 1.0]`.
+- Hits must be ordered so that `time_seconds` is non-decreasing across the array and `grid_index` is non-decreasing across the array.
+- For every hit, `|time_seconds - raw_time_seconds| <= (60.0 / estimated_tempo / 4) / 2 + 1e-3`, where `estimated_tempo` is the global tempo (BPM) returned by beat tracking on the percussive component.
+- `estimated_tempo` must fall within `[40, 240]` BPM. The estimated tempo may be embedded as a numeric `_metadata.estimated_tempo` field inside `/workspace/hits.json`; otherwise the verifier will recompute the tempo by replaying the documented librosa pipeline (HPSS on the loaded waveform, onset strength on the percussive component, `librosa.beat.beat_track` on that envelope) against `/workspace/input.wav`.
+
+
+EOF
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Multi-Resolution Spectrogram Stack with librosa
+
+## Background
+Produce a stacked time-frequency representation of a single audio file by computing three complementary spectrograms on the SAME time grid: a linear STFT, a Constant-Q transform (CQT), and a Variable-Q transform (VQT). Persist the dB-scaled magnitudes in one `.npz` archive together with a sidecar metadata JSON that fully describes the analysis parameters and the per-representation frequency vectors.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Compute all three transforms (STFT, CQT, VQT) using a SINGLE shared `hop_length` so the columns of every output share a common time grid.
+- Convert each magnitude spectrogram to dB.
+- Save the three dB arrays into `/workspace/spec_stack.npz` under the keys `stft_db`, `cqt_db`, `vqt_db`.
+- Save the analysis metadata as JSON into `/workspace/spec_meta.json`.
+
+## Implementation Hints
+- Use `librosa.stft`, `librosa.cqt`, and `librosa.vqt` from librosa 0.11.0; nearly every kwarg is keyword-only.
+- Take magnitudes (`np.abs`) before converting to dB with `librosa.amplitude_to_db`.
+- The number of frames for STFT, CQT, and VQT must agree; choose a `hop_length` that is a power of two and divisible by `2 ** (n_octaves - 1)` so the recursive CQT/VQT implementation accepts it.
+- The frequency vectors should be derived from librosa's own helpers (consult the 0.11.0 docs to pick the correct helper for each transform).
+- All metadata numeric values must be plain JSON-serializable scalars; the frequency arrays must be plain JSON lists of numbers.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the spectrogram pipeline is executed and BOTH output artifacts exist.
+- Output files:
+  - `/workspace/spec_stack.npz` containing exactly the arrays `stft_db`, `cqt_db`, `vqt_db` (real-valued, finite).
+  - `/workspace/spec_meta.json` containing the keys `n_frames`, `hop_length`, `sample_rate`, `stft_freqs`, `cqt_freqs`, `vqt_freqs`, `n_fft`, `cqt_n_bins`, `cqt_bins_per_octave`, `vqt_n_bins`, `vqt_bins_per_octave`.
+- Shape constraints:
+  - `stft_db.shape == (1 + n_fft // 2, n_frames)`.
+  - `cqt_db.shape == (cqt_n_bins, n_frames)`.
+  - `vqt_db.shape == (vqt_n_bins, n_frames)`.
+  - The trailing dimension of all three arrays equals the metadata `n_frames`.
+- Frequency-vector constraints:
+  - `len(stft_freqs) == stft_db.shape[0]`, `len(cqt_freqs) == cqt_n_bins`, `len(vqt_freqs) == vqt_n_bins`.
+  - `cqt_freqs` is element-wise close to the standard librosa Constant-Q frequency helper output for the recorded `cqt_n_bins`, `fmin`, `bins_per_octave`.
+  - `vqt_freqs` is element-wise close to the standard librosa interval-based frequency helper output for `intervals='equal'` with the recorded `vqt_n_bins`, `fmin`, `bins_per_octave`.
+- Each dB array must be finite everywhere and have dynamic range `> 20 dB` (i.e. `max - min > 20`).
+
+
+EOF
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Reassigned Spectrogram Peak Tracking
+
+## Background
+Build a peak-tracking analysis on top of the time-frequency *reassigned* spectrogram in `librosa`. Unlike a plain STFT, the reassigned spectrogram yields refined per-bin instantaneous frequency estimates (and may produce `NaN` for low-power bins). Your job is to extract, for every analysis frame, the most prominent spectral peaks and report their reassigned frequencies plus magnitudes in dB.
+
+## Requirements
+- Read the input audio file from `/workspace/input.wav`.
+- Compute the time-frequency reassigned spectrogram of the signal using `librosa`.
+- For each STFT frame, select the **top-5** spectral bins ranked by reassigned magnitude (after converting magnitudes to dB). Handle `NaN` values produced by reassignment so they never appear in the output and never break sort order.
+- For each selected peak, report:
+  - The **reassigned instantaneous frequency** in Hz (from the frequency output of the reassigned spectrogram).
+  - The magnitude in **decibels (dB)**.
+- Write the result to `/workspace/peaks.json`.
+
+## Implementation Hints
+- Sanity-check the API signature and return tuple order against the librosa 0.11.0 documentation. The reassigned spectrogram returns three parallel arrays of shape `(1 + n_fft/2, n_frames)`.
+- The frequency and time arrays may contain `NaN` for bins whose power falls below the reassignment threshold; these must be excluded from peak selection rather than silently propagated.
+- Use a librosa helper to convert linear amplitude magnitudes to dB.
+- Pick an `n_fft` / `hop_length` combination that yields a deterministic frame count for a 22050 Hz, ~5 s input and record that frame count in the output.
+- The number of frames in your JSON output must match what librosa actually produces for the parameters you chose — do not pad, truncate, or invent frames.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the analysis pipeline is executed and the output artifact exists.
+- Output file: `/workspace/peaks.json`
+- The file must be valid JSON. The top-level value must be a JSON **object** with the following schema:
+
+  ```json
+  {
+    "meta": {
+      "n_frames": number,
+      "sr": number,
+      "n_fft": number,
+      "hop_length": number
+    },
+    "frames": [
+      {
+        "time": number,
+        "peaks": [
+          {"freq_hz": number, "magnitude_db": number}
+        ]
+      }
+    ]
+  }
+  ```
+
+- `meta.n_frames` must equal `len(frames)` and must equal the number of STFT frames produced by the chosen `n_fft` / `hop_length`.
+- `frames` length equals `meta.n_frames`.
+- Each frame's `time` is a finite float in seconds, monotonically non-decreasing across frames, lying in `[0, audio_duration + 1e-2]`, with the last frame within `0.1` s of the audio duration.
+- Each frame's `peaks` array contains **exactly 5** entries.
+- Each peak: `freq_hz` is finite and in `(0.0, sr/2]`; `magnitude_db` is finite.
+- Within each frame, peaks are sorted by `magnitude_db` in **descending** order.
+- At least 50% of frames must contain at least one peak whose `freq_hz` is within ±10 Hz of one of the input tones at 220 Hz, 440 Hz, or 880 Hz.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Skipping image OS validation for hb__laplacian-segmentation: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Skipping image OS validation for hb__spectral-contrast-classifier: docker inspect returned 1
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-aidm65w > /logs/artifacts/run-id && echo laplacian-segmentation__aidM65w > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-cc8uf6i > /logs/artifacts/run-id && echo spectral-contrast-classifier__cC8uF6i > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Speech vs. Music Audio Classifier
+
+## Background
+You are given a small labeled training corpus and an unlabeled test corpus of short WAV recordings. Your job is to extract a fixed-dimensional feature vector from each clip, train a binary classifier that distinguishes spoken-voice clips from instrumental-music clips, predict labels on the test clips, and emit the predictions as a CSV file.
+
+## Inputs
+- `/workspace/train/speech/` — training WAV files whose ground-truth label is `speech`.
+- `/workspace/train/music/` — training WAV files whose ground-truth label is `music`.
+- `/workspace/test/` — unlabeled WAV files; you must produce a label for each one.
+
+## Required Feature Families
+For every audio file, build a single 1-D feature vector that concatenates the temporal **mean** and **standard deviation** (over time frames) of each of the following librosa feature families:
+- MFCCs with `n_mfcc=20`.
+- Spectral contrast with `n_bands=6`.
+- Zero crossing rate.
+- Spectral centroid.
+
+The order of concatenation is up to you, but it must be identical for every file (training and test).
+
+## Output
+Write the predictions to `/workspace/predictions.csv` with exactly the header line:
+
+```
+filename,label
+```
+
+Followed by one row per file found in `/workspace/test/`. Each `label` value must be either `speech` or `music`. The `filename` column must contain the basename of the test WAV file (e.g. `clip_00.wav`), not a full path. Do not include rows for files that are not in `/workspace/test/`, and do not produce duplicate `filename` rows.
+
+## Implementation Hints
+- Use `librosa.load` to read each WAV. You may choose your own sample rate, but be consistent across train and test.
+- Compute each feature family with the requested librosa API, then aggregate along the time axis to produce a fixed-size vector regardless of clip length.
+- Train any `sklearn.linear_model.LogisticRegression` model on the training features, then predict on the test features.
+- The training set is small (a few files per class) but the snippets were chosen to be clearly separable by the requested features. You do not need cross-validation or hyper-parameter tuning to pass.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Output file (must be created by you): /workspace/predictions.csv
+- The output is a CSV file whose first line is exactly `filename,label`.
+- There is exactly one row for every WAV file under /workspace/test/, identified by basename. No file under /workspace/test/ may be missing, and no extra files may appear.
+- Every `label` value is either `speech` or `music` (case-sensitive, no extra whitespace).
+- No `filename` value appears more than once.
+- Classification accuracy against the held-out ground truth is at least 80%.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Laplacian Structural Music Segmentation
+
+## Background
+Use `librosa` 0.11.0 to build a structural music segmentation pipeline that recovers song-section boundaries and re-uses cluster identities (A/B/A...) across repeating sections. The pipeline must beat-track the input, extract a beat-synchronous tonal feature, build a weighted recurrence graph that mixes path-enhanced repetition with sequential affinity, embed frames via the symmetric normalized graph Laplacian, and assign one section label per frame using temporally-constrained agglomerative clustering before mapping the labels back to absolute time intervals.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Detect beats, then aggregate a tonal feature (CQT magnitude or `chroma_cqt`) into beat-synchronous frames using `librosa.util.sync`.
+- Construct a recurrence-based affinity matrix and enhance its diagonal paths with `librosa.segment.path_enhance`.
+- Combine the path-enhanced repetition graph with a sequential (local) affinity term into a single symmetric weighted adjacency.
+- Compute the symmetric normalized graph Laplacian, take its bottom eigenvectors, normalize the chosen eigenvector embedding, and cluster the per-beat embeddings into a small number of section types.
+- Map cluster ids back to contiguous time intervals and write them to `/workspace/segments.json`.
+
+## Implementation Hints
+- All `librosa` 0.11.0 feature/segment APIs are keyword-only except for primary data arrays. Verify signatures before calling.
+- You may use any of: `librosa.load`, `librosa.beat.beat_track`, `librosa.cqt`, `librosa.feature.chroma_cqt`, `librosa.util.sync`, `librosa.util.fix_frames`, `librosa.segment.recurrence_matrix`, `librosa.segment.path_enhance`, `librosa.segment.agglomerative`, `librosa.frames_to_time`, plus NumPy / SciPy / scikit-learn helpers for eigendecomposition and clustering.
+- Choose the Laplacian normalization, the number of eigenvectors `K`, the number of clusters, and the relative weighting of repetition vs. sequential affinity yourself; defaults that work on the librosa segmentation gallery example are a reasonable starting point.
+- The audio at `/workspace/input.wav` is mono at 22050 Hz and has a clear A/B/A-style structure, so the output must demonstrate that at least one section label is re-used (proving repetition recovery, not just temporal partitioning).
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the segmentation pipeline is executed and the output artifact exists.
+- Output file: `/workspace/segments.json`
+- The output file must be a JSON array. Each element must be an object with the following schema:
+
+  ```json
+  {
+    "start": number,
+    "end": number,
+    "label": string
+  }
+  ```
+
+  - `start` and `end` are floating-point timestamps in seconds with `start < end`.
+  - `label` must be a non-empty string matching the regex `^[A-Z]$` (a single uppercase letter such as `A`, `B`, `C`, ...).
+- Segments must be sorted by `start`, cover the audio from near 0s through the audio duration, and have neither significant overlaps nor gaps between adjacent segments.
+- The decoded segmentation must contain at least 2 distinct labels, at least 3 segments total, every segment must have duration greater than 0.5 seconds, and at least one label must appear in more than one segment (re-used section identity).
+
+
+EOF
+Skipping image OS validation for hb__hpss-multi-stem-mixer: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-njj6b3f > /logs/artifacts/run-id && echo hpss-multi-stem-mixer__nJj6b3f > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# HPSS Multi-Stem Mixer
+
+## Background
+The file `/workspace/input.wav` is a short music recording. Build a small creative remixer that splits it into harmonic and percussive stems, processes each stem independently, and writes the mixed result back to disk.
+
+## Requirements
+Read `/workspace/input.wav` (preserving its native sample rate) and produce `/workspace/output.wav` by performing **exactly** the following steps, in order:
+
+1. Decompose the input into harmonic and percussive time-domain components using `librosa.effects.hpss` with `margin=(1.0, 5.0)` (strong percussive mask).
+2. Pitch-shift the harmonic component up by **7 semitones** using `librosa.effects.pitch_shift`.
+3. Time-stretch the percussive component by a rate of **0.85** (i.e. slow it down) using `librosa.effects.time_stretch`.
+4. Re-align the lengths of the pitch-shifted harmonic and the time-stretched percussive signals so they both have the same length as the original input waveform (pad with zeros or truncate as needed), and mix them with weights: `mix = 0.7 * harmonic_shifted + 0.5 * percussive_stretched`.
+5. Trim leading and trailing silence from the mix with `librosa.effects.trim(top_db=30)`.
+6. Write the result to `/workspace/output.wav` at the **same sample rate as the input**.
+
+## Implementation Hints
+- `librosa.effects.hpss` returns time-domain waveforms of the same length as the input.
+- `librosa.effects.pitch_shift` preserves the input length, but `librosa.effects.time_stretch` changes it; you will need to pad/truncate before mixing.
+- You may use `soundfile.write` to save the WAV.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Input file (already present): /workspace/input.wav
+- Output file (must be created by you): /workspace/output.wav
+- The output must be a readable WAV file (via `soundfile`).
+- The output sample rate must equal the input sample rate.
+- The output length (in samples) must be less than or equal to the input length (because of trimming).
+- The output peak absolute amplitude must lie in the range [0.05, 1.0].
+- The spectral centroid of the output (mean over frames) must be strictly higher than that of the input, reflecting the upward harmonic pitch shift.
+- The estimated tempo of the output (via `librosa.feature.tempo`) must be at most 0.95x the estimated tempo of the input, reflecting the percussive slow-down.
+- The output must not be identical to the input: cosine similarity between the (length-aligned) input and output waveforms must be strictly less than 0.95.
+
+
+EOF
+Skipping image OS validation for hb__tempogram-tempo-multi: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-rbedcui > /logs/artifacts/run-id && echo tempogram-tempo-multi__rbeDcUi > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Multi-Candidate Tempo Estimation via Fourier Tempogram
+
+## Background
+Estimate the top-3 tempo candidates of `/workspace/input.wav` using `librosa`'s Fourier tempogram. Rank candidates by salience and cross-validate against the primary BPM estimator.
+
+## Requirements
+- Load `/workspace/input.wav` mono at its native sample rate.
+- Compute an onset strength envelope and a Fourier tempogram on it.
+- Identify the three most salient periodicity peaks in the global tempogram spectrum, restricted to the BPM range `[40.0, 240.0]`.
+- Convert peaks to BPM, assign a `harmonic_rank` (1, 2, 3 in some assignment), and emit them sorted by salience descending.
+- Write `/workspace/tempo_candidates.json`.
+
+## Implementation Hints
+- Use `librosa.feature.fourier_tempogram` and `librosa.tempo_frequencies` (the Fourier variant maps to frequencies via `sr / hop_length`; remember its bin layout differs from the autocorrelation tempogram).
+- Use a global statistic (e.g., mean magnitude over time) to score each tempo bin's salience.
+- Cross-validate one candidate against `librosa.feature.rhythm.tempo` (a.k.a. `librosa.feature.tempo`) with `aggregate=np.mean`.
+- All `librosa` rhythm/feature APIs in 0.11 are keyword-only.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the pipeline is executed and the output artifact exists.
+- Output file: `/workspace/tempo_candidates.json`
+- The output must be a JSON array of exactly 3 objects with the schema:
+
+  ```json
+  {
+    "tempo_bpm": number,
+    "salience": number,
+    "harmonic_rank": integer
+  }
+  ```
+
+  - `tempo_bpm` must be in `[40.0, 240.0]`.
+  - `salience` must be a non-negative float; the list must be sorted by `salience` non-increasing.
+  - `harmonic_rank` values must be positive integers using each of `1`, `2`, `3` exactly once.
+- At least one candidate must lie within ±3 BPM of the reference BPM produced by `librosa.feature.rhythm.tempo(onset_envelope=..., sr=..., aggregate=np.mean)`.
+- The top candidate (index 0) must lie within ±5 BPM of the tempo returned by `librosa.beat.beat_track(...)`.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Skipping image OS validation for hb__griffin-lim-resynthesizer: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-yqeeytn > /logs/artifacts/run-id && echo griffin-lim-resynthesizer__yqeeyTn > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Mel Spectrogram Resynthesis via Griffin-Lim
+
+## Background
+Build a small analysis-resynthesis pipeline with `librosa`. The pipeline must analyze a single audio file into a 128-band log-power mel spectrogram and then reconstruct a time-domain waveform from that mel representation using Griffin-Lim phase recovery. The reconstruction must be reported alongside two objective fidelity metrics computed against the original waveform.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav` as a mono signal at its native sample rate.
+- Compute a 128-band power mel spectrogram and represent it in a log-power form suitable for storage / downstream use.
+- Resynthesize a waveform from the mel representation using Griffin-Lim phase estimation (either through the mel-to-audio convenience wrapper, or by inverting mel to STFT magnitude first and then running Griffin-Lim explicitly).
+- Write the reconstructed mono waveform to `/workspace/reconstructed.wav` at the same sample rate as the input.
+- Compute two reconstruction quality metrics relative to the original waveform and write them, along with run metadata, to `/workspace/metrics.json`.
+
+## Implementation Hints
+- Verify all relevant signatures against the librosa 0.11.0 documentation; most spectral / inverse-spectral functions are keyword-only.
+- The convenience wrapper for the full pipeline is `librosa.feature.inverse.mel_to_audio`; the explicit two-step path is `librosa.feature.inverse.mel_to_stft` followed by `librosa.griffinlim`. Either approach is acceptable as long as the STFT analysis parameters used for inversion match those used during analysis.
+- Pick `hop_length`, `win_length`, and `n_iter` yourself; defaults from the docs are a reasonable starting point but the agent may tune them to satisfy the fidelity targets.
+- Make sure the reconstructed waveform length matches the input length closely; the inverse functions expose a `length` argument that can be used to enforce this.
+- For the SNR computation, treat the original waveform as the reference signal and the reconstruction as the reference plus reconstruction error; align lengths before subtracting.
+- For spectral convergence, compare magnitude STFTs of the original and the reconstruction computed with the same analysis parameters.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the resynthesis pipeline is executed and both output artifacts exist.
+- Output audio file: `/workspace/reconstructed.wav`
+  - Mono, sample rate equal to the input sample rate.
+  - Total number of samples must be within 2% of the input waveform length.
+- Output metrics file: `/workspace/metrics.json`
+  - Must be a JSON object with the following schema:
+
+    ```json
+    {
+      "spectral_convergence": number,
+      "snr_db": number,
+      "length_samples": integer,
+      "sample_rate": integer,
+      "n_mels": integer,
+      "n_iter": integer
+    }
+    ```
+
+  - `length_samples` must equal the actual sample count of `/workspace/reconstructed.wav`.
+  - `sample_rate` must equal the sample rate of `/workspace/reconstructed.wav`.
+  - `n_mels` must be >= 128.
+  - `n_iter` must be >= 32.
+  - `spectral_convergence` is defined as `||abs(STFT_ref) - abs(STFT_recon)||_F / ||abs(STFT_ref)||_F` and must be a finite float strictly less than 0.5.
+  - `snr_db` must be a finite float strictly greater than 0.0.
+
+
+EOF
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Skipping image OS validation for hb__audio-augmentation-pipeline: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-ejr53gq > /logs/artifacts/run-id && echo audio-augmentation-pipeline__EJr53GQ > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Audio Augmentation Pipeline with `librosa.effects`
+
+## Background
+Build an ordered audio augmentation pipeline using `librosa` 0.11. The pipeline reads a single mono WAV, applies a fixed sequence of effects (pitch shift, time stretch, then silence trim), and persists both the resulting waveform and a metadata log capturing per-stage durations and trim indices.
+
+## Requirements
+- Read the input audio from `/workspace/input.wav`.
+- Apply the following stages, in this exact order, on the loaded waveform:
+  1. Pitch shift up by `+3` semitones with `bins_per_octave=12` and energy scaling enabled (`scale=True`).
+  2. Time-stretch the pitch-shifted signal by `rate=0.85` (slow down).
+  3. Trim leading/trailing silence with `top_db=40`.
+- Write the final waveform to `/workspace/augmented.wav` as a mono file with the same sample rate as the input.
+- Write a metadata JSON log to `/workspace/aug_meta.json` describing the original sample rate, the per-stage durations (in seconds, measured on the waveform produced by that stage), the trim indices returned by the trim stage, and the parameters used.
+
+## Implementation Hints
+- Use `librosa.effects.pitch_shift`, `librosa.effects.time_stretch`, and `librosa.effects.trim` for the three stages. All effect parameters in `librosa` 0.11 are keyword-only.
+- Measure each stage's duration from the waveform produced by that stage (length divided by sample rate).
+- The trim stage returns both the trimmed waveform and a 2-element `index` array; persist that index as `trim_indices`.
+- Use `soundfile` (or `librosa` helpers built on top of it) to write the final WAV file; preserve the input sample rate.
+- Cross-check API signatures against the `librosa` 0.11.0 documentation; do not assume positional argument order.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the augmentation pipeline is executed and the output artifacts exist.
+- Output files:
+  - `/workspace/augmented.wav`: mono WAV whose sample rate matches the input.
+  - `/workspace/aug_meta.json`: JSON object matching the schema below.
+
+  ```json
+  {
+    "sample_rate": number,
+    "input_duration_seconds": number,
+    "after_pitch_shift_seconds": number,
+    "after_time_stretch_seconds": number,
+    "after_trim_seconds": number,
+    "trim_indices": [number, number],
+    "n_steps": 3.0,
+    "rate": 0.85,
+    "top_db": 40
+  }
+  ```
+
+- The augmented WAV sample count must equal `after_trim_seconds * sample_rate` within ±1 sample.
+- Pitch shift must preserve length within phase-vocoder rounding: `|after_pitch_shift_seconds - input_duration_seconds| / input_duration_seconds <= 0.02`.
+- Time stretch must satisfy `|after_time_stretch_seconds - after_pitch_shift_seconds / 0.85| / after_time_stretch_seconds <= 0.05`.
+- `after_trim_seconds <= after_time_stretch_seconds`.
+- `trim_indices` must be a `[start, end]` integer pair with `0 <= start < end` and `end <= round(after_time_stretch_seconds * sample_rate)`.
+- The median voiced F0 of the augmented audio (computed via `librosa.pyin`) divided by that of the input must lie in `[2**(2.5/12), 2**(3.5/12)]` (i.e., `+3` semitones ±0.5 semitone).
+
+
+EOF
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Skipping image OS validation for hb__multifeature-timbre-fingerprint: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-wufug3p > /logs/artifacts/run-id && echo multifeature-timbre-fingerprint__Wufug3p > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Multi-Feature Timbral Fingerprint and Centroid Classification
+
+## Background
+Build a fixed-length timbral fingerprint from a short audio clip using `librosa` and classify it against three precomputed reference centroids by cosine similarity. The fingerprint concatenates the temporal mean and standard deviation of multiple complementary spectral and temporal feature streams into a single 72-dimensional vector.
+
+## Requirements
+- Load the input WAV from `/workspace/input.wav` (mono, 22050 Hz, ~8 seconds).
+- Load the reference centroids from `/workspace/centroids.json`. The file is a JSON object whose keys are the candidate labels `rock`, `classical`, `jazz` and whose values are 72-element float arrays.
+- Compute the 72-dimensional fingerprint by concatenating, in the exact order specified below, the per-frame mean and standard deviation (over the time axis) of each feature stream.
+- Score the fingerprint against each centroid with cosine similarity and pick the label with the highest similarity.
+- Write the result to `/workspace/features.json`.
+
+## Feature Ordering Specification
+The 72-dim `vector` is the concatenation of these blocks, in this exact order:
+
+| # | Block | Dim | Feature source |
+| - | ----- | --- | -------------- |
+| 1 | `mfcc_mean` | 13 | `librosa.feature.mfcc` with `n_mfcc=13` |
+| 2 | `mfcc_std`  | 13 | same MFCC matrix, temporal std |
+| 3 | `chroma_mean` | 12 | `librosa.feature.chroma_stft` (default `n_chroma=12`) |
+| 4 | `chroma_std`  | 12 | same chroma matrix, temporal std |
+| 5 | `centroid_mean` | 1 | `librosa.feature.spectral_centroid` |
+| 6 | `centroid_std`  | 1 | same |
+| 7 | `bandwidth_mean` | 1 | `librosa.feature.spectral_bandwidth` |
+| 8 | `bandwidth_std`  | 1 | same |
+| 9 | `rolloff_mean` | 1 | `librosa.feature.spectral_rolloff` |
+| 10 | `rolloff_std`  | 1 | same |
+| 11 | `zcr_mean` | 1 | `librosa.feature.zero_crossing_rate` |
+| 12 | `zcr_std`  | 1 | same |
+| 13 | `contrast_mean` | 7 | `librosa.feature.spectral_contrast` (default `n_bands=6`, which yields 7 sub-bands) |
+| 14 | `contrast_std`  | 7 | same |
+
+Total: 26 + 24 + 8 + 14 = 72.
+
+## Implementation Hints
+- All librosa feature extractors must be called with the audio loaded from `/workspace/input.wav` and the sample rate returned by `librosa.load`, with every other parameter left at its 0.11.0 default.
+- Temporal mean/std means reduction along the time (frame) axis of each feature matrix.
+- Cosine similarity between two vectors `a` and `b` is `dot(a, b) / (norm(a) * norm(b))`.
+- The predicted label is the centroid key whose cosine similarity is the largest. Ties must be broken by Python's natural string ordering of the tied keys (i.e., the lexicographically smallest key wins on a tie).
+- The verifier will recompute the fingerprint from the same input file using the documented order and call `numpy.allclose(rtol=1e-4, atol=1e-4)` element-wise.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the fingerprint pipeline is executed and the output artifact exists.
+- Output file: `/workspace/features.json`
+- The output file must be a JSON object with exactly these top-level keys:
+  - `vector`: list of 72 finite floats.
+  - `feature_order`: list of strings equal to `["mfcc_mean", "mfcc_std", "chroma_mean", "chroma_std", "centroid_mean", "centroid_std", "bandwidth_mean", "bandwidth_std", "rolloff_mean", "rolloff_std", "zcr_mean", "zcr_std", "contrast_mean", "contrast_std"]`.
+  - `similarities`: JSON object with exactly the 3 keys `rock`, `classical`, `jazz`; every value is a float in the closed range `[-1.0, 1.0]`.
+  - `predicted_label`: string equal to the centroid key with the maximum similarity (ties broken by the lexicographically smallest key).
+- The `vector` values must match a reference computation against `/workspace/input.wav` using `numpy.allclose(rtol=1e-4, atol=1e-4)` element-wise.
+
+
+EOF
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Skipping image OS validation for hb__novelty-segmenter: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-xo6lehr > /logs/artifacts/run-id && echo novelty-segmenter__xo6LEhr > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Structural Boundary Detection with a Foote Novelty Curve
+
+## Background
+Structural segmentation of an audio recording can be performed by analyzing how a frame-level feature representation repeats over time. Foote's classic approach builds a self-similarity matrix (SSM) over short-time spectral features and convolves the diagonal of the SSM with a checkerboard kernel; large responses correspond to instants where the feature statistics change abruptly. Your job is to implement this novelty-curve pipeline with `librosa` (v0.11.0) and report the detected change-point timestamps.
+
+## Requirements
+- Read the input audio from `/workspace/input.wav`.
+- Compute a frame-level spectral feature representation (MFCCs over time).
+- Build a self-similarity matrix from the feature sequence using a cosine metric.
+- Construct a Foote-style checkerboard kernel and convolve it along the diagonal of the SSM to obtain a one-dimensional novelty curve.
+- Pick peaks from the novelty curve to identify structural change-points.
+- Convert each peak from a frame index to a timestamp in seconds.
+- Write the timestamps to `/workspace/boundaries.json` using the schema:
+  ```json
+  {
+    "boundaries_sec": [<float>, <float>, ...]
+  }
+  ```
+  Values must be in seconds, strictly increasing, and lie inside the audio's duration.
+
+## Implementation Hints
+- Inspect `librosa.feature.mfcc` for MFCC extraction and `librosa.segment.recurrence_matrix` (with `mode='affinity'`, `metric='cosine'`, and `full=True`) for the dense self-similarity matrix.
+- Build the checkerboard kernel yourself: a square matrix with positive values in the top-left and bottom-right quadrants and negative values in the off-diagonal quadrants, optionally tapered with a 2-D Gaussian window. Do not rely on any pre-built Foote shortcut in librosa.
+- Slide the kernel along the diagonal of the SSM to produce the novelty curve; mind boundary effects.
+- Convert frame indices to time using `librosa.frames_to_time` with the same `sr` and `hop_length` used for the MFCCs.
+- Use any peak-picking strategy you like (e.g., `librosa.util.peak_pick` or `scipy.signal.find_peaks`); tune it to ignore trivial peaks near the very start and very end of the signal.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the script is executed and the output artifact exists.
+- Output file: /workspace/boundaries.json
+- The file must be valid JSON containing an object with a `boundaries_sec` key.
+- `boundaries_sec` must be a list of numbers (in seconds), strictly increasing, with every value in the interval `[0, audio_duration]`.
+- At least two structural boundaries must be reported.
+- The detected boundaries must correspond to the major structural changes present in the input audio (verified against ground-truth change-points baked into the test environment).
+
+
+EOF
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Skipping image OS validation for hb__format-transcoder-multichannel: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-tdhnvdn > /logs/artifacts/run-id && echo format-transcoder-multichannel__TDhNVdn > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Multichannel Format Transcoder
+
+## Background
+Build a robust audio format transcoder on top of `librosa` 0.11. Consume a stereo FLAC, downmix it to mono, resample with a high-quality bandlimited backend, peak-normalize, and emit a 16-bit PCM WAV plus a metadata JSON. The pipeline must preserve the native sample rate during load and only resample once with the requested backend.
+
+## Requirements
+- Read `/workspace/input.flac` at its NATIVE sample rate without resampling at load time, keeping both channels.
+- Downmix the stereo signal to mono via a weighted average of the two channels.
+- Resample the mono signal to exactly 16000 Hz using the `soxr_hq` backend.
+- Peak-normalize the resampled signal to -1 dBFS using `librosa.util.normalize`.
+- Write `/workspace/output.wav` as a mono, 16-bit PCM WAV at 16000 Hz via `soundfile`.
+- Write `/workspace/transcode_meta.json` describing the original input, the output, and the resampler backend that was used.
+
+## Implementation Hints
+- Inspect the librosa 0.11 docs for `librosa.load`, `librosa.resample`, and `librosa.util.normalize` to confirm keyword-only argument names and defaults.
+- `librosa.load` returns multichannel audio as a 2D array when `mono=False`; pick the channel axis carefully when downmixing.
+- -1 dBFS corresponds to a linear peak of `10**(-1/20)`; pass that as the desired post-normalization peak rather than relying on the function's default behavior.
+- `soundfile.write` expects 1D arrays for mono outputs and selects bit depth via the `subtype` argument.
+- Record durations as `samples / sample_rate` (seconds, floats) and dB values as `20 * log10(peak)` / `20 * log10(rms)`.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the transcoder is executed and the output artifacts exist.
+- Output audio: `/workspace/output.wav` (mono, 16000 Hz, 16-bit PCM, loadable by `soundfile`).
+- Output metadata: `/workspace/transcode_meta.json` with the following schema:
+
+  ```json
+  {
+    "orig_sample_rate": number,
+    "orig_channels": number,
+    "orig_duration_seconds": number,
+    "output_sample_rate": 16000,
+    "output_channels": 1,
+    "output_duration_seconds": number,
+    "peak_dbfs": number,
+    "rms_dbfs": number,
+    "resampler_backend": "soxr_hq"
+  }
+  ```
+
+  - `orig_sample_rate` must equal the input file's native sample rate.
+  - `orig_channels` must equal the input file's channel count.
+  - `output_sample_rate` must be `16000` and `output_channels` must be `1`.
+  - `output_duration_seconds` must match the actual `/workspace/output.wav` duration within 0.005 s.
+  - `|orig_duration_seconds - output_duration_seconds|` must be `< 0.05` s.
+  - `peak_dbfs` must be within 0.2 dB of -1 dBFS and must match the measured peak of `/workspace/output.wav`.
+  - `resampler_backend` must be the exact string `"soxr_hq"`.
+- The `soxr` package must be installed and used; the produced waveform must NOT be byte-identical (or perfectly correlated) with a `scipy.signal.resample_poly`-based resample of the same downmix.
+
+
+EOF
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Skipping image OS validation for hb__beat-sync-mfcc-aggregator: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-t8bwfnm > /logs/artifacts/run-id && echo beat-sync-mfcc-aggregator__t8bwfnM > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Beat-Synchronous MFCC Aggregator
+
+## Background
+Build a beat-synchronous MFCC summarizer with `librosa` (0.11). The pipeline must beat-track a short rhythmic clip, compute MFCCs at the same hop length, aggregate MFCC frames into per-beat-interval medians, and persist the synchronized matrix together with the beat timing metadata.
+
+## Requirements
+- Read the input WAV from `/workspace/input.wav`.
+- Estimate the tempo and the beat frame indices with `librosa.beat.beat_track`.
+- Compute 20-coefficient MFCCs (`n_mfcc=20`) at the **same `hop_length`** as the beat tracker.
+- Aggregate the MFCC matrix to one column per beat interval using `librosa.util.sync` with **median aggregation**.
+- Write the synchronized matrix to `/workspace/beat_mfcc.npz` under the key `mfcc_sync` (shape `(20, n_beat_intervals)`).
+- Write the beat metadata to `/workspace/beats.json`.
+
+## Implementation Hints
+- Pick a `hop_length` once and reuse it for both `librosa.beat.beat_track` and `librosa.feature.mfcc`.
+- `librosa.beat.beat_track` returns the tempo as a 1-D ndarray even for mono input; reduce it to a scalar before serialising to JSON.
+- `librosa.util.sync` accepts an `aggregate` callable (e.g. `np.median`) and pads boundaries by default; verify the resulting column count against `len(beat_times_seconds)` and record the chosen convention.
+- Use `librosa.frames_to_time` (with the same `sr` and `hop_length`) to convert beat frame indices to seconds.
+- Sanity-check every API signature against the librosa 0.11.0 documentation; feature, beat, and util functions are keyword-only.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the pipeline is executed and both output artifacts exist.
+- Output files:
+  - `/workspace/beat_mfcc.npz` containing the key `mfcc_sync` with shape `(20, n_beat_intervals)`.
+  - `/workspace/beats.json` containing a JSON object with the following schema:
+
+    ```json
+    {
+      "tempo_bpm": number,
+      "beat_times_seconds": [number, ...],
+      "hop_length": integer,
+      "sample_rate": integer,
+      "n_mfcc": 20
+    }
+    ```
+
+  - `tempo_bpm` must be a float in the inclusive range `[40.0, 240.0]`.
+  - `beat_times_seconds` must be a strictly increasing list of floats; every element must lie in `[0, audio_duration + 1e-3]`.
+  - `hop_length` and `sample_rate` must be positive integers; `n_mfcc` must be `20`.
+- The column count of `mfcc_sync` (`n_beat_intervals`) must be internally consistent with the chosen `librosa.util.sync` boundary convention; both `n_beat_intervals == len(beat_times_seconds) - 1` and `n_beat_intervals == len(beat_times_seconds)` are accepted.
+- Re-computing MFCCs with the recorded `hop_length`, `sample_rate`, and `n_mfcc=20` and aggregating per beat interval with the median must reproduce each stored column of `mfcc_sync` within an absolute tolerance of `1e-3` for at least 80% of beat intervals.
+
+
+EOF
+Skipping image OS validation for hb__onset-midi-quantizer: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-5cn9qix > /logs/artifacts/run-id && echo onset-midi-quantizer__5cn9qiX > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Skipping image OS validation for hb__chord-recognition-viterbi: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Monophonic Onset-Based MIDI Note Transcriber
+
+## Background
+Build a small offline monophonic note transcriber on top of librosa. The transcriber reads a short audio file containing a sequence of synthesized notes, detects where each note begins, estimates its pitch, quantizes the pitch to the nearest MIDI integer, and assigns a velocity proportional to the loudness of each note. The result is written to a JSON file describing every detected note.
+
+## Requirements
+- Read the input audio from `/workspace/input.wav`.
+- Detect note onsets using `librosa.onset.onset_detect` with `backtrack=True` so each onset is snapped back to the local energy minimum.
+- For every per-note segment, estimate the fundamental frequency with `librosa.pyin` and use the median of the voiced f0 values as the segment's pitch.
+- Convert each segment's pitch from Hz to a MIDI integer using `librosa.hz_to_midi`.
+- Derive a per-note integer velocity in `[1, 127]` from the per-note RMS energy.
+- Write the resulting list of notes to `/workspace/notes.json`.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the script is executed and the artifact `/workspace/notes.json` exists.
+- Output file: /workspace/notes.json
+- The file must be valid JSON containing a single JSON array. Each element of the array must be an object with exactly these four keys and types:
+  - `onset_sec` (float, seconds from the start of the audio)
+  - `offset_sec` (float, seconds from the start of the audio, strictly greater than `onset_sec`)
+  - `pitch_midi` (integer in `[0, 127]`)
+  - `velocity` (integer in `[1, 127]`)
+- The notes must be sorted strictly in ascending order by `onset_sec`.
+- Every `offset_sec` must be no greater than the audio duration plus a small tolerance of 0.1 s.
+
+
+EOF
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-fpboapr > /logs/artifacts/run-id && echo chord-recognition-viterbi__FpBoAPR > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Chord Recognition with Chroma + Viterbi Decoding
+
+## Background
+Build a simple major/minor chord recognition pipeline using `librosa`. The pipeline must consume a single audio file, derive chroma observations, score them against 24 chord templates (12 major + 12 minor), and use Hidden Markov Model (HMM)-style Viterbi decoding to produce a temporally smooth chord sequence. The decoded state sequence must then be summarized as time-aligned chord segments.
+
+## Requirements
+- Read the input WAV file from `/workspace/input.wav`.
+- Detect chords from the set of 24 labels:
+  `C:maj, C#:maj, D:maj, D#:maj, E:maj, F:maj, F#:maj, G:maj, G#:maj, A:maj, A#:maj, B:maj, C:min, C#:min, D:min, D#:min, E:min, F:min, F#:min, G:min, G#:min, A:min, A#:min, B:min`.
+- Use chroma observations together with `librosa.sequence.viterbi` to decode the most likely chord state per frame.
+- Merge consecutive frames that share the same decoded chord into segments and write them to `/workspace/chords.json`.
+
+## Implementation Hints
+- Use a librosa chroma feature appropriate for tonal content to obtain a `(12, n_frames)` observation matrix.
+- Define 24 chord templates corresponding to major and minor triads (one per root pitch class) and turn them into per-frame, per-state non-negative likelihoods that the Viterbi routine can consume.
+- Build a 24x24 transition matrix that favors staying in the current chord (self-bias) while still allowing transitions to any other chord; remember that each row must sum to 1.
+- Convert the decoded frame indices to seconds with `librosa.frames_to_time` (using the same `hop_length` used to compute the chroma) and clamp the final segment end to the audio duration so the segments cover the full track without gaps or overlaps.
+- Sanity-check the API signatures against the librosa 0.11.0 documentation; most feature and sequence functions are keyword-only.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the recognition pipeline is executed and the output artifact exists.
+- Output file: `/workspace/chords.json`
+- The output file must be a JSON array. Each element must be an object with the following schema:
+
+  ```json
+  {
+    "start": number,
+    "end": number,
+    "chord": string
+  }
+  ```
+
+  - `start` and `end` are floating-point timestamps in seconds with `start < end`.
+  - `chord` must match the regular expression `^[A-G]#?:(maj|min)$` and be one of the 24 allowed labels listed above.
+- The segments must be sorted by `start`, cover the audio from near 0s to near the audio duration, and not contain overlapping intervals.
+- The decoded sequence must contain at least 2 distinct chord labels (the pipeline must produce real variation, not a constant output).
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Skipping image OS validation for hb__cross-similarity-cover-detect: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-usd9dgm > /logs/artifacts/run-id && echo cross-similarity-cover-detect__Usd9DGm > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Cross-Similarity Cover Song Detection
+
+## Background
+Decide whether `/workspace/track_b.wav` is a cover (possibly transposed and/or tempo-altered) of `/workspace/track_a.wav` using `librosa` 0.11. Use CENS chroma, cross-similarity, and subsequence DTW to score each of the 12 possible key transpositions and pick the best one.
+
+## Requirements
+- Read `/workspace/track_a.wav` and `/workspace/track_b.wav` (mono, 22050 Hz, ~15s each).
+- Compute CENS chroma features for both tracks.
+- For each integer semitone shift in `[-6, 5]` (12 transpositions covering all pitch classes), circularly roll one chroma along the pitch-class axis.
+- For every transposition, build a cross-similarity matrix (`librosa.segment.cross_similarity`) and run subsequence DTW (`librosa.sequence.dtw` with `subseq=True`) over the resulting distance matrix.
+- Score each transposition by the minimum accumulated cost on the final DTW row, divided by the warping path length ("normalized_cost").
+- Pick the transposition with the lowest normalized cost as `best_transposition_semitones`.
+- Decide `is_cover` using the rule: `normalized_cost < 0.6` -> `True`, else `False`.
+- Report the time offset (in seconds) of the best subsequence alignment start in track A as `best_offset_seconds`.
+- Write the decision to `/workspace/cover_decision.json`.
+
+## Implementation Hints
+- Use `librosa.feature.chroma_cens` with default parameters; pass `y` and `sr` as keyword args.
+- `numpy.roll` along the pitch-class axis is the standard way to simulate semitone transposition on chroma.
+- `librosa.segment.cross_similarity` with `mode='distance'`, `full=True`, and `metric='cosine'` returns a dense distance matrix usable directly as DTW input cost.
+- Pass the distance matrix to `librosa.sequence.dtw` as `C=...` together with `subseq=True`; do not also pass `X`/`Y`.
+- Convert frame indices back to seconds with `librosa.frames_to_time(..., sr=sr, hop_length=hop_length)` using the same hop length you used when computing chroma (CENS default is 512).
+- Sanity-check API signatures against the librosa 0.11.0 docs; most functions are keyword-only.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the detection pipeline is executed and the output artifact exists.
+- Output file: `/workspace/cover_decision.json`
+- The output file must be a single JSON object with this schema:
+
+  ```json
+  {
+    "is_cover": bool,
+    "best_transposition_semitones": int,
+    "normalized_cost": float,
+    "best_offset_seconds": float
+  }
+  ```
+
+  - `is_cover` must be a JSON boolean.
+  - `best_transposition_semitones` must be an integer in the inclusive range `[-6, 5]`.
+  - `normalized_cost` must be a finite, non-negative number.
+  - `best_offset_seconds` must be a finite number (`>= 0`).
+- The decision rule must be: `is_cover == (normalized_cost < 0.6)`.
+- `is_cover` must match the ground truth for the provided fixture audio.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Exception AgentTimeoutError is in exclude_exceptions, not retrying
+Not retrying trial because the exception is not in include_exceptions or the maximum number of retries has been reached
+Skipping image OS validation for hb__nmf-source-decomposer: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Skipping image OS validation for hb__constellation-fingerprint-matcher: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Skipping image OS validation for hb__headless-spectrogram-renderer: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Running command: echo zr-s2o5xzj > /logs/artifacts/run-id && echo nmf-source-decomposer__S2o5Xzj > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Running command: echo zr-sbqzz5w > /logs/artifacts/run-id && echo constellation-fingerprint-matche__SbQZZ5w > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Shazam-style Constellation Fingerprint Matcher
+
+## Background
+Implement a Shazam-style audio fingerprinter with `librosa` 0.11.0. A long reference recording and a shorter noisy query clip (cut from a hidden offset inside the reference) are provided. Recover the time offset at which the query starts inside the reference using a constellation map of spectral peaks and combinatorial hashing of peak pairs.
+
+## Inputs
+- `/workspace/reference.wav` (mono, 22050 Hz)
+- `/workspace/query.wav` (mono, 22050 Hz) — derived from the reference with additive Gaussian noise.
+
+## Requirements
+- Read both WAV files with `librosa.load`.
+- Compute a log-magnitude STFT for each signal (`librosa.stft`, `librosa.amplitude_to_db`).
+- Build a constellation map of local spectral peaks and hash anchor/target pairs.
+- Match query hashes against reference hashes and recover the dominant time offset.
+- Write the result to `/workspace/match.json`.
+- Note: all relevant `librosa` 0.11 functions used here (`load`, `stft`, `amplitude_to_db`, `frames_to_time`) use keyword-only arguments after the first positional one.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the matching pipeline is executed and the output artifact exists.
+- Output file: `/workspace/match.json`
+- The output file must be a JSON object containing exactly these four keys:
+
+  ```json
+  {
+    "offset_seconds": number,
+    "match_score": integer,
+    "reference_hash_count": integer,
+    "query_hash_count": integer
+  }
+  ```
+
+  - `offset_seconds` is a float: the recovered time offset (seconds) where the query starts inside the reference.
+  - `match_score` is an integer: the number of hash votes that fall in the winning offset bin.
+  - `reference_hash_count` and `query_hash_count` are integers: total hashes generated from each signal.
+- The recovered `offset_seconds` must match the hidden ground-truth offset within 0.30 seconds.
+- `match_score` must be at least 20.
+- `reference_hash_count > query_hash_count > 0`.
+- `offset_seconds` must lie inside `[0, reference_duration - query_duration + 0.5]`.
+
+
+EOF
+Running command: echo zr-m529zqb > /logs/artifacts/run-id && echo headless-spectrogram-renderer__M529Zqb > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Headless Multi-Panel Spectrogram Figure
+
+## Background
+Produce a publication-quality 4-panel PNG figure from a single WAV file using `librosa` (0.11) and `matplotlib`, in a strictly headless environment.
+
+## Requirements
+- Read `/workspace/input.wav`.
+- Render a single PNG figure with exactly 4 stacked panels that share the x-axis (time in seconds):
+  - Panel A: time-domain waveform via `librosa.display.waveshow`.
+  - Panel B: linear-frequency STFT magnitude spectrogram in dB via `librosa.display.specshow`.
+  - Panel C: log-frequency mel spectrogram in dB.
+  - Panel D: chromagram from `librosa.feature.chroma_cqt`.
+- Panels B, C, and D must each carry their own colorbar.
+- Each panel must carry a title, drawn from the fixed list in Acceptance Criteria, in that exact order.
+- Force matplotlib into the non-interactive `Agg` backend before any `pyplot` import. Do not call `plt.show()`.
+- Write the figure to `/workspace/figure.png` and accompanying metadata to `/workspace/figure_meta.json`.
+
+## Implementation Hints
+- Use `librosa.load` to read the WAV.
+- Use `librosa.stft` with `librosa.amplitude_to_db` for Panel B.
+- Use `librosa.feature.melspectrogram` with `librosa.power_to_db` for Panel C; render with `y_axis='mel'` for log-frequency display.
+- Use `librosa.feature.chroma_cqt` for Panel D; render with `y_axis='chroma'`.
+- Set `matplotlib.use('Agg')` BEFORE `import matplotlib.pyplot`.
+- Save with `fig.savefig(...)` using an explicit `dpi`.
+- Read pixel dimensions and dpi back from the saved file and record them in the metadata JSON.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the script is executed and both artifacts exist.
+- Output files:
+  - `/workspace/figure.png`
+  - `/workspace/figure_meta.json`
+- `figure.png` must be a valid PNG of at least 50000 bytes that opens with PIL.
+- The image must be at least 800x800 pixels and have a DPI of at least 100.
+- The image must contain real visual structure (not a uniform blank image).
+- `figure_meta.json` must be a JSON object with exactly these keys:
+  - `width_px` (integer): the PNG pixel width.
+  - `height_px` (integer): the PNG pixel height.
+  - `dpi` (float): the DPI used to save the figure.
+  - `panel_titles` (array of 4 strings) equal to exactly: `["Waveform", "Linear STFT (dB)", "Log-Mel Spectrogram (dB)", "Chromagram"]`.
+- The `width_px` and `height_px` fields must match the actual pixel dimensions of `figure.png`.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# NMF Source Decomposition with Wiener Soft Masks
+
+## Background
+Decompose a polyphonic mixture into 4 spectral sources using NMF, then resynthesize each source back to a waveform using Wiener-style soft masking applied to the original complex STFT.
+
+## Requirements
+- Read `/workspace/mixture.wav` (mono, 22050 Hz).
+- Decompose its magnitude spectrogram into 4 NMF components with `librosa.decompose.decompose`.
+- For each component, build a Wiener-style soft mask, apply it to the original complex STFT, and resynthesize to a waveform via the inverse STFT. The summed component waveforms should reconstruct the mixture.
+- Write each resynthesized component to `/workspace/component_<i>.wav` for `i` in `0..3`.
+- Write per-component spectral statistics to `/workspace/components.json`.
+
+## Implementation Hints
+- Keep STFT/iSTFT parameters consistent so component lengths match the mixture.
+- The soft mask for component `k` should be its magnitude-squared spectrogram divided by the sum of magnitude-squared spectrograms across all components.
+- Compute the spectral centroid per component from its resynthesized waveform.
+- Verify API signatures against the librosa 0.11.0 docs.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the decomposition pipeline is executed and the output artifacts exist.
+- Output audio files: `/workspace/component_0.wav`, `/workspace/component_1.wav`, `/workspace/component_2.wav`, `/workspace/component_3.wav`.
+  - Each file must be mono, with the same sample rate as `/workspace/mixture.wav`, and the same sample count as the mixture (±1 sample).
+- Output metadata file: `/workspace/components.json`.
+  - Must be a JSON array of exactly 4 objects, each with the schema:
+
+    ```json
+    {
+      "index": integer,
+      "centroid_hz": number,
+      "rms": number
+    }
+    ```
+
+  - The `index` values must be exactly `0, 1, 2, 3` (each appearing once).
+  - Every `centroid_hz` must satisfy `0 < centroid_hz < sr / 2`.
+  - The spread `max(centroid_hz) - min(centroid_hz)` across the 4 components must exceed 200 Hz.
+  - Every `rms` must exceed `1e-4`.
+- Reconstruction quality: the sample-wise sum of the 4 component waveforms must approximate the mixture such that the mean absolute error is at most `5e-2` times the mixture RMS.
+
+
+EOF
+Skipping image OS validation for hb__dtw-alignment-mapper: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-mgmguxj > /logs/artifacts/run-id && echo dtw-alignment-mapper__mgMGUXj > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Headless Music Alignment with CENS Chroma + DTW
+
+## Background
+Build a headless audio alignment engine using `librosa`. Two short WAV files are provided: a reference recording and a tempo-altered (time-stretched) performance of the same content. The job is to align them in the chroma domain using Dynamic Time Warping, then emit a structured JSON describing the warping path, a dense reference-to-comparison timestamp mapping, and the final accumulated alignment cost.
+
+## Requirements
+- Load `/workspace/reference.wav` and `/workspace/comparison.wav` (both mono, 22050 Hz).
+- Compute robust, smoothed chroma features that are suitable for cross-recording matching for each signal.
+- Run Dynamic Time Warping in the chroma feature space using a cosine cost and recover the optimal warping path via backtracking.
+- Write the alignment results to `/workspace/alignment.json`.
+
+## Implementation Hints
+- Pick a chroma representation that is robust to dynamics and timbre and that smooths over short transients.
+- Cosine distance is a natural choice for chroma vectors; let DTW compute it for you via the appropriate `metric`.
+- The warping path returned by the DTW backtracker is not in chronological order; you will likely need to reorient it before using it.
+- The accumulated cost matrix's terminal corner holds the total alignment cost.
+- Use `librosa.frames_to_time` (with the same `hop_length` used for the chroma) to translate frame indices to seconds when sampling the timestamp map.
+- All `librosa.feature` and `librosa.sequence` parameters in 0.11.0 are keyword-only; check the docs.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the alignment pipeline is executed and the output artifact exists.
+- Output file: `/workspace/alignment.json`
+- The output file must be a JSON object with exactly these top-level keys:
+
+  ```json
+  {
+    "warping_path_frames": [[int, int], ...],
+    "timestamp_map": [{"ref_time": number, "comp_time": number}, ...],
+    "total_cost": number,
+    "hop_length": int,
+    "sample_rate": int
+  }
+  ```
+
+- `warping_path_frames` must be non-empty, contain only `[int, int]` pairs, be monotonically non-decreasing in BOTH the reference axis and the comparison axis (no step that decreases either index), start near `(0, 0)` (both indices `<= 2`), and end near `(N_ref - 1, N_comp - 1)` within a tolerance of 3 frames on each axis, where `N_ref` and `N_comp` are the chroma frame counts of the reference and comparison signals.
+- `timestamp_map` must be sorted by `ref_time`. Consecutive `ref_time` deltas must fall in `[0.45, 0.55]` seconds, the first `ref_time` must be `<= 0.25`, and the last `ref_time` must be within `0.5` of the reference audio duration. All `comp_time` values must be monotonically non-decreasing and must lie in `[0, comparison_duration + 0.1]`.
+- `total_cost` must be a finite, non-negative float.
+- `hop_length` and `sample_rate` must be positive integers and must reflect the configuration that was actually used to compute the chroma features and frame timestamps.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Skipping image OS validation for hb__vocal-separation-mask: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-bjvvfuu > /logs/artifacts/run-id && echo vocal-separation-mask__bjVvfuU > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Skipping image OS validation for hb__f0-melody-extractor: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Vocal / Accompaniment Separation with Soft Masks
+
+## Background
+Use `librosa` to implement a foreground (vocal) vs. background (accompaniment) source separator based on nearest-neighbor median filtering of the magnitude STFT and complementary soft masks. The pipeline operates in the magnitude STFT domain, estimates a background by aggregating spectrally similar frames, derives complementary soft masks for vocal and accompaniment, applies each mask to the original complex STFT, and reconstructs two waveforms via the inverse STFT.
+
+## Requirements
+- Read the input mixture from `/workspace/input.wav` (mono).
+- Produce two output WAV files at the same sample rate as the input:
+  - `/workspace/vocal.wav` (foreground)
+  - `/workspace/accompaniment.wav` (background)
+- The two outputs must be derived from complementary soft masks applied to the original complex STFT (no naive subtraction of waveforms).
+
+## Implementation Hints
+- Allowed librosa APIs for the core separation: `librosa.load`, `librosa.stft`, `librosa.istft`, `librosa.decompose.nn_filter`, `librosa.util.softmask`.
+- The background magnitude estimate must use `librosa.decompose.nn_filter` with `aggregate=np.median` and a non-local cosine recurrence width constraint to prevent neighbors that are too close in time from being aggregated.
+- Complementary masks must be obtained from `librosa.util.softmask` (one mask for vocal, one for accompaniment), then multiplied element-wise with the original complex STFT before inverse transform.
+- Use the same STFT parameters (`n_fft`, `hop_length`, `win_length`) for analysis and synthesis so the reconstructed signal length matches the input.
+- Save outputs with `soundfile.write` (or equivalent) at the loaded sample rate; do not resample.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the separation pipeline is executed and both output artifacts exist.
+- Output files:
+  - `/workspace/vocal.wav`
+  - `/workspace/accompaniment.wav`
+- Both outputs are valid WAV files loadable by `soundfile`, mono, and have the same sample rate as the input.
+- Each output has a length within ±1 sample of the input length.
+- Each output is non-silent (per-file RMS energy strictly greater than 1e-4).
+- The element-wise sum of the two output waveforms reconstructs the input mixture to a mean-absolute-error of at most 5e-2 (soft masks must be complementary).
+- The cosine similarity between the magnitude STFTs of `vocal.wav` and `accompaniment.wav` (flattened) must be strictly less than the cosine similarity between the input mixture magnitude STFT and `accompaniment.wav` magnitude STFT (the masks must actually separate spectral content rather than copy the mixture).
+- Neither output may be a bitwise copy of the input.
+
+
+EOF
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: echo zr-vcqydve > /logs/artifacts/run-id && echo f0-melody-extractor__VCQyDvE > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# F0-Based Monophonic Melody to MIDI Notes
+
+## Background
+Use `librosa` to convert a monophonic recording at `/workspace/input.wav` into a time-aligned sequence of MIDI notes. Estimate fundamental frequency (F0) per frame, smooth it, and segment voiced frames into discrete notes based on rounded MIDI pitch changes and unvoiced gaps.
+
+## Requirements
+- Read `/workspace/input.wav`.
+- Estimate F0 with `librosa.pyin` (it returns `f0`, `voiced_flag`, `voiced_prob`).
+- Apply a median filter to the voiced F0 trace before quantization.
+- Group consecutive voiced frames into notes; cut a new note whenever the rounded MIDI value changes or whenever at least one unvoiced frame interrupts the sequence.
+- Write the result to `/workspace/melody.json`.
+
+## Implementation Hints
+- Convert F0 in Hz to MIDI with the standard formula `12 * log2(f0 / 440) + 69` and round to the nearest integer for the note label.
+- Compute frame timestamps with `librosa.times_like` using the same `sr` and `hop_length` you passed to `librosa.pyin`.
+- Report each note's `mean_f0_hz` as the mean of the (smoothed) voiced F0 values that contributed to that note.
+- Verify keyword names and return order against the librosa 0.11.0 documentation.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Ensure the extraction pipeline is executed and the output artifact exists.
+- Output file: `/workspace/melody.json`
+- The output file must be a JSON array. Each element must be an object with the following schema:
+
+  ```json
+  {
+    "start": number,
+    "end": number,
+    "midi_note": integer,
+    "mean_f0_hz": number
+  }
+  ```
+
+  - `start` and `end` are floating-point timestamps in seconds.
+  - `midi_note` is an integer in `[21, 108]`.
+  - `mean_f0_hz` is a positive float representing the mean F0 over the note window.
+- Notes must be sorted by `start` and must not overlap in time.
+- Every note must satisfy `end - start > 0.05` seconds.
+- For every note, the mean F0 must be within 50 cents of the reported MIDI pitch (i.e. `abs(1200 * log2(mean_f0_hz / midi_to_hz(midi_note))) <= 50`).
+- The set of `midi_note` values across the sequence must contain at least 4 distinct pitches.
+- The output must contain at least 5 notes.
+- All `start` / `end` values must lie in `[0, audio_duration + 0.05]`.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured
+Command outputs captured
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured

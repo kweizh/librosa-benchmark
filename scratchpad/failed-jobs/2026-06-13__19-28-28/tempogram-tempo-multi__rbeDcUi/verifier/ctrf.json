@@ -1,0 +1,89 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:44:44.891770+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 4,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781379878184,
+            "stop": 1781379884891
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_each_candidate_has_required_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379878215,
+                "stop": 1781379878216,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_tempo_bpm_within_allowed_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379878216,
+                "stop": 1781379878217,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_salience_non_negative_and_non_increasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379878217,
+                "stop": 1781379878218,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_harmonic_rank_is_permutation_of_1_2_3",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781379878219,
+                "stop": 1781379878219,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_at_least_one_candidate_matches_reference_tempo",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 3825,
+                "start": 1781379878220,
+                "stop": 1781379882045,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "candidates = [{'harmonic_rank': 1, 'salience': 68.80658721923828, 'tempo_bpm': 184.5703125}, {'harmonic_rank': 2, 'salience': 48.92599105834961, 'tempo_bpm': 95.703125}, {'harmonic_rank': 3, 'salience': 29.203641891479492, 'tempo_bpm': 129.19921875}]\nreference_signals = {'librosa': <module 'librosa' from '/usr/local/lib/python3.12/dist-packages/librosa/__init__.py'>, 'np': <module 'nump...25312157e+01, 2.33437276e+00, 9.31600928e-02,\n       5.92461862e-02, 8.88906717e-02], dtype=float32), 'sr': 22050, ...}\n\n    def test_at_least_one_candidate_matches_reference_tempo(candidates, reference_signals):\n        np = reference_signals[\"np\"]\n        librosa = reference_signals[\"librosa\"]\n        sr = reference_signals[\"sr\"]\n        onset_env = reference_signals[\"onset_env\"]\n    \n>       ref_tempo_arr = librosa.feature.rhythm.tempo(\n            onset_envelope=onset_env, sr=sr, aggregate=np.mean\n        )\n\ntests/test_final_state.py:111: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nname = 'rhythm'\n\n    def __getattr__(name):\n        if name in submodules:\n            return importlib.import_module(f\"{package_name}.{name}\")\n        elif name in attr_to_modules:\n            submod_path = f\"{package_name}.{attr_to_modules[name]}\"\n            submod = importlib.import_module(submod_path)\n            attr = getattr(submod, name)\n    \n            # If the attribute lives in a file (module) with the same\n            # name as the attribute, ensure that the attribute and *not*\n            # the module is accessible on the package.\n            if name == attr_to_modules[name]:\n                pkg = sys.modules[package_name]\n                pkg.__dict__[name] = attr\n    \n            return attr\n        else:\n>           raise AttributeError(f\"No {package_name} attribute {name}\")\nE           AttributeError: No librosa.feature attribute rhythm\n\nusr/local/lib/python3.12/dist-packages/lazy_loader/__init__.py:90: AttributeError",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_top_candidate_matches_beat_track_tempo",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 2841,
+                "start": 1781379882050,
+                "stop": 1781379884891,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "candidates = [{'harmonic_rank': 1, 'salience': 68.80658721923828, 'tempo_bpm': 184.5703125}, {'harmonic_rank': 2, 'salience': 48.92599105834961, 'tempo_bpm': 95.703125}, {'harmonic_rank': 3, 'salience': 29.203641891479492, 'tempo_bpm': 129.19921875}]\nreference_signals = {'librosa': <module 'librosa' from '/usr/local/lib/python3.12/dist-packages/librosa/__init__.py'>, 'np': <module 'nump...25312157e+01, 2.33437276e+00, 9.31600928e-02,\n       5.92461862e-02, 8.88906717e-02], dtype=float32), 'sr': 22050, ...}\n\n    def test_top_candidate_matches_beat_track_tempo(candidates, reference_signals):\n        np = reference_signals[\"np\"]\n        librosa = reference_signals[\"librosa\"]\n        y = reference_signals[\"y\"]\n        sr = reference_signals[\"sr\"]\n    \n        beat_tempo_raw, _ = librosa.beat.beat_track(y=y, sr=sr)\n        beat_tempo = float(np.asarray(beat_tempo_raw).reshape(-1)[0])\n        top_bpm = float(candidates[0][\"tempo_bpm\"])\n        diff = abs(top_bpm - beat_tempo)\n>       assert diff <= 5.0 + 1e-6, (\n            f\"Top candidate tempo {top_bpm:.3f} must be within \\u00b15 BPM of \"\n            f\"beat_track tempo {beat_tempo:.3f}; diff={diff:.3f}.\"\n        )\nE       AssertionError: Top candidate tempo 184.570 must be within \u00b15 BPM of beat_track tempo 135.999; diff=48.571.\nE       assert 48.57113486842104 <= (5.0 + 1e-06)\n\ntests/test_final_state.py:134: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,52 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 7 items
+
+tests/test_final_state.py ....F..                                        [100%]
+
+=================================== FAILURES ===================================
+___________________ test_time_values_monotonic_and_in_bounds ___________________
+
+payload = {'frames': [{'peaks': [{'freq_hz': 216.82662415504456, 'magnitude_db': 42.56786346435547}, {'freq_hz': 223.26130843162...288086}], 'time': 0.16253968253968254}, ...], 'meta': {'hop_length': 512, 'n_fft': 2048, 'n_frames': 216, 'sr': 22050}}
+audio_info = {'duration': 5.0, 'n_samples': 110250, 'sr': 22050}
+
+    def test_time_values_monotonic_and_in_bounds(payload, audio_info):
+        frames = payload["frames"]
+        duration = audio_info["duration"]
+        times = [float(f["time"]) for f in frames]
+    
+        for i, t in enumerate(times):
+            assert t >= 0.0, f"Frame {i} time must be >= 0, got {t}."
+>           assert t <= duration + 1e-2, (
+                f"Frame {i} time {t} exceeds audio_duration + 1e-2 ({duration + 1e-2})."
+            )
+E           AssertionError: Frame 214 time 5.015510204081632 exceeds audio_duration + 1e-2 (5.01).
+E           assert 5.015510204081632 <= (5.0 + 0.01)
+
+tests/test_final_state.py:111: AssertionError
+=============================== warnings summary ===============================
+test_final_state.py::test_meta_sr_matches_input_audio
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_meta_sr_matches_input_audio
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_meta_sr_matches_input_audio
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_meta_block_is_valid
+PASSED tests/test_final_state.py::test_frames_list_matches_meta_n_frames
+PASSED tests/test_final_state.py::test_meta_sr_matches_input_audio
+PASSED tests/test_final_state.py::test_each_frame_schema
+PASSED tests/test_final_state.py::test_peaks_are_valid_and_sorted
+PASSED tests/test_final_state.py::test_majority_of_frames_recover_input_tones
+FAILED tests/test_final_state.py::test_time_values_monotonic_and_in_bounds - ...
+=================== 1 failed, 6 passed, 3 warnings in 3.53s ====================

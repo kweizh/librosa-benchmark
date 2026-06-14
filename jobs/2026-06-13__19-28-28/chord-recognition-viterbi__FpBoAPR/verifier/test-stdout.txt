@@ -1,0 +1,46 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 5 items
+
+tests/test_final_state.py ...F.                                          [100%]
+
+=================================== FAILURES ===================================
+__________________ test_each_segment_duration_above_threshold __________________
+
+segments = [{'chord': 'E:min', 'end': 0.255, 'start': 0.0}, {'chord': 'C:min', 'end': 0.975, 'start': 0.255}, {'chord': 'E:min', ...art': 2.833}, {'chord': 'F#:maj', 'end': 4.458, 'start': 3.994}, {'chord': 'E:min', 'end': 5.062, 'start': 4.458}, ...]
+
+    def test_each_segment_duration_above_threshold(segments):
+        for idx, seg in enumerate(segments):
+            duration = float(seg["end"]) - float(seg["start"])
+>           assert duration > 0.1, (
+                f"Segment {idx} duration must be > 0.1s, got {duration} "
+                f"(start={seg['start']}, end={seg['end']})."
+            )
+E           AssertionError: Segment 128 duration must be > 0.1s, got 0.09300000000000352 (start=81.316, end=81.409).
+E           assert 0.09300000000000352 > 0.1
+
+tests/test_final_state.py:116: AssertionError
+=============================== warnings summary ===============================
+test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_each_segment_has_required_schema
+PASSED tests/test_final_state.py::test_chord_labels_match_regex_and_allowed_set
+PASSED tests/test_final_state.py::test_segments_cover_audio_without_significant_gaps_or_overlaps
+PASSED tests/test_final_state.py::test_at_least_two_distinct_chord_labels
+FAILED tests/test_final_state.py::test_each_segment_duration_above_threshold
+=================== 1 failed, 4 passed, 3 warnings in 3.79s ====================

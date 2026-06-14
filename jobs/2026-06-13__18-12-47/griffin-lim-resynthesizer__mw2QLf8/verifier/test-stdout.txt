@@ -1,0 +1,59 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 8 items
+
+tests/test_final_state.py ......F.                                       [100%]
+
+=================================== FAILURES ===================================
+___________________ test_recomputed_metrics_pass_thresholds ____________________
+
+input_audio = (array([ 0.00000000e+00,  0.00000000e+00, -3.05175781e-05, ...,
+       -1.26647949e-02, -1.18408203e-02, -1.09558105e-02], shape=(110250,)), 22050)
+reconstructed_audio = (array([ 0.        ,  0.        ,  0.        , ..., -0.00726318,
+       -0.00933838, -0.01016235], shape=(110250,)), 22050)
+
+    def test_recomputed_metrics_pass_thresholds(input_audio, reconstructed_audio):
+        in_y, _ = input_audio
+        recon_y, _ = reconstructed_audio
+        sc, snr = _compute_spectral_convergence_and_snr(in_y, recon_y)
+        assert math.isfinite(sc), f"Recomputed spectral_convergence is not finite: {sc}."
+        assert math.isfinite(snr), f"Recomputed snr_db is not finite: {snr}."
+        assert sc < 0.5, (
+            f"Recomputed spectral_convergence={sc:.4f} must be < 0.5 "
+            f"(reconstruction is too far from input)."
+        )
+>       assert snr > 0.0, (
+            f"Recomputed snr_db={snr:.4f} must be > 0.0 dB "
+            f"(reconstruction is no better than noise)."
+        )
+E       AssertionError: Recomputed snr_db=-3.1224 must be > 0.0 dB (reconstruction is no better than noise).
+E       assert -3.1223973637479903 > 0.0
+
+tests/test_final_state.py:222: AssertionError
+=============================== warnings summary ===============================
+test_final_state.py::test_reconstructed_sample_rate_matches_input
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_reconstructed_sample_rate_matches_input
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_reconstructed_sample_rate_matches_input
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_metrics_has_exact_required_keys
+PASSED tests/test_final_state.py::test_metrics_types_and_ranges
+PASSED tests/test_final_state.py::test_reconstructed_sample_rate_matches_input
+PASSED tests/test_final_state.py::test_metrics_sample_rate_matches_reconstructed
+PASSED tests/test_final_state.py::test_metrics_length_matches_reconstructed
+PASSED tests/test_final_state.py::test_reconstructed_length_within_two_percent_of_input
+PASSED tests/test_final_state.py::test_reported_metrics_match_recomputation
+FAILED tests/test_final_state.py::test_recomputed_metrics_pass_thresholds - A...
+=================== 1 failed, 7 passed, 3 warnings in 5.86s ====================

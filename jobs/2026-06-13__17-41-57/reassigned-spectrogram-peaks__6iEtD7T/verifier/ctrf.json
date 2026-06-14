@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T17:46:38.003605+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781372794285,
+            "stop": 1781372798003
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_meta_block_is_valid",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781372794345,
+                "stop": 1781372794349,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_frames_list_matches_meta_n_frames",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781372794349,
+                "stop": 1781372794351,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_meta_sr_matches_input_audio",
+                "status": "passed",
+                "duration": 3638,
+                "start": 1781372794351,
+                "stop": 1781372797989,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_frame_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781372797992,
+                "stop": 1781372797994,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_values_monotonic_and_in_bounds",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781372797995,
+                "stop": 1781372797996,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_peaks_are_valid_and_sorted",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781372797996,
+                "stop": 1781372798000,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_majority_of_frames_recover_input_tones",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781372798001,
+                "stop": 1781372798002,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

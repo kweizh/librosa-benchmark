@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:17:15.266584+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781374635219,
+            "stop": 1781374635266
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_predictions_file_exists",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781374635252,
+                "stop": 1781374635254,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predictions_header_is_exact",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781374635255,
+                "stop": 1781374635257,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predictions_rows_have_two_columns",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374635258,
+                "stop": 1781374635259,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predictions_cover_exactly_test_set",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374635260,
+                "stop": 1781374635261,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_duplicate_filenames",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781374635261,
+                "stop": 1781374635263,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_all_labels_are_valid",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781374635263,
+                "stop": 1781374635264,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_classification_accuracy_meets_threshold",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781374635265,
+                "stop": 1781374635265,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

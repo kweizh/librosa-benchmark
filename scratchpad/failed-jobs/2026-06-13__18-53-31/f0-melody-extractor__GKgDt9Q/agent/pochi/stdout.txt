@@ -1,0 +1,118 @@
+- Initializing MCP connections...
+You
+# F0-Based Monophonic Melody to MIDI Notes ## Background Use `librosa` to convert a monophonic recording at `/workspace/input.wav` into a time-aligned sequence of MIDI notes. Estimate fundamental frequency (F0) per frame, smooth it, and segment voiced frames into discrete notes based on rounded MIDI pitch changes and unvoiced gaps. ## Requirements * Read `/workspace/input.wav`. * Estimate F0 with `librosa.pyin` (it returns `f0`, `voiced_flag`, `voiced_prob`). * Apply a median filter to the voiced F0 trace before quantization. * Group consecutive voiced frames into notes; cut a new note whenever the rounded MIDI value changes or whenever at least one unvoiced frame interrupts the sequence. * Write the result to `/workspace/melody.json`. ## Implementation Hints * Convert F0 in Hz to MIDI with the standard formula `12 * log2(f0 / 440) + 69` and round to the nearest integer for the note label. * Compute frame timestamps with `librosa.times_like` using the same `sr` and `hop_length` you passed to `librosa.pyin`. * Report each note's `mean_f0_hz` as the mean of the (smoothed) voiced F0 values that contributed to that note. * Verify keyword names and return order against the librosa 0.11.0 documentation. ## Acceptance Criteria * Project path: /workspace * Ensure the extraction pipeline is executed and the output artifact exists. * Output file: `/workspace/melody.json` * The output file must be a JSON array. Each element must be an object with the following schema: ```json { "start": number, "end": number, "midi_note": integer, "mean_f0_hz": number } ``` * `start` and `end` are floating-point timestamps in seconds. * `midi_note` is an integer in `[21, 108]`. * `mean_f0_hz` is a positive float representing the mean F0 over the note window. * Notes must be sorted by `start` and must not overlap in time. * Every note must satisfy `end - start > 0.05` seconds. * For every note, the mean F0 must be within 50 cents of the reported MIDI pitch (i.e. `abs(1200 * log2(mean_f0_hz / midi_to_hz(midi_note))) <= 50`). * The set of `midi_note` values across the sequence must contain at least 4 distinct pitches. * The output must contain at least 5 notes. * All `start` / `end` values must lie in `[0, audio_duration + 0.05]`.   
+
+Pochi
+💭 Thinking for 359 characters   
+📋 Updating todo list (4 items) ✔ 
+💭 Thinking for 33 characters   
+📂 Listing files in /workspace ✔ 
+💫 Executing python3 -c "import librosa; print(librosa.__version__)" ✔ 
+💭 Thinking for 126 characters   
+💫 Executing python3 -c "import librosa; y, sr = librosa.load('/workspace/input.wav', sr=None); print(f'sr={sr}, duration={len(y)/sr:.4f}s, samples={len(y)}')" ✔ 
+💭 Thinking for 686 characters   
+📋 Updating todo list (4 items) ✔ 
+✏️  Writing /workspace/extract_melody.py ✔ 
+💭 Thinking for 26 characters   
+📋 Updating todo list (4 items) ✔ 
+💫 Executing cd /workspace && python3 extract_melody.py ✔ 
+💭 Thinking for 1313 characters   
+💫 Executing cat /workspace/melody.json ✔ 
+💭 Thinking for 100 characters   
+Now let me run a comprehensive validation against all acceptance criteria:   
+💫 Executing cd /workspace && python3 -c "
+import json
+import numpy as np
+
+with open('melody.json') as f:
+    notes = json.load(f)
+
+# Check it's a list
+assert isinstance(notes, list), 'Not a list'
+
+# Check schema
+for n in notes:
+    assert 'start' in n, 'missing start'
+    assert 'end' in n, 'missing end'
+    assert 'midi_note' in n, 'missing midi_note'
+    assert 'mean_f0_hz' in n, 'missing mean_f0_hz'
+    assert isinstance(n['start'], (int, float)), 'start not number'
+    assert isinstance(n['end'], (int, float)), 'end not number'
+    assert isinstance(n['midi_note'], int), f'midi_note not int: {type(n[\"midi_note\"])}'
+    assert isinstance(n['mean_f0_hz'], (int, float)), 'mean_f0_hz not number'
+
+# Check sorted by start
+for i in range(1, len(notes)):
+    assert notes[i]['start'] >= notes[i-1]['start'], f'Not sorted at index {i}'
+
+# Check no overlap
+for i in range(1, len(notes)):
+    assert notes[i]['start'] >= notes[i-1]['end'], f'Overlap at index {i}: {notes[i-1][\"end\"]} > {notes[i][\"start\"]}'
+
+# Check duration > 0.05
+for n in notes:
+    assert n['end'] - n['start'] > 0.05, f'Note too short: {n[\"end\"] - n[\"start\"]}'
+
+# Check midi_note in [21, 108]
+for n in notes:
+    assert 21 <= n['midi_note'] <= 108, f'MIDI note out of range: {n[\"midi_note\"]}'
+
+# Check mean_f0_hz > 0
+for n in notes:
+    assert n['mean_f0_hz'] > 0, f'mean_f0_hz not positive: {n[\"mean_f0_hz\"]}'
+
+# Check cents tolerance
+def midi_to_hz(m):
+    return 440.0 * 2 ** ((m - 69) / 12.0)
+
+for n in notes:
+    expected_hz = midi_to_hz(n['midi_note'])
+    cents = abs(1200 * np.log2(n['mean_f0_hz'] / expected_hz))
+    assert cents <= 50, f'Cents too far: {cents:.1f} for midi_note={n[\"midi_note\"]}, mean_f0={n[\"mean_f0_hz\"]:.2f}'
+
+# Check at least 4 distinct pitches
+distinct = len(set(n['midi_note'] for n in notes))
+assert distinct >= 4, f'Only {distinct} distinct pitches'
+
+# Check at least 5 notes
+assert len(notes) >= 5, f'Only {len(notes)} notes'
+
+# Check start/end within [0, audio_duration + 0.05]
+import librosa
+y, sr = librosa.load('/workspace/input.wav', sr=None)
+dur = librosa.get_duration(y=y, sr=sr)
+for n in notes:
+    assert 0 <= n['start'] <= dur + 0.05, f'Start out of range: {n[\"start\"]}'
+    assert 0 <= n['end'] <= dur + 0.05, f'End out of range: {n[\"end\"]}'
+
+print('ALL ACCEPTANCE CRITERIA PASSED')
+print(f'  Notes: {len(notes)}')
+print(f'  Distinct pitches: {distinct}')
+print(f'  Audio duration: {dur:.4f}s')
+" ✔ 
+📋 Updating todo list (4 items) ✔ 
+🎉 Task Completed
+Successfully extracted a monophonic melody from `/workspace/input.wav` and wrote the result to `/workspace/melody.json`.
+
+**Pipeline summary:**
+1. Loaded audio (sr=22050 Hz, duration≈5.95s)
+2. Estimated F0 using `librosa.pyin` with fmin=C2, fmax=C7
+3. Applied a median filter (kernel_size=5) to the F0 trace
+4. Converted voiced F0 frames to rounded MIDI pitches via `12 * log2(f0/440) + 69`
+5. Grouped consecutive voiced frames into notes, splitting on MIDI pitch changes or unvoiced gaps
+6. Filtered notes shorter than 0.05s
+
+**Output:** 7 notes with 5 distinct MIDI pitches (C4, E4, G4, C5, E5):
+
+| MIDI | Pitch | Start (s) | End (s) | Mean F0 (Hz) |
+|------|-------|-----------|---------|---------------|
+| 60   | C4    | 0.000     | 0.743   | 261.63        |
+| 64   | E4    | 0.813     | 1.602   | 329.80        |
+| 67   | G4    | 1.672     | 2.461   | 392.00        |
+| 72   | C5    | 2.508     | 3.297   | 523.25        |
+| 76   | E5    | 3.367     | 4.156   | 659.26        |
+| 67   | G4    | 4.226     | 5.016   | 392.00        |
+| 60   | C4    | 5.062     | 5.851   | 261.76        |
+
+All acceptance criteria verified: sorted, non-overlapping, duration > 0.05s, MIDI notes in [21,108], mean F0 within 50 cents, ≥4 distinct pitches, ≥5 notes, timestamps within bounds.   
+  

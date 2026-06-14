@@ -1,0 +1,95 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:35:11.813403+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 6,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781379311763,
+            "stop": 1781379311813
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_predictions_file_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379311787,
+                "stop": 1781379311788,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predictions_header_is_exact",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379311788,
+                "stop": 1781379311789,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predictions_rows_have_two_columns",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379311789,
+                "stop": 1781379311790,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_predictions_cover_exactly_test_set",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781379311791,
+                "stop": 1781379311791,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_duplicate_filenames",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781379311792,
+                "stop": 1781379311792,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_all_labels_are_valid",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781379311793,
+                "stop": 1781379311793,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_classification_accuracy_meets_threshold",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 18,
+                "start": 1781379311794,
+                "stop": 1781379311812,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "predictions = (['filename', 'label'], [['music_test_0.wav', 'speech'], ['music_test_1.wav', 'music'], ['speech_test_0.wav', 'music'], ['speech_test_1.wav', 'music']])\n\n    def test_classification_accuracy_meets_threshold(predictions):\n        _, rows = predictions\n        predicted = {row[0]: row[1] for row in rows}\n    \n        # Restrict scoring to filenames we have ground truth for. The other coverage\n        # tests already guarantee that the predictions exactly cover the test set,\n        # which itself equals GROUND_TRUTH.keys() because the Dockerfile generated it.\n        relevant = [name for name in GROUND_TRUTH if name in predicted]\n        assert relevant, (\n            \"No predicted rows match the ground-truth test set; cannot score accuracy.\"\n        )\n    \n        correct = sum(1 for name in relevant if predicted[name] == GROUND_TRUTH[name])\n        accuracy = correct / len(GROUND_TRUTH)\n    \n>       assert accuracy >= MIN_ACCURACY, (\n            f\"Classification accuracy {accuracy:.2f} is below the required \"\n            f\"threshold of {MIN_ACCURACY:.2f}. Per-file predictions: \"\n            f\"{[(n, predicted.get(n), GROUND_TRUTH[n]) for n in GROUND_TRUTH]}.\"\n        )\nE       AssertionError: Classification accuracy 0.25 is below the required threshold of 0.80. Per-file predictions: [('speech_test_0.wav', 'music', 'speech'), ('speech_test_1.wav', 'music', 'speech'), ('music_test_0.wav', 'speech', 'music'), ('music_test_1.wav', 'music', 'music')].\nE       assert 0.25 >= 0.8\n\ntests/test_final_state.py:126: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

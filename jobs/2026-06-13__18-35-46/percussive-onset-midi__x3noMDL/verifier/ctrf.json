@@ -1,0 +1,95 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:39:40.996509+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 6,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781375972517,
+            "stop": 1781375980996
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_hits_list_minimum_length",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375972573,
+                "stop": 1781375972575,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_hit_has_required_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781375972576,
+                "stop": 1781375972577,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_fields_within_audio_bounds",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 4158,
+                "start": 1781375972578,
+                "stop": 1781375976736,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "hits = [{'grid_index': 2, 'raw_time_seconds': 0.2786394557823129, 'time_seconds': 0.2554195011337868, 'velocity': 0.658992767...x': 12, 'raw_time_seconds': 1.509297052154195, 'time_seconds': 1.532517006802721, 'velocity': 0.6262337565422058}, ...]\naudio_duration = 12.0\n\n    def test_time_fields_within_audio_bounds(hits, audio_duration):\n        upper = audio_duration + 1e-3\n        for idx, hit in enumerate(hits):\n            t = float(hit[\"time_seconds\"])\n            raw = float(hit[\"raw_time_seconds\"])\n>           assert 0.0 <= t <= upper, (\n                f\"Hit {idx} 'time_seconds'={t} is outside [0, {upper}] \"\n                f\"(audio_duration={audio_duration}).\"\n            )\nE           AssertionError: Hit 47 'time_seconds'=12.00471655328798 is outside [0, 12.001] (audio_duration=12.0).\nE           assert 12.00471655328798 <= 12.001\n\ntests/test_final_state.py:134: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_time_seconds_non_decreasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781375976738,
+                "stop": 1781375976739,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_grid_index_non_decreasing",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781375976740,
+                "stop": 1781375976740,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_estimated_tempo_in_expected_range",
+                "status": "passed",
+                "duration": 4251,
+                "start": 1781375976741,
+                "stop": 1781375980992,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_snapped_time_within_grid_tolerance",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781375980993,
+                "stop": 1781375980995,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

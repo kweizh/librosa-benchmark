@@ -1,0 +1,38 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 13 items
+
+tests/test_final_state.py .............                                  [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_metadata_sample_rate_matches_input_wav
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_metadata_sample_rate_matches_input_wav
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_metadata_sample_rate_matches_input_wav
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_metadata_scalar_types_and_positivity
+PASSED tests/test_final_state.py::test_metadata_freq_lists_are_numeric
+PASSED tests/test_final_state.py::test_metadata_sample_rate_matches_input_wav
+PASSED tests/test_final_state.py::test_arrays_are_two_dimensional_and_finite
+PASSED tests/test_final_state.py::test_arrays_share_common_time_grid
+PASSED tests/test_final_state.py::test_stft_row_count_matches_n_fft
+PASSED tests/test_final_state.py::test_cqt_row_count_matches_metadata
+PASSED tests/test_final_state.py::test_vqt_row_count_matches_metadata
+PASSED tests/test_final_state.py::test_frequency_vector_lengths
+PASSED tests/test_final_state.py::test_stft_freqs_match_librosa_helper
+PASSED tests/test_final_state.py::test_cqt_freqs_match_librosa_helper
+PASSED tests/test_final_state.py::test_vqt_freqs_match_librosa_helper
+PASSED tests/test_final_state.py::test_dynamic_range_above_threshold
+======================== 13 passed, 3 warnings in 3.48s ========================

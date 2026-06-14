@@ -1,0 +1,64 @@
+{
+    "id": "a19578f9-b2e9-40a9-a0e7-8529a9fa0788",
+    "started_at": "2026-06-13T17:42:00.243508",
+    "updated_at": "2026-06-13T18:12:44.858946",
+    "finished_at": "2026-06-13T18:12:44.858946",
+    "n_total_trials": 24,
+    "stats": {
+        "n_completed_trials": 24,
+        "n_errored_trials": 0,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "pochi__gemini-3.5-flash__pending-tasks": {
+                "n_trials": 24,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.875
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "pyin-pitch-tracker__6tPCgvS",
+                            "percussive-onset-midi__iq3zmA9",
+                            "reassigned-spectrogram-peaks__6iEtD7T",
+                            "multires-spectrogram-stacker__YgHyCSz",
+                            "subsegment-hierarchy__ABozEiS",
+                            "laplacian-segmentation__fgLkhJk",
+                            "spectral-contrast-classifier__e4PZZn7",
+                            "hpss-multi-stem-mixer__XE3qsrA",
+                            "griffin-lim-resynthesizer__Traoa7k",
+                            "multifeature-timbre-fingerprint__DbucLGv",
+                            "novelty-segmenter__wK97xJq",
+                            "beat-sync-mfcc-aggregator__oeiiEfF",
+                            "onset-midi-quantizer__5ZN88kP",
+                            "chord-recognition-viterbi__h3xnqdz",
+                            "cross-similarity-cover-detect__J7EkzGL",
+                            "nmf-source-decomposer__3JYKSQQ",
+                            "constellation-fingerprint-matche__atmycC9",
+                            "headless-spectrogram-renderer__yWu5sux",
+                            "dtw-alignment-mapper__sAh6vPr",
+                            "vocal-separation-mask__dBeuN84",
+                            "f0-melody-extractor__cc2khrF"
+                        ],
+                        "0.0": [
+                            "tempogram-tempo-multi__SriiqbB",
+                            "audio-augmentation-pipeline__fyCGoh4",
+                            "format-transcoder-multichannel__DPibUkv"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        },
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 941055,
+        "cost_usd": null
+    }
+}

@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:17:01.545065+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781378218012,
+            "stop": 1781378221544
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_meta_schema_and_types",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781378218231,
+                "stop": 1781378218233,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_beat_times_strictly_increasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781378218233,
+                "stop": 1781378218234,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_beat_times_within_audio_bounds",
+                "status": "passed",
+                "duration": 3210,
+                "start": 1781378218235,
+                "stop": 1781378221445,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mfcc_sync_shape",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781378221445,
+                "stop": 1781378221447,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mfcc_sync_column_count_matches_boundary_convention",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781378221448,
+                "stop": 1781378221449,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mfcc_sync_matches_recomputed_median",
+                "status": "passed",
+                "duration": 95,
+                "start": 1781378221449,
+                "stop": 1781378221544,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

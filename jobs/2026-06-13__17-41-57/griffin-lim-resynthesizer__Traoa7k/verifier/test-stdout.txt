@@ -1,0 +1,33 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 8 items
+
+tests/test_final_state.py ........                                       [100%]
+
+=============================== warnings summary ===============================
+test_final_state.py::test_reconstructed_sample_rate_matches_input
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_reconstructed_sample_rate_matches_input
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_reconstructed_sample_rate_matches_input
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_metrics_has_exact_required_keys
+PASSED tests/test_final_state.py::test_metrics_types_and_ranges
+PASSED tests/test_final_state.py::test_reconstructed_sample_rate_matches_input
+PASSED tests/test_final_state.py::test_metrics_sample_rate_matches_reconstructed
+PASSED tests/test_final_state.py::test_metrics_length_matches_reconstructed
+PASSED tests/test_final_state.py::test_reconstructed_length_within_two_percent_of_input
+PASSED tests/test_final_state.py::test_recomputed_metrics_pass_thresholds
+PASSED tests/test_final_state.py::test_reported_metrics_match_recomputation
+======================== 8 passed, 3 warnings in 7.81s =========================

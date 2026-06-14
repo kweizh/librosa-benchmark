@@ -1,0 +1,715 @@
+- Initializing MCP connections...
+You
+# Laplacian Structural Music Segmentation ## Background Use `librosa` 0.11.0 to build a structural music segmentation pipeline that recovers song-section boundaries and re-uses cluster identities (A/B/A...) across repeating sections. The pipeline must beat-track the input, extract a beat-synchronous tonal feature, build a weighted recurrence graph that mixes path-enhanced repetition with sequential affinity, embed frames via the symmetric normalized graph Laplacian, and assign one section label per frame using temporally-constrained agglomerative clustering before mapping the labels back to absolute time intervals. ## Requirements * Read the input WAV file from `/workspace/input.wav`. * Detect beats, then aggregate a tonal feature (CQT magnitude or `chroma_cqt`) into beat-synchronous frames using `librosa.util.sync`. * Construct a recurrence-based affinity matrix and enhance its diagonal paths with `librosa.segment.path_enhance`. * Combine the path-enhanced repetition graph with a sequential (local) affinity term into a single symmetric weighted adjacency. * Compute the symmetric normalized graph Laplacian, take its bottom eigenvectors, normalize the chosen eigenvector embedding, and cluster the per-beat embeddings into a small number of section types. * Map cluster ids back to contiguous time intervals and write them to `/workspace/segments.json`. ## Implementation Hints * All `librosa` 0.11.0 feature/segment APIs are keyword-only except for primary data arrays. Verify signatures before calling. * You may use any of: `librosa.load`, `librosa.beat.beat_track`, `librosa.cqt`, `librosa.feature.chroma_cqt`, `librosa.util.sync`, `librosa.util.fix_frames`, `librosa.segment.recurrence_matrix`, `librosa.segment.path_enhance`, `librosa.segment.agglomerative`, `librosa.frames_to_time`, plus NumPy / SciPy / scikit-learn helpers for eigendecomposition and clustering. * Choose the Laplacian normalization, the number of eigenvectors `K`, the number of clusters, and the relative weighting of repetition vs. sequential affinity yourself; defaults that work on the librosa segmentation gallery example are a reasonable starting point. * The audio at `/workspace/input.wav` is mono at 22050 Hz and has a clear A/B/A-style structure, so the output must demonstrate that at least one section label is re-used (proving repetition recovery, not just temporal partitioning). ## Acceptance Criteria * Project path: /workspace * Ensure the segmentation pipeline is executed and the output artifact exists. * Output file: `/workspace/segments.json` * The output file must be a JSON array. Each element must be an object with the following schema: ```json { "start": number, "end": number, "label": string } ``` * `start` and `end` are floating-point timestamps in seconds with `start < end`. * `label` must be a non-empty string matching the regex `^[A-Z]$` (a single uppercase letter such as `A`, `B`, `C`, ...). * Segments must be sorted by `start`, cover the audio from near 0s through the audio duration, and have neither significant overlaps nor gaps between adjacent segments. * The decoded segmentation must contain at least 2 distinct labels, at least 3 segments total, every segment must have duration greater than 0.5 seconds, and at least one label must appear in more than one segment (re-used section identity).   
+
+Pochi
+💭 Thinking for 1766 characters   
+💫 Executing cat << 'EOF' > /workspace/run_seg.py
+import librosa
+import numpy as np
+import json
+import scipy.sparse.csgraph
+import scipy.linalg
+from sklearn.cluster import KMeans
+import sklearn.preprocessing
+
+def run():
+    y, sr = librosa.load('/workspace/input.wav')
+    tempo, beats = librosa.beat.beat_track(y=y, sr=sr, trim=False)
+    
+    # Extract chroma
+    chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+    
+    # Sync to beats
+    chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+    
+    # Recurrence matrix
+    R = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+    
+    # Enhance diagonals
+    R_path = librosa.segment.path_enhance(R, n=15)
+    
+    # Sequential affinity
+    R_seq = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+    # Actually, sequential affinity is usually just a local band.
+    # Let's just use a band matrix for sequential affinity.
+    n_frames = chroma_sync.shape[1]
+    seq_aff = np.zeros((n_frames, n_frames))
+    for i in range(n_frames):
+        for j in range(max(0, i-2), min(n_frames, i+3)):
+            if i != j:
+                seq_aff[i, j] = 1.0
+                
+    A = R_path + seq_aff
+    A = np.maximum(A, A.T) # Ensure symmetry
+    
+    # Laplacian
+    L = scipy.sparse.csgraph.laplacian(A, normed=True)
+    
+    # Eigendecomposition
+    e, V = scipy.linalg.eigh(L)
+    
+    # Normalize eigenvectors
+    k = 4
+    V_emb = V[:, 1:k]
+    V_norm = sklearn.preprocessing.normalize(V_emb, norm='l2', axis=1)
+    
+    # Temporally-constrained agglomerative clustering to find boundaries
+    bounds = librosa.segment.agglomerative(chroma_sync, k=8)
+    
+    # We need a label per frame.
+    # Let's just use AgglomerativeClustering with connectivity to partition,
+    # then KMeans on the segments.
+    # Wait, the prompt says: "assign one section label per frame using temporally-constrained agglomerative clustering before mapping the labels back to absolute time intervals."
+    # Let's see what happens if we just use KMeans on V_norm.
+    
+    print("Done")
+
+run()
+EOF
+python /workspace/run_seg.py
+ ✖ "Command exited with code 1"
+💭 Thinking for 229 characters   
+💫 Executing ls -la /workspace/input.wav ✔ 
+💭 Thinking for 232 characters   
+💫 Executing cat << 'EOF' > /workspace/run_seg.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav')
+tempo, beats = librosa.beat.beat_track(y=y, sr=sr, trim=False)
+print("beats shape:", beats.shape)
+chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+print("chroma shape:", chroma.shape)
+chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+print("chroma_sync shape:", chroma_sync.shape)
+EOF
+python /workspace/run_seg.py ✔ 
+💭 Thinking for 680 characters   
+💫 Executing python -c "import librosa; help(librosa.beat.beat_track)" ✔ 
+💭 Thinking for 328 characters   
+💫 Executing cat << 'EOF' > /workspace/check_audio.py
+import librosa
+import numpy as np
+
+y, sr = librosa.load('/workspace/input.wav')
+print("Duration:", librosa.get_duration(y=y, sr=sr))
+print("Max amp:", np.max(np.abs(y)))
+print("Mean amp:", np.mean(np.abs(y)))
+EOF
+python /workspace/check_audio.py ✔ 
+💭 Thinking for 201 characters   
+💫 Executing cat << 'EOF' > /workspace/check_beats.py
+import librosa
+y, sr = librosa.load('/workspace/input.wav')
+tempo, beats = librosa.beat.beat_track(y=y, sr=sr, trim=False)
+print("trim=False:", beats.shape)
+tempo, beats2 = librosa.beat.beat_track(y=y, sr=sr, trim=True)
+print("trim=True:", beats2.shape)
+EOF
+python /workspace/check_beats.py ✔ 
+💭 Thinking for 268 characters   
+💫 Executing cat << 'EOF' > /workspace/check_beats2.py
+import librosa
+import numpy as np
+y, sr = librosa.load('/workspace/input.wav')
+onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+print("max onset:", np.max(onset_env))
+tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+print("beats shape:", beats.shape)
+EOF
+python /workspace/check_beats2.py ✔ 
+💭 Thinking for 279 characters   
+💫 Executing cat << 'EOF' > /workspace/check_beats3.py
+import librosa
+y, sr = librosa.load('/workspace/input.wav')
+tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+print(beats.shape)
+EOF
+python /workspace/check_beats3.py ✔ 
+💭 Thinking for 1514 characters   
+💫 Executing python -c "import librosa; help(librosa.segment.agglomerative)" ✔ 
+💭 Thinking for 655 characters   
+💫 Executing cat << 'EOF' > /workspace/search_gallery.py
+import urllib.request
+url = "https://raw.githubusercontent.com/librosa/librosa/main/docs/examples/plot_segmentation.py"
+try:
+    response = urllib.request.urlopen(url)
+    print(response.read().decode('utf-8'))
+except Exception as e:
+    print(e)
+EOF
+python /workspace/search_gallery.py ✔ 
+💭 Thinking for 1144 characters   
+💫 Executing cat << 'EOF' > /workspace/test_agg.py
+import librosa
+import numpy as np
+import scipy.sparse.csgraph
+import scipy.linalg
+from sklearn.cluster import KMeans
+import sklearn.preprocessing
+import json
+
+y, sr = librosa.load('/workspace/input.wav')
+
+# 1. Beat track
+onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+
+# 2. Chroma sync
+chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+
+# 3. Recurrence matrix
+R = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+
+# 4. Path enhance
+R_path = librosa.segment.path_enhance(R, n=15)
+
+# 5. Sequential affinity
+# Let's use MFCC like the gallery, or just a band matrix
+# The prompt says: "Combine the path-enhanced repetition graph with a sequential (local) affinity term"
+# Let's use the local affinity from chroma_sync directly
+path_distance = np.sum(np.diff(chroma_sync, axis=1)**2, axis=0)
+sigma = np.median(path_distance)
+if sigma == 0: sigma = 1e-5
+path_sim = np.exp(-path_distance / sigma)
+R_seq = np.diag(path_sim, k=1) + np.diag(path_sim, k=-1)
+
+# 6. Combine
+A = R_path + R_seq
+
+# 7. Laplacian
+L = scipy.sparse.csgraph.laplacian(A, normed=True)
+
+# 8. Eigen
+e, V = scipy.linalg.eigh(L)
+k = 4
+V_emb = V[:, :k]
+V_norm = sklearn.preprocessing.normalize(V_emb, norm='l2', axis=1)
+
+# 9. Temporally constrained agglomerative clustering
+n_segments = 10
+bounds = librosa.segment.agglomerative(V_norm.T, k=n_segments)
+# Note: librosa.segment.agglomerative expects (features, frames) or it uses axis=-1
+# Wait, let's check agglomerative axis.
+# By default axis=-1, so we should pass V_norm.T which has shape (k, n_frames)
+
+# Now we have bounds (frame indices). Let's append the total number of frames to bounds
+bounds = list(bounds)
+bounds.append(V_norm.shape[0])
+
+# Compute segment means
+seg_means = []
+for i in range(len(bounds)-1):
+    start = bounds[i]
+    end = bounds[i+1]
+    seg_means.append(np.mean(V_norm[start:end], axis=0))
+seg_means = np.array(seg_means)
+
+# Cluster the segments to reuse labels
+n_clusters = 3
+km = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
+seg_labels = km.fit_predict(seg_means)
+
+# Map back to frames
+frame_labels = np.zeros(V_norm.shape[0], dtype=int)
+for i in range(len(bounds)-1):
+    start = bounds[i]
+    end = bounds[i+1]
+    frame_labels[start:end] = seg_labels[i]
+
+print("Frame labels:", frame_labels)
+print("Unique labels:", np.unique(frame_labels))
+
+EOF
+python /workspace/test_agg.py ✔ 
+💭 Thinking for 628 characters   
+💫 Executing cat << 'EOF' > /workspace/test_agg2.py
+import librosa
+import numpy as np
+import scipy.sparse.csgraph
+import scipy.linalg
+from sklearn.cluster import AgglomerativeClustering
+import sklearn.preprocessing
+
+y, sr = librosa.load('/workspace/input.wav')
+onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+
+R = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+R_path = librosa.segment.path_enhance(R, n=15)
+
+path_distance = np.sum(np.diff(chroma_sync, axis=1)**2, axis=0)
+sigma = np.median(path_distance)
+if sigma == 0: sigma = 1e-5
+path_sim = np.exp(-path_distance / sigma)
+R_seq = np.diag(path_sim, k=1) + np.diag(path_sim, k=-1)
+
+A = R_path + R_seq
+L = scipy.sparse.csgraph.laplacian(A, normed=True)
+e, V = scipy.linalg.eigh(L)
+k = 4
+V_emb = V[:, :k]
+V_norm = sklearn.preprocessing.normalize(V_emb, norm='l2', axis=1)
+
+# Using AgglomerativeClustering with connectivity
+agg = AgglomerativeClustering(n_clusters=3, connectivity=A, linkage='ward')
+labels = agg.fit_predict(V_norm)
+print("Labels with connectivity A:", labels)
+
+# Using librosa.segment.agglomerative
+bounds = librosa.segment.agglomerative(V_norm.T, k=10)
+print("Bounds from librosa:", bounds)
+
+EOF
+python /workspace/test_agg2.py ✔ 
+💭 Thinking for 1921 characters   
+💫 Executing cat << 'EOF' > /workspace/run_full.py
+import librosa
+import numpy as np
+import scipy.sparse.csgraph
+import scipy.linalg
+from sklearn.cluster import KMeans
+import sklearn.preprocessing
+import json
+
+def run():
+    y, sr = librosa.load('/workspace/input.wav')
+    
+    # 1. Beat track
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+    
+    # Ensure beats include 0 and end
+    # Actually, let's just use the beats we have.
+    # We can fix frames later.
+    
+    # 2. Extract chroma and sync
+    chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+    chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+    
+    # 3. Recurrence matrix
+    R = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+    
+    # 4. Path enhance
+    R_path = librosa.segment.path_enhance(R, n=15)
+    
+    # 5. Sequential affinity
+    path_distance = np.sum(np.diff(chroma_sync, axis=1)**2, axis=0)
+    sigma = np.median(path_distance)
+    if sigma == 0: sigma = 1e-5
+    path_sim = np.exp(-path_distance / sigma)
+    R_seq = np.diag(path_sim, k=1) + np.diag(path_sim, k=-1)
+    
+    # 6. Combine
+    A = R_path + R_seq
+    
+    # 7. Laplacian
+    L = scipy.sparse.csgraph.laplacian(A, normed=True)
+    
+    # 8. Eigen
+    e, V = scipy.linalg.eigh(L)
+    k_eigen = min(4, V.shape[1]-1)
+    V_emb = V[:, :k_eigen]
+    V_norm = sklearn.preprocessing.normalize(V_emb, norm='l2', axis=1)
+    
+    # 9. Temporally constrained agglomerative clustering for boundaries
+    n_segments = 8
+    bounds = librosa.segment.agglomerative(V_norm.T, k=n_segments)
+    
+    # Add end boundary
+    n_frames = V_norm.shape[0]
+    bounds = list(bounds)
+    if bounds[0] != 0:
+        bounds.insert(0, 0)
+    if bounds[-1] != n_frames:
+        bounds.append(n_frames)
+    
+    # 10. Cluster the segments to reuse labels
+    seg_means = []
+    valid_bounds = []
+    for i in range(len(bounds)-1):
+        start = bounds[i]
+        end = bounds[i+1]
+        if end > start:
+            seg_means.append(np.mean(V_norm[start:end], axis=0))
+            valid_bounds.append((start, end))
+            
+    seg_means = np.array(seg_means)
+    
+    n_clusters = 3
+    km = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
+    seg_labels = km.fit_predict(seg_means)
+    
+    # Map back to absolute time intervals
+    # We need to map beat frames back to time
+    beat_times = librosa.frames_to_time(beats, sr=sr)
+    
+    # The sync function aggregates frames between beats.
+    # chroma_sync has shape (12, len(beats)+1) if we fix frames, or len(beats)
+    # Let's check sync logic carefully.
+    
+    print("beats shape:", beats.shape)
+    print("chroma_sync shape:", chroma_sync.shape)
+    print("n_frames:", n_frames)
+
+run()
+EOF
+python /workspace/run_full.py ✔ 
+💭 Thinking for 741 characters   
+💫 Executing cat << 'EOF' > /workspace/test_time.py
+import librosa
+y, sr = librosa.load('/workspace/input.wav')
+duration = librosa.get_duration(y=y, sr=sr)
+print("Duration:", duration)
+EOF
+python /workspace/test_time.py ✔ 
+💭 Thinking for 345 characters   
+💫 Executing cat << 'EOF' > /workspace/run_full2.py
+import librosa
+import numpy as np
+import scipy.sparse.csgraph
+import scipy.linalg
+from sklearn.cluster import KMeans
+import sklearn.preprocessing
+import json
+import string
+
+def run():
+    y, sr = librosa.load('/workspace/input.wav')
+    duration = librosa.get_duration(y=y, sr=sr)
+    
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+    
+    chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+    chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+    
+    R = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+    R_path = librosa.segment.path_enhance(R, n=15)
+    
+    path_distance = np.sum(np.diff(chroma_sync, axis=1)**2, axis=0)
+    sigma = np.median(path_distance)
+    if sigma == 0: sigma = 1e-5
+    path_sim = np.exp(-path_distance / sigma)
+    R_seq = np.diag(path_sim, k=1) + np.diag(path_sim, k=-1)
+    
+    A = R_path + R_seq
+    L = scipy.sparse.csgraph.laplacian(A, normed=True)
+    
+    e, V = scipy.linalg.eigh(L)
+    k_eigen = min(4, V.shape[1]-1)
+    V_emb = V[:, :k_eigen]
+    V_norm = sklearn.preprocessing.normalize(V_emb, norm='l2', axis=1)
+    
+    n_segments = 8
+    bounds = librosa.segment.agglomerative(V_norm.T, k=n_segments)
+    
+    n_frames = V_norm.shape[0]
+    bounds = list(bounds)
+    if bounds[0] != 0:
+        bounds.insert(0, 0)
+    if bounds[-1] != n_frames:
+        bounds.append(n_frames)
+    
+    seg_means = []
+    valid_bounds = []
+    for i in range(len(bounds)-1):
+        start = bounds[i]
+        end = bounds[i+1]
+        if end > start:
+            seg_means.append(np.mean(V_norm[start:end], axis=0))
+            valid_bounds.append((start, end))
+            
+    seg_means = np.array(seg_means)
+    
+    n_clusters = 3
+    km = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
+    seg_labels = km.fit_predict(seg_means)
+    
+    beat_times = librosa.frames_to_time(beats, sr=sr)
+    
+    # Boundary times: 0, beat_times, duration
+    boundary_times = [0.0] + list(beat_times) + [duration]
+    
+    segments = []
+    for (start_idx, end_idx), label_idx in zip(valid_bounds, seg_labels):
+        start_time = boundary_times[start_idx]
+        end_time = boundary_times[end_idx]
+        label = string.ascii_uppercase[label_idx]
+        segments.append({
+            "start": float(start_time),
+            "end": float(end_time),
+            "label": label
+        })
+        
+    with open('/workspace/segments.json', 'w') as f:
+        json.dump(segments, f, indent=2)
+        
+    print(json.dumps(segments, indent=2))
+
+run()
+EOF
+python /workspace/run_full2.py ✔ 
+💭 Thinking for 1074 characters   
+💫 Executing cat << 'EOF' > /workspace/test_merge.py
+import json
+
+segments = [
+  {
+    "start": 0.0,
+    "end": 0.7198185941043084,
+    "label": "A"
+  },
+  {
+    "start": 0.7198185941043084,
+    "end": 2.020136054421769,
+    "label": "C"
+  },
+  {
+    "start": 2.020136054421769,
+    "end": 8.080544217687075,
+    "label": "A"
+  },
+  {
+    "start": 8.080544217687075,
+    "end": 13.003174603174603,
+    "label": "B"
+  },
+  {
+    "start": 13.003174603174603,
+    "end": 19.644081632653062,
+    "label": "C"
+  },
+  {
+    "start": 19.644081632653062,
+    "end": 22.66267573696145,
+    "label": "C"
+  },
+  {
+    "start": 22.66267573696145,
+    "end": 28.69986394557823,
+    "label": "A"
+  },
+  {
+    "start": 28.69986394557823,
+    "end": 33.0,
+    "label": "B"
+  }
+]
+
+def merge_short_segments(segments, min_duration=0.5):
+    while True:
+        merged = False
+        for i in range(len(segments)):
+            dur = segments[i]['end'] - segments[i]['start']
+            if dur < min_duration:
+                # Merge with the neighbor that has the same label if possible
+                # Otherwise merge with the longest neighbor
+                left_idx = i - 1
+                right_idx = i + 1
+                
+                merge_target = -1
+                if left_idx >= 0 and right_idx < len(segments):
+                    if segments[left_idx]['label'] == segments[i]['label']:
+                        merge_target = left_idx
+                    elif segments[right_idx]['label'] == segments[i]['label']:
+                        merge_target = right_idx
+                    else:
+                        left_dur = segments[left_idx]['end'] - segments[left_idx]['start']
+                        right_dur = segments[right_idx]['end'] - segments[right_idx]['start']
+                        if left_dur > right_dur:
+                            merge_target = left_idx
+                        else:
+                            merge_target = right_idx
+                elif left_idx >= 0:
+                    merge_target = left_idx
+                elif right_idx < len(segments):
+                    merge_target = right_idx
+                    
+                if merge_target != -1:
+                    # Merge i into merge_target
+                    new_start = min(segments[i]['start'], segments[merge_target]['start'])
+                    new_end = max(segments[i]['end'], segments[merge_target]['end'])
+                    segments[merge_target]['start'] = new_start
+                    segments[merge_target]['end'] = new_end
+                    segments.pop(i)
+                    merged = True
+                    break
+        if not merged:
+            break
+            
+    # Also merge adjacent segments with the same label
+    while True:
+        merged = False
+        for i in range(len(segments)-1):
+            if segments[i]['label'] == segments[i+1]['label']:
+                segments[i]['end'] = segments[i+1]['end']
+                segments.pop(i+1)
+                merged = True
+                break
+        if not merged:
+            break
+            
+    return segments
+
+merged = merge_short_segments(segments)
+print(json.dumps(merged, indent=2))
+EOF
+python /workspace/test_merge.py ✔ 
+💭 Thinking for 730 characters   
+💫 Executing cat << 'EOF' > /workspace/run_segmentation.py
+import librosa
+import numpy as np
+import scipy.sparse.csgraph
+import scipy.linalg
+from sklearn.cluster import KMeans
+import sklearn.preprocessing
+import json
+import string
+
+def merge_short_segments(segments, min_duration=0.5):
+    while True:
+        merged = False
+        for i in range(len(segments)):
+            dur = segments[i]['end'] - segments[i]['start']
+            if dur < min_duration:
+                left_idx = i - 1
+                right_idx = i + 1
+                
+                merge_target = -1
+                if left_idx >= 0 and right_idx < len(segments):
+                    if segments[left_idx]['label'] == segments[i]['label']:
+                        merge_target = left_idx
+                    elif segments[right_idx]['label'] == segments[i]['label']:
+                        merge_target = right_idx
+                    else:
+                        left_dur = segments[left_idx]['end'] - segments[left_idx]['start']
+                        right_dur = segments[right_idx]['end'] - segments[right_idx]['start']
+                        if left_dur > right_dur:
+                            merge_target = left_idx
+                        else:
+                            merge_target = right_idx
+                elif left_idx >= 0:
+                    merge_target = left_idx
+                elif right_idx < len(segments):
+                    merge_target = right_idx
+                    
+                if merge_target != -1:
+                    new_start = min(segments[i]['start'], segments[merge_target]['start'])
+                    new_end = max(segments[i]['end'], segments[merge_target]['end'])
+                    segments[merge_target]['start'] = new_start
+                    segments[merge_target]['end'] = new_end
+                    segments.pop(i)
+                    merged = True
+                    break
+        if not merged:
+            break
+            
+    while True:
+        merged = False
+        for i in range(len(segments)-1):
+            if segments[i]['label'] == segments[i+1]['label']:
+                segments[i]['end'] = segments[i+1]['end']
+                segments.pop(i+1)
+                merged = True
+                break
+        if not merged:
+            break
+            
+    return segments
+
+def main():
+    y, sr = librosa.load('/workspace/input.wav')
+    duration = librosa.get_duration(y=y, sr=sr)
+    
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+    
+    chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+    chroma_sync = librosa.util.sync(chroma, beats, aggregate=np.median)
+    
+    R = librosa.segment.recurrence_matrix(chroma_sync, width=3, mode='affinity', sym=True)
+    R_path = librosa.segment.path_enhance(R, n=15)
+    
+    path_distance = np.sum(np.diff(chroma_sync, axis=1)**2, axis=0)
+    sigma = np.median(path_distance)
+    if sigma == 0: sigma = 1e-5
+    path_sim = np.exp(-path_distance / sigma)
+    R_seq = np.diag(path_sim, k=1) + np.diag(path_sim, k=-1)
+    
+    A = R_path + R_seq
+    L = scipy.sparse.csgraph.laplacian(A, normed=True)
+    
+    e, V = scipy.linalg.eigh(L)
+    k_eigen = min(4, V.shape[1]-1)
+    V_emb = V[:, :k_eigen]
+    V_norm = sklearn.preprocessing.normalize(V_emb, norm='l2', axis=1)
+    
+    n_segments = 8
+    bounds = librosa.segment.agglomerative(V_norm.T, k=n_segments)
+    
+    n_frames = V_norm.shape[0]
+    bounds = list(bounds)
+    if bounds[0] != 0:
+        bounds.insert(0, 0)
+    if bounds[-1] != n_frames:
+        bounds.append(n_frames)
+    
+    seg_means = []
+    valid_bounds = []
+    for i in range(len(bounds)-1):
+        start = bounds[i]
+        end = bounds[i+1]
+        if end > start:
+            seg_means.append(np.mean(V_norm[start:end], axis=0))
+            valid_bounds.append((start, end))
+            
+    seg_means = np.array(seg_means)
+    
+    n_clusters = 3
+    km = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
+    seg_labels = km.fit_predict(seg_means)
+    
+    beat_times = librosa.frames_to_time(beats, sr=sr)
+    boundary_times = [0.0] + list(beat_times) + [duration]
+    
+    segments = []
+    for (start_idx, end_idx), label_idx in zip(valid_bounds, seg_labels):
+        start_time = boundary_times[start_idx]
+        end_time = boundary_times[end_idx]
+        label = string.ascii_uppercase[label_idx]
+        segments.append({
+            "start": float(start_time),
+            "end": float(end_time),
+            "label": label
+        })
+        
+    segments = merge_short_segments(segments, min_duration=0.5)
+    
+    with open('/workspace/segments.json', 'w') as f:
+        json.dump(segments, f, indent=2)
+
+if __name__ == '__main__':
+    main()
+EOF
+python /workspace/run_segmentation.py ✔ 
+💭 Thinking for 212 characters   
+💫 Executing cat /workspace/segments.json ✔ 
+💭 Thinking for 665 characters   
+🎉 Task Completed
+I have successfully implemented the Laplacian structural music segmentation pipeline using `librosa` 0.11.0.
+
+The pipeline performs the following steps:
+1. **Beat Tracking & Feature Extraction**: Computes the onset strength envelope and extracts beats using `librosa.beat.beat_track`. Then, it extracts `chroma_cqt` and synchronizes it to the detected beats using `librosa.util.sync`.
+2. **Graph Construction**: Constructs a recurrence-based affinity matrix (`librosa.segment.recurrence_matrix`) and enhances its diagonal paths (`librosa.segment.path_enhance`). This is combined with a sequential (local) affinity term computed from the path distances.
+3. **Laplacian Embedding**: Computes the symmetric normalized graph Laplacian of the combined adjacency matrix, takes its bottom eigenvectors, and normalizes them using L2 normalization to form frame embeddings.
+4. **Temporally-Constrained Clustering**: Uses `librosa.segment.agglomerative` (a temporally-constrained agglomerative clustering routine) on the embeddings to partition the audio into contiguous sections.
+5. **Re-using Cluster Identities**: Averages the embeddings within each contiguous segment and clusters these segment means using K-Means to assign reusable section labels (e.g., A, B, C) across repeating sections.
+6. **Time Mapping & Formatting**: Maps the beat-synchronous segment boundaries back to absolute time intervals, ensures no segment is shorter than 0.5 seconds by merging short segments into neighbors, and writes the final sequence to `/workspace/segments.json`.
+
+The output is correctly formatted as a JSON array of segment objects with `start`, `end`, and `label` properties, demonstrating reused section identities and satisfying all acceptance criteria.   
+  

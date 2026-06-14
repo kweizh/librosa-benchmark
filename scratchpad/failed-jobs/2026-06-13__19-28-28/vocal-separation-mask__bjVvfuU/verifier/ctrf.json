@@ -1,0 +1,119 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:54:40.099611+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 10,
+            "passed": 10,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781380476565,
+            "stop": 1781380480099
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_vocal_sample_rate_matches_input",
+                "status": "passed",
+                "duration": 3186,
+                "start": 1781380476805,
+                "stop": 1781380479991,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_accomp_sample_rate_matches_input",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781380479992,
+                "stop": 1781380479997,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vocal_length_matches_input",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380479998,
+                "stop": 1781380479999,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_accomp_length_matches_input",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380479999,
+                "stop": 1781380480000,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vocal_is_not_silent",
+                "status": "passed",
+                "duration": 3,
+                "start": 1781380480000,
+                "stop": 1781380480003,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_accomp_is_not_silent",
+                "status": "passed",
+                "duration": 4,
+                "start": 1781380480004,
+                "stop": 1781380480008,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vocal_is_not_bitwise_copy_of_input",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380480009,
+                "stop": 1781380480010,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_accomp_is_not_bitwise_copy_of_input",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781380480011,
+                "stop": 1781380480012,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_complementary_masks_sum_reconstructs_input",
+                "status": "passed",
+                "duration": 9,
+                "start": 1781380480013,
+                "stop": 1781380480022,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_separation_reduces_vocal_accomp_similarity",
+                "status": "passed",
+                "duration": 76,
+                "start": 1781380480022,
+                "stop": 1781380480098,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

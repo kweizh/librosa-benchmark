@@ -1,0 +1,93 @@
+Skipping image OS validation for hb__spectral-contrast-classifier: docker inspect returned 1
+Running command: apt-get update && apt-get install -y curl ripgrep
+Command outputs captured
+Running command: set -euo pipefail; curl -fsSL https://getpochi.com/install.sh | bash -x -s -- pochi-v0.6.14 && mkdir -p /logs/agent/pochi && ~/.pochi/bin/pochi --version
+Command outputs captured
+Running command: ln -sf ~/.pochi/bin/pochi /usr/local/bin/pochi
+Command outputs captured
+Running command: echo zr-cc8uf6i > /logs/artifacts/run-id && echo spectral-contrast-classifier__cC8uF6i > /logs/artifacts/trial_id
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: pochi --model deepseek/deepseek-4-pro --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Speech vs. Music Audio Classifier
+
+## Background
+You are given a small labeled training corpus and an unlabeled test corpus of short WAV recordings. Your job is to extract a fixed-dimensional feature vector from each clip, train a binary classifier that distinguishes spoken-voice clips from instrumental-music clips, predict labels on the test clips, and emit the predictions as a CSV file.
+
+## Inputs
+- `/workspace/train/speech/` — training WAV files whose ground-truth label is `speech`.
+- `/workspace/train/music/` — training WAV files whose ground-truth label is `music`.
+- `/workspace/test/` — unlabeled WAV files; you must produce a label for each one.
+
+## Required Feature Families
+For every audio file, build a single 1-D feature vector that concatenates the temporal **mean** and **standard deviation** (over time frames) of each of the following librosa feature families:
+- MFCCs with `n_mfcc=20`.
+- Spectral contrast with `n_bands=6`.
+- Zero crossing rate.
+- Spectral centroid.
+
+The order of concatenation is up to you, but it must be identical for every file (training and test).
+
+## Output
+Write the predictions to `/workspace/predictions.csv` with exactly the header line:
+
+```
+filename,label
+```
+
+Followed by one row per file found in `/workspace/test/`. Each `label` value must be either `speech` or `music`. The `filename` column must contain the basename of the test WAV file (e.g. `clip_00.wav`), not a full path. Do not include rows for files that are not in `/workspace/test/`, and do not produce duplicate `filename` rows.
+
+## Implementation Hints
+- Use `librosa.load` to read each WAV. You may choose your own sample rate, but be consistent across train and test.
+- Compute each feature family with the requested librosa API, then aggregate along the time axis to produce a fixed-size vector regardless of clip length.
+- Train any `sklearn.linear_model.LogisticRegression` model on the training features, then predict on the test features.
+- The training set is small (a few files per class) but the snippets were chosen to be clearly separable by the requested features. You do not need cross-validation or hyper-parameter tuning to pass.
+
+## Acceptance Criteria
+- Project path: /workspace
+- Output file (must be created by you): /workspace/predictions.csv
+- The output is a CSV file whose first line is exactly `filename,label`.
+- There is exactly one row for every WAV file under /workspace/test/, identified by basename. No file under /workspace/test/ may be missing, and no extra files may appear.
+- Every `label` value is either `speech` or `music` (case-sensitive, no extra whitespace).
+- No `filename` value appears more than once.
+- Classification accuracy against the held-out ground truth is at least 80%.
+
+
+EOF
+Command outputs captured
+Running command: rm -f ~/.pochi/config.jsonc
+Command outputs captured

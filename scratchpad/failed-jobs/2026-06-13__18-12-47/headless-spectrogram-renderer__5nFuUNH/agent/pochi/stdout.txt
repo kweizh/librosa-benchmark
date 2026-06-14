@@ -1,0 +1,87 @@
+- Initializing MCP connections...
+You
+# Headless Multi-Panel Spectrogram Figure ## Background Produce a publication-quality 4-panel PNG figure from a single WAV file using `librosa` (0.11) and `matplotlib`, in a strictly headless environment. ## Requirements * Read `/workspace/input.wav`. * Render a single PNG figure with exactly 4 stacked panels that share the x-axis (time in seconds): * Panel A: time-domain waveform via `librosa.display.waveshow`. * Panel B: linear-frequency STFT magnitude spectrogram in dB via `librosa.display.specshow`. * Panel C: log-frequency mel spectrogram in dB. * Panel D: chromagram from `librosa.feature.chroma_cqt`. * Panels B, C, and D must each carry their own colorbar. * Each panel must carry a title, drawn from the fixed list in Acceptance Criteria, in that exact order. * Force matplotlib into the non-interactive `Agg` backend before any `pyplot` import. Do not call `plt.show()`. * Write the figure to `/workspace/figure.png` and accompanying metadata to `/workspace/figure_meta.json`. ## Implementation Hints * Use `librosa.load` to read the WAV. * Use `librosa.stft` with `librosa.amplitude_to_db` for Panel B. * Use `librosa.feature.melspectrogram` with `librosa.power_to_db` for Panel C; render with `y_axis='mel'` for log-frequency display. * Use `librosa.feature.chroma_cqt` for Panel D; render with `y_axis='chroma'`. * Set `matplotlib.use('Agg')` BEFORE `import matplotlib.pyplot`. * Save with `fig.savefig(...)` using an explicit `dpi`. * Read pixel dimensions and dpi back from the saved file and record them in the metadata JSON. ## Acceptance Criteria * Project path: /workspace * Ensure the script is executed and both artifacts exist. * Output files: * `/workspace/figure.png` * `/workspace/figure_meta.json` * `figure.png` must be a valid PNG of at least 50000 bytes that opens with PIL. * The image must be at least 800x800 pixels and have a DPI of at least 100. * The image must contain real visual structure (not a uniform blank image). * `figure_meta.json` must be a JSON object with exactly these keys: * `width_px` (integer): the PNG pixel width. * `height_px` (integer): the PNG pixel height. * `dpi` (float): the DPI used to save the figure. * `panel_titles` (array of 4 strings) equal to exactly: `["Waveform", "Linear STFT (dB)", "Log-Mel Spectrogram (dB)", "Chromagram"]`. * The `width_px` and `height_px` fields must match the actual pixel dimensions of `figure.png`.   
+
+Pochi
+💭 Thinking for 290 characters   
+📂 Listing files in /workspace ✔ 
+✏️  Writing /workspace/generate_figure.py ✔ 
+💫 Executing cd /workspace && python generate_figure.py 2>&1 ✔ 
+Script ran cleanly. Let me verify both output files meet all acceptance criteria:   
+💫 Executing cd /workspace && python - <<'EOF'
+import json, os
+from PIL import Image
+
+# ── File existence & size ────────────────────────────────────────────────────
+png_path  = 'figure.png'
+meta_path = 'figure_meta.json'
+
+png_size = os.path.getsize(png_path)
+print(f"PNG file size : {png_size:,} bytes  (need ≥50000)")
+
+# ── PIL open & pixel dims ────────────────────────────────────────────────────
+with Image.open(png_path) as im:
+    w, h = im.size
+    mode = im.mode
+    pil_dpi = im.info.get('dpi')
+print(f"Dimensions    : {w} x {h}  (need ≥800x800)")
+print(f"Mode          : {mode}")
+print(f"DPI from PIL  : {pil_dpi}")
+
+# ── Uniform-image check (visual structure) ───────────────────────────────────
+import numpy as np
+arr = np.array(Image.open(png_path).convert('L'))
+stddev = arr.std()
+print(f"Pixel std-dev : {stddev:.2f}  (need > 0 for real content)")
+
+# ── Metadata JSON ─────────────────────────────────────────────────────────────
+with open(meta_path) as f:
+    meta = json.load(f)
+
+print(f"\nMetadata keys : {sorted(meta.keys())}")
+print(f"width_px      : {meta['width_px']}  (PNG actual: {w})")
+print(f"height_px     : {meta['height_px']}  (PNG actual: {h})")
+print(f"dpi           : {meta['dpi']}")
+print(f"panel_titles  : {meta['panel_titles']}")
+
+# ── Assertions ────────────────────────────────────────────────────────────────
+assert png_size >= 50000,   "PNG too small"
+assert w >= 800 and h >= 800, "Image too small"
+assert meta['dpi'] >= 100,  "DPI too low"
+assert stddev > 1.0,        "Image appears blank"
+assert meta['width_px']  == w
+assert meta['height_px'] == h
+EXPECTED = ["Waveform", "Linear STFT (dB)", "Log-Mel Spectrogram (dB)", "Chromagram"]
+assert meta['panel_titles'] == EXPECTED, f"Titles mismatch: {meta['panel_titles']}"
+
+print("\n✅  All acceptance criteria passed.")
+EOF
+ ✔ 
+📖 Reading /workspace/figure_meta.json ✔ 
+🎉 Task Completed
+Both output artifacts are written and every acceptance criterion is satisfied:
+
+| Check | Result |
+|---|---|
+| `/workspace/figure.png` exists | ✅ |
+| `/workspace/figure_meta.json` exists | ✅ |
+| PNG file size ≥ 50 000 bytes | ✅ 658 366 bytes |
+| Dimensions ≥ 800 × 800 px | ✅ 2 027 × 2 556 px |
+| DPI ≥ 100 | ✅ 150.01 |
+| Real visual structure (std-dev > 0) | ✅ σ = 96.20 |
+| `width_px` / `height_px` match actual PNG | ✅ |
+| `panel_titles` exact match | ✅ |
+
+**What the script does (`/workspace/generate_figure.py`)**
+
+1. `matplotlib.use('Agg')` is called **before** any `pyplot` import, ensuring a fully headless render.
+2. `librosa.load` reads `/workspace/input.wav` (8 s, sr = 22 050 Hz).
+3. Features are computed:
+   - STFT → `amplitude_to_db` (Panel B)
+   - `melspectrogram` → `power_to_db` (Panel C)
+   - `chroma_cqt` (Panel D)
+4. A `GridSpec(4, 2)` layout gives each of the four main axes a narrow colorbar column to its right; all panels share the x-axis via `sharex`.
+5. `librosa.display.waveshow` / `specshow` populate the panels with their required `y_axis` modes (`linear`, `mel`, `chroma`).
+6. `fig.savefig(OUT_PNG, dpi=150, bbox_inches='tight')` writes the PNG.
+7. PIL re-opens the file to read back the exact pixel dimensions and stored DPI, which are written verbatim into `figure_meta.json`.   
+  

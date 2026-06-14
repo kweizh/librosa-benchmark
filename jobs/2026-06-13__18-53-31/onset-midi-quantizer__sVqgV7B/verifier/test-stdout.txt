@@ -1,0 +1,54 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 7 items
+
+tests/test_final_state.py .....FF                                        [100%]
+
+=================================== FAILURES ===================================
+________________ test_detected_note_count_close_to_ground_truth ________________
+
+notes = [{'offset_sec': 0.928798, 'onset_sec': 0.04644, 'pitch_midi': 60, 'velocity': 116}, {'offset_sec': 1.021678, 'onset_se...ch_midi': 64, 'velocity': 97}, {'offset_sec': 3.297234, 'onset_sec': 2.391655, 'pitch_midi': 67, 'velocity': 116}, ...]
+
+    def test_detected_note_count_close_to_ground_truth(notes):
+        diff = abs(len(notes) - GROUND_TRUTH_COUNT)
+>       assert diff <= 1, (
+            f"Expected the number of detected notes to be within 1 of "
+            f"{GROUND_TRUTH_COUNT}, got {len(notes)}."
+        )
+E       AssertionError: Expected the number of detected notes to be within 1 of 5, got 13.
+E       assert 8 <= 1
+
+tests/test_final_state.py:114: AssertionError
+___________________ test_pitch_accuracy_against_ground_truth ___________________
+
+notes = [{'offset_sec': 0.928798, 'onset_sec': 0.04644, 'pitch_midi': 60, 'velocity': 116}, {'offset_sec': 1.021678, 'onset_se...ch_midi': 64, 'velocity': 97}, {'offset_sec': 3.297234, 'onset_sec': 2.391655, 'pitch_midi': 67, 'velocity': 116}, ...]
+
+    def test_pitch_accuracy_against_ground_truth(notes):
+        # Compare the first min(len(notes), GROUND_TRUTH_COUNT) detected notes
+        # against the ground-truth sequence in order.
+        pairs = list(zip(notes, GROUND_TRUTH_PITCHES))
+        correct = 0
+        for entry, gt in pairs:
+            if abs(int(entry["pitch_midi"]) - gt) <= 1:
+                correct += 1
+>       assert correct >= 4, (
+            f"Expected at least 4 of the detected notes to have pitch_midi within 1 semitone "
+            f"of the corresponding ground-truth pitch {GROUND_TRUTH_PITCHES}; got {correct} matches "
+            f"from detected pitches {[entry['pitch_midi'] for entry in notes]}."
+        )
+E       AssertionError: Expected at least 4 of the detected notes to have pitch_midi within 1 semitone of the corresponding ground-truth pitch [60, 64, 67, 72, 67]; got 1 matches from detected pitches [60, 60, 60, 64, 64, 67, 67, 72, 72, 72, 72, 67, 67].
+E       assert 1 >= 4
+
+tests/test_final_state.py:128: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_notes_json_exists_and_is_list
+PASSED tests/test_final_state.py::test_each_note_has_required_keys_and_types
+PASSED tests/test_final_state.py::test_notes_are_strictly_ordered_by_onset
+PASSED tests/test_final_state.py::test_each_note_has_positive_duration
+PASSED tests/test_final_state.py::test_offsets_within_audio_duration
+FAILED tests/test_final_state.py::test_detected_note_count_close_to_ground_truth
+FAILED tests/test_final_state.py::test_pitch_accuracy_against_ground_truth - ...
+========================= 2 failed, 5 passed in 0.06s ==========================

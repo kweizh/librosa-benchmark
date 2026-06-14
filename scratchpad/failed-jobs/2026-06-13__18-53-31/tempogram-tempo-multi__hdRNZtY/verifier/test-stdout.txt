@@ -1,0 +1,74 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 6 items
+
+tests/test_final_state.py ....F.                                         [100%]
+
+=================================== FAILURES ===================================
+_____________ test_at_least_one_candidate_matches_reference_tempo ______________
+
+candidates = [{'harmonic_rank': 1, 'salience': 106.3554, 'tempo_bpm': 134.58}, {'harmonic_rank': 2, 'salience': 66.9435, 'tempo_bpm': 201.87}, {'harmonic_rank': 3, 'salience': 60.035, 'tempo_bpm': 67.29}]
+reference_signals = {'librosa': <module 'librosa' from '/usr/local/lib/python3.12/dist-packages/librosa/__init__.py'>, 'np': <module 'nump...25312157e+01, 2.33437276e+00, 9.31600928e-02,
+       5.92461862e-02, 8.88906717e-02], dtype=float32), 'sr': 22050, ...}
+
+    def test_at_least_one_candidate_matches_reference_tempo(candidates, reference_signals):
+        np = reference_signals["np"]
+        librosa = reference_signals["librosa"]
+        sr = reference_signals["sr"]
+        onset_env = reference_signals["onset_env"]
+    
+>       ref_tempo_arr = librosa.feature.rhythm.tempo(
+            onset_envelope=onset_env, sr=sr, aggregate=np.mean
+        )
+
+tests/test_final_state.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'rhythm'
+
+    def __getattr__(name):
+        if name in submodules:
+            return importlib.import_module(f"{package_name}.{name}")
+        elif name in attr_to_modules:
+            submod_path = f"{package_name}.{attr_to_modules[name]}"
+            submod = importlib.import_module(submod_path)
+            attr = getattr(submod, name)
+    
+            # If the attribute lives in a file (module) with the same
+            # name as the attribute, ensure that the attribute and *not*
+            # the module is accessible on the package.
+            if name == attr_to_modules[name]:
+                pkg = sys.modules[package_name]
+                pkg.__dict__[name] = attr
+    
+            return attr
+        else:
+>           raise AttributeError(f"No {package_name} attribute {name}")
+E           AttributeError: No librosa.feature attribute rhythm
+
+usr/local/lib/python3.12/dist-packages/lazy_loader/__init__.py:90: AttributeError
+=============================== warnings summary ===============================
+test_final_state.py::test_at_least_one_candidate_matches_reference_tempo
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:16: DeprecationWarning: 'aifc' is deprecated and slated for removal in Python 3.13
+    import aifc
+
+test_final_state.py::test_at_least_one_candidate_matches_reference_tempo
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:17: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+    import audioop
+
+test_final_state.py::test_at_least_one_candidate_matches_reference_tempo
+  /usr/local/lib/python3.12/dist-packages/audioread/rawread.py:19: DeprecationWarning: 'sunau' is deprecated and slated for removal in Python 3.13
+    import sunau
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_final_state.py::test_each_candidate_has_required_schema
+PASSED tests/test_final_state.py::test_tempo_bpm_within_allowed_range
+PASSED tests/test_final_state.py::test_salience_non_negative_and_non_increasing
+PASSED tests/test_final_state.py::test_harmonic_rank_is_permutation_of_1_2_3
+PASSED tests/test_final_state.py::test_top_candidate_matches_beat_track_tempo
+FAILED tests/test_final_state.py::test_at_least_one_candidate_matches_reference_tempo
+=================== 1 failed, 5 passed, 3 warnings in 6.83s ====================

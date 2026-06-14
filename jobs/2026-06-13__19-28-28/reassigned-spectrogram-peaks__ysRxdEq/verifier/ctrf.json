@@ -1,0 +1,95 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T19:33:32.299038+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 6,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781379208763,
+            "stop": 1781379212298
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_meta_block_is_valid",
+                "status": "passed",
+                "duration": 5,
+                "start": 1781379208828,
+                "stop": 1781379208833,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_frames_list_matches_meta_n_frames",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379208834,
+                "stop": 1781379208835,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_meta_sr_matches_input_audio",
+                "status": "passed",
+                "duration": 3447,
+                "start": 1781379208835,
+                "stop": 1781379212282,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_each_frame_schema",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379212283,
+                "stop": 1781379212284,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_time_values_monotonic_and_in_bounds",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 9,
+                "start": 1781379212284,
+                "stop": 1781379212293,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "payload = {'frames': [{'peaks': [{'freq_hz': 216.82662415504456, 'magnitude_db': 42.56786346435547}, {'freq_hz': 223.26130843162...288086}], 'time': 0.16253968253968254}, ...], 'meta': {'hop_length': 512, 'n_fft': 2048, 'n_frames': 216, 'sr': 22050}}\naudio_info = {'duration': 5.0, 'n_samples': 110250, 'sr': 22050}\n\n    def test_time_values_monotonic_and_in_bounds(payload, audio_info):\n        frames = payload[\"frames\"]\n        duration = audio_info[\"duration\"]\n        times = [float(f[\"time\"]) for f in frames]\n    \n        for i, t in enumerate(times):\n            assert t >= 0.0, f\"Frame {i} time must be >= 0, got {t}.\"\n>           assert t <= duration + 1e-2, (\n                f\"Frame {i} time {t} exceeds audio_duration + 1e-2 ({duration + 1e-2}).\"\n            )\nE           AssertionError: Frame 214 time 5.015510204081632 exceeds audio_duration + 1e-2 (5.01).\nE           assert 5.015510204081632 <= (5.0 + 0.01)\n\ntests/test_final_state.py:111: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_peaks_are_valid_and_sorted",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781379212294,
+                "stop": 1781379212296,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_majority_of_frames_recover_input_tones",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781379212297,
+                "stop": 1781379212298,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

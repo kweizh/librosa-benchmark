@@ -1,0 +1,110 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-06-13T18:51:48.872147+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 9,
+            "passed": 9,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1781376704935,
+            "stop": 1781376708871
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_payload_has_required_top_level_keys",
+                "status": "passed",
+                "duration": 2,
+                "start": 1781376704990,
+                "stop": 1781376704992,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_hop_length_and_sample_rate_are_positive_ints",
+                "status": "passed",
+                "duration": 0,
+                "start": 1781376704993,
+                "stop": 1781376704993,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_total_cost_is_finite_non_negative",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376704994,
+                "stop": 1781376704995,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_warping_path_pairs_well_formed",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376704995,
+                "stop": 1781376704996,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_warping_path_monotonic_non_decreasing",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376704997,
+                "stop": 1781376704998,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_warping_path_endpoints",
+                "status": "passed",
+                "duration": 3868,
+                "start": 1781376704998,
+                "stop": 1781376708866,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_timestamp_map_schema_and_sorting",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376708867,
+                "stop": 1781376708868,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_timestamp_map_ref_time_spacing_and_span",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376708868,
+                "stop": 1781376708869,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_timestamp_map_comp_time_monotonic_and_in_range",
+                "status": "passed",
+                "duration": 1,
+                "start": 1781376708870,
+                "stop": 1781376708871,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}
